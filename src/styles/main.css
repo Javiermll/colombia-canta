@@ -1,0 +1,313 @@
+/* ==========================================
+   COLOMBIA CANTA Y ENCANTA — main.css
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* --- Variables --- */
+:root {
+  --amarillo: #F5C800;
+  --azul: #1A56DB;
+  --rojo: #E8341A;
+  --amarillo-oscuro: #B8960A;
+  --azul-oscuro: #0F3A9E;
+  --rojo-oscuro: #A8240E;
+  --footer-bg: #0A0F1E;
+  --crema: #FFFDF0;
+  --texto-principal: #0A0F1E;
+  --texto-secundario: rgba(10, 15, 30, 0.6);
+  --font-titulo: 'Playfair Display', Georgia, serif;
+  --font-cuerpo: 'Inter', system-ui, sans-serif;
+}
+
+/* --- Reset & Base --- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-cuerpo);
+  color: var(--texto-principal);
+  background: #fff;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+}
+
+/* --- Tipografía base --- */
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-titulo);
+  line-height: 1.2;
+}
+
+/* --- Utilidades --- */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.label-seccion {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.label-rojo { color: var(--rojo); }
+.label-amarillo { color: var(--amarillo); }
+.label-muted { color: var(--texto-secundario); }
+
+/* --- Botones --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-family: var(--font-cuerpo);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.btn-azul {
+  background: var(--azul-oscuro);
+  color: #fff;
+  border: none;
+}
+
+.btn-amarillo {
+  background: var(--amarillo);
+  color: var(--azul-oscuro);
+  border: none;
+}
+
+.btn-rojo {
+  background: var(--rojo);
+  color: #fff;
+  border: none;
+}
+
+.btn-outline-oscuro {
+  background: transparent;
+  color: var(--texto-principal);
+  border: 1.5px solid var(--texto-principal);
+}
+
+.btn-outline-oscuro:hover {
+  background: var(--texto-principal);
+  color: #fff;
+  opacity: 1;
+}
+
+.btn-outline-blanco {
+  background: transparent;
+  color: #fff;
+  border: 1.5px solid rgba(255,255,255,0.7);
+}
+
+.btn-outline-blanco:hover {
+  background: rgba(255,255,255,0.15);
+  opacity: 1;
+}
+
+/* --- Franja bandera --- */
+.franja-bandera {
+  height: 5px;
+  background: linear-gradient(to right,
+    var(--amarillo) 0%, var(--amarillo) 50%,
+    var(--azul) 50%, var(--azul) 75%,
+    var(--rojo) 75%, var(--rojo) 100%
+  );
+  width: 100%;
+}
+
+/* --- Page header interior --- */
+.page-header {
+  background: var(--azul-oscuro);
+  border-bottom: 3px solid var(--amarillo);
+  padding: 80px 0 48px;
+  text-align: center;
+}
+
+.page-header h1 {
+  color: #fff;
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.page-header p {
+  color: rgba(255,255,255,0.65);
+  font-size: 17px;
+}
+
+/* --- Sección ContactoSection reutilizable --- */
+.contacto-section {
+  background: var(--crema);
+  padding: 80px 0 0;
+  overflow: hidden;
+}
+
+.contacto-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  align-items: end;
+}
+
+.contacto-content {
+  padding: 60px 48px 80px;
+}
+
+.contacto-content .frase-principal {
+  font-family: var(--font-titulo);
+  font-size: 40px;
+  line-height: 1.2;
+  margin: 16px 0 8px;
+}
+
+.contacto-content .frase-principal span {
+  color: var(--azul);
+}
+
+.contacto-content .subtitulo {
+  color: var(--texto-secundario);
+  font-size: 15px;
+  margin-bottom: 32px;
+}
+
+.contacto-imagen {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  min-height: 360px;
+}
+
+.contacto-semicirculo {
+  position: absolute;
+  bottom: 0;
+  right: 40px;
+  width: 280px;
+  height: 280px;
+  border-radius: 50% 50% 0 0;
+  background: rgba(26, 86, 219, 0.12);
+}
+
+.contacto-imagen-placeholder {
+  position: relative;
+  z-index: 1;
+  width: 260px;
+  height: 340px;
+  background: linear-gradient(180deg, rgba(26,86,219,0.1) 0%, rgba(26,86,219,0.25) 100%);
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+}
+
+/* Aliados */
+.aliados-bar {
+  background: #fff;
+  border-top: 1px solid rgba(0,0,0,0.06);
+  padding: 24px 0;
+  margin-top: 0;
+}
+
+.aliados-inner {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.aliados-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+  white-space: nowrap;
+}
+
+.aliados-lista {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-wrap: wrap;
+}
+
+.aliado-item {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texto-secundario);
+  padding: 4px 20px;
+  border-right: 1px solid rgba(0,0,0,0.12);
+}
+
+.aliado-item:last-child {
+  border-right: none;
+}
+
+/* --- Responsive base --- */
+@media (max-width: 768px) {
+  .contacto-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .contacto-content {
+    padding: 48px 24px 40px;
+  }
+
+  .contacto-content .frase-principal {
+    font-size: 28px;
+  }
+
+  .contacto-imagen {
+    display: none;
+  }
+
+  .page-header h1 {
+    font-size: 32px;
+  }
+}

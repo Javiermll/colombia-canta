@@ -1,0 +1,8 @@
+/* ContactoSection styles live in main.css (shared) */
+/* Component-specific overrides: */
+
+.contacto-section {
+  background: var(--crema);
+  padding-top: 80px;
+  overflow: hidden;
+}
