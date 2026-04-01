@@ -27,28 +27,30 @@ export default function Nosotros() {
 
       {/* Quiénes somos */}
       <section id="quienes-somos" style={{ scrollMarginTop: '80px', padding: '72px 0', background: '#fff' }}>
-        <div className="container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '56px', alignItems: 'center' }}>
-          <div>
-            <span className="label-seccion label-rojo">Quiénes somos</span>
-            <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '20px', lineHeight: '1.2' }}>
-              Un proyecto cultural que nació en Medellín
-            </h2>
-            <p style={{ color: 'var(--texto-secundario)', lineHeight: '1.8', marginBottom: '16px' }}>
-              Colombia Canta y Encanta es una organización cultural dedicada a la formación musical de niños y jóvenes en música tradicional colombiana. Con sede en el Sector Estadio de Medellín, llevamos más de diez años preservando y difundiendo el patrimonio musical de nuestra nación.
-            </p>
-            <p style={{ color: 'var(--texto-secundario)', lineHeight: '1.8' }}>
-              Nuestra misión es conectar a las nuevas generaciones con las raíces del bambuco, el pasillo, la cumbia y todos los ritmos que hacen única a la música colombiana, llevando esa riqueza cultural a escenarios de todo el mundo.
-            </p>
+        <div className="container">
+          <div className="grid-2col">
+            <div>
+              <span className="label-seccion label-rojo">Quiénes somos</span>
+              <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '20px', lineHeight: '1.2' }}>
+                Un proyecto cultural que nació en Medellín
+              </h2>
+              <p style={{ color: 'var(--texto-secundario)', lineHeight: '1.8', marginBottom: '16px' }}>
+                Colombia Canta y Encanta es una organización cultural dedicada a la formación musical de niños y jóvenes en música tradicional colombiana. Con sede en el Sector Estadio de Medellín, llevamos más de diez años preservando y difundiendo el patrimonio musical de nuestra nación.
+              </p>
+              <p style={{ color: 'var(--texto-secundario)', lineHeight: '1.8' }}>
+                Nuestra misión es conectar a las nuevas generaciones con las raíces del bambuco, el pasillo, la cumbia y todos los ritmos que hacen única a la música colombiana, llevando esa riqueza cultural a escenarios de todo el mundo.
+              </p>
+            </div>
+            <div style={{
+              background: 'linear-gradient(135deg, #0F3A9E, #1A56DB)',
+              borderRadius: '16px',
+              height: '360px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: '80px'
+            }}>🇨🇴</div>
           </div>
-          <div style={{
-            background: 'linear-gradient(135deg, #0F3A9E, #1A56DB)',
-            borderRadius: '16px',
-            height: '360px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: '80px'
-          }}>🇨🇴</div>
         </div>
       </section>
 
@@ -57,7 +59,7 @@ export default function Nosotros() {
         <div className="container">
           <span className="label-seccion label-rojo" style={{ display: 'block', marginBottom: '8px' }}>Elenco artístico</span>
           <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '40px' }}>Nuestros artistas</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px' }}>
+          <div className="grid-3col">
             {elenco.map(artista => (
               <div key={artista.nombre} style={{
                 background: '#fff',
@@ -93,7 +95,7 @@ export default function Nosotros() {
         <div className="container">
           <span className="label-seccion label-rojo" style={{ display: 'block', marginBottom: '8px' }}>Noticias</span>
           <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '40px' }}>Novedades</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
+          <div className="grid-3col-gap-24">
             {noticias.map(n => (
               <div key={n.titulo} style={{
                 border: '1px solid rgba(0,0,0,0.08)',

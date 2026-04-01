@@ -42,6 +42,7 @@ body {
   background: #fff;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 img {
@@ -289,6 +290,44 @@ h1, h2, h3, h4, h5 {
   border-right: none;
 }
 
+/* --- Grids responsivos reutilizables --- */
+
+/* 2 columnas desktop → 1 columna mobile */
+.grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+
+/* 2 columnas con gap grande (Contacto) */
+.grid-2col-contacto {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+/* 3 columnas desktop → 2 tablet → 1 mobile */
+.grid-3col {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.grid-3col-gap-24 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* 4 columnas desktop → 2 tablet */
+.grid-4col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
 /* --- Responsive base --- */
 @media (max-width: 768px) {
   .contacto-grid {
@@ -309,5 +348,46 @@ h1, h2, h3, h4, h5 {
 
   .page-header h1 {
     font-size: 32px;
+  }
+
+  /* Grids responsivos */
+  .grid-2col {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .grid-2col-contacto {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .grid-3col {
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .grid-3col-gap-24 {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .grid-4col {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  /* Formulario de contacto en mobile */
+  .contacto-form-card {
+    padding: 24px 20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-3col {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-4col {
+    grid-template-columns: 1fr;
   }
 }

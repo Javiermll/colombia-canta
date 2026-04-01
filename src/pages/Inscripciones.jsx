@@ -41,7 +41,7 @@ export default function Inscripciones() {
           <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '40px' }}>
             Elige tu instrumento
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '24px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '24px' }}>
             {cursos.map(c => (
               <div key={c.nombre} style={{
                 border: '1px solid rgba(0,0,0,0.08)',
@@ -77,7 +77,7 @@ export default function Inscripciones() {
         <div className="container">
           <span className="label-seccion label-rojo" style={{ display: 'block', marginBottom: '8px' }}>Proceso</span>
           <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '48px' }}>Cómo inscribirse</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '24px' }}>
+          <div className="grid-4col">
             {pasos.map(p => (
               <div key={p.num} style={{ textAlign: 'center' }}>
                 <div style={{
@@ -116,7 +116,7 @@ export default function Inscripciones() {
                   }}
                 >
                   {faq.q}
-                  <span style={{ fontSize: '20px', transition: 'transform 0.2s', transform: openFaq === i ? 'rotate(180deg)' : '' }}>▾</span>
+                  <span style={{ fontSize: '20px', transition: 'transform 0.2s', transform: openFaq === i ? 'rotate(180deg)' : '', flexShrink: 0, marginLeft: '12px' }}>▾</span>
                 </button>
                 {openFaq === i && (
                   <p style={{ padding: '0 0 20px', fontSize: '15px', color: 'var(--texto-secundario)', lineHeight: '1.7' }}>

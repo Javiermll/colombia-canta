@@ -23,7 +23,7 @@ export default function Contacto() {
 
       <section style={{ background: 'var(--crema)', padding: '72px 0 0', overflow: 'hidden' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '64px', alignItems: 'start' }}>
+          <div className="grid-2col-contacto">
             {/* Info */}
             <div>
               <span className="label-seccion label-rojo">Únete a nuestra comunidad</span>
@@ -69,7 +69,7 @@ export default function Contacto() {
             </div>
 
             {/* Formulario */}
-            <div style={{
+            <div className="contacto-form-card" style={{
               background: '#fff', borderRadius: '20px', padding: '40px',
               boxShadow: '0 8px 40px rgba(0,0,0,0.08)'
             }}>
@@ -102,7 +102,7 @@ export default function Contacto() {
                           width: '100%', padding: '12px 16px', borderRadius: '10px',
                           border: '1.5px solid rgba(0,0,0,0.12)', fontSize: '15px',
                           fontFamily: 'var(--font-cuerpo)', outline: 'none',
-                          transition: 'border-color 0.15s'
+                          transition: 'border-color 0.15s', boxSizing: 'border-box'
                         }}
                         onFocus={e => e.target.style.borderColor = 'var(--azul)'}
                         onBlur={e => e.target.style.borderColor = 'rgba(0,0,0,0.12)'}
@@ -124,7 +124,7 @@ export default function Contacto() {
                         width: '100%', padding: '12px 16px', borderRadius: '10px',
                         border: '1.5px solid rgba(0,0,0,0.12)', fontSize: '15px',
                         fontFamily: 'var(--font-cuerpo)', resize: 'vertical', outline: 'none',
-                        transition: 'border-color 0.15s'
+                        transition: 'border-color 0.15s', boxSizing: 'border-box'
                       }}
                       onFocus={e => e.target.style.borderColor = 'var(--azul)'}
                       onBlur={e => e.target.style.borderColor = 'rgba(0,0,0,0.12)'}
