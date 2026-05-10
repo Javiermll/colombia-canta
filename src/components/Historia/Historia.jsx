@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Historia.css';
 
@@ -8,36 +9,32 @@ const imagenes = [
 ];
 
 export default function Historia() {
+  const [activo, setActivo] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActivo(i => (i + 1) % imagenes.length);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <section className="historia-section">
-      {/* Mosaico de imágenes */}
-      <div className="historia-imagenes">
-        <div className="historia-img-grande">
-          <div style={{
-            background: imagenes[0].bg,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '64px', height: '100%'
-          }}>
-            {imagenes[0].label}
+      {/* Carrusel fade */}
+      <div className="historia-carrusel">
+        {imagenes.map((img, i) => (
+          <div
+            key={i}
+            className={`historia-slide${i === activo ? ' activo' : ''}`}
+            style={{ background: img.bg }}
+          >
+            <span className="historia-slide-emoji">{img.label}</span>
           </div>
-        </div>
-        <div className="historia-img-chica">
-          <div style={{
-            background: imagenes[1].bg,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '40px', height: '100%'
-          }}>
-            {imagenes[1].label}
-          </div>
-        </div>
-        <div className="historia-img-chica">
-          <div style={{
-            background: imagenes[2].bg,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '40px', height: '100%'
-          }}>
-            {imagenes[2].label}
-          </div>
+        ))}
+        <div className="historia-dots">
+          {imagenes.map((_, i) => (
+            <span key={i} className={`historia-dot${i === activo ? ' activo' : ''}`} />
+          ))}
         </div>
       </div>
 
