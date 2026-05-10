@@ -1,5 +1,10 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import Footer from '../components/Footer/Footer';
+import { BASE_URL, OG_IMAGE } from '../utils/seo';
+
+const PAGE_TITLE = 'Contacto | Colombia Canta y Encanta';
+const PAGE_DESC = 'Visítanos en el Sector Estadio de Medellín o escríbenos por WhatsApp y email. Centro cultural Colombia Canta y Encanta.';
 
 const aliados = ['Co·Crea', 'Alcaldía de Medellín', 'Medellín Bureau', 'Teleantioquia', 'Teatro Trail'];
 
@@ -16,6 +21,21 @@ export default function Contacto() {
 
   return (
     <main>
+      <Helmet>
+        <title>{PAGE_TITLE}</title>
+        <meta name="description" content={PAGE_DESC} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${BASE_URL}/#/contacto`} />
+        <meta property="og:title" content={PAGE_TITLE} />
+        <meta property="og:description" content={PAGE_DESC} />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:locale" content="es_CO" />
+        <meta property="og:site_name" content="Colombia Canta y Encanta" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={PAGE_TITLE} />
+        <meta name="twitter:description" content={PAGE_DESC} />
+        <meta name="twitter:image" content={OG_IMAGE} />
+      </Helmet>
       <div className="page-header" style={{ paddingTop: '96px' }}>
         <h1>Contacto</h1>
         <p>Estamos en Medellín, Colombia · Contáctanos</p>
@@ -61,7 +81,7 @@ export default function Contacto() {
                   <span key={r} style={{
                     display: 'inline-flex', alignItems: 'center', gap: '6px',
                     padding: '8px 16px', borderRadius: '100px',
-                    background: 'rgba(0,0,0,0.06)', border: '1px solid rgba(0,0,0,0.1)',
+                    background: 'var(--bg-chip)', border: '1px solid var(--border-sutil)',
                     fontSize: '13px', fontWeight: '500', cursor: 'pointer'
                   }}>{r}</span>
                 ))}
@@ -70,8 +90,8 @@ export default function Contacto() {
 
             {/* Formulario */}
             <div className="contacto-form-card" style={{
-              background: '#fff', borderRadius: '20px', padding: '40px',
-              boxShadow: '0 8px 40px rgba(0,0,0,0.08)'
+              background: 'var(--bg-card)', borderRadius: '20px', padding: '40px',
+              boxShadow: '0 8px 40px var(--sombra-media)'
             }}>
               {enviado ? (
                 <div style={{ textAlign: 'center', padding: '40px 0' }}>
@@ -100,12 +120,12 @@ export default function Contacto() {
                         required
                         style={{
                           width: '100%', padding: '12px 16px', borderRadius: '10px',
-                          border: '1.5px solid rgba(0,0,0,0.12)', fontSize: '15px',
+                          border: '1.5px solid var(--border-media)', fontSize: '15px',
                           fontFamily: 'var(--font-cuerpo)', outline: 'none',
                           transition: 'border-color 0.15s', boxSizing: 'border-box'
                         }}
                         onFocus={e => e.target.style.borderColor = 'var(--azul)'}
-                        onBlur={e => e.target.style.borderColor = 'rgba(0,0,0,0.12)'}
+                        onBlur={e => e.target.style.borderColor = 'var(--border-media)'}
                       />
                     </div>
                   ))}
@@ -122,12 +142,12 @@ export default function Contacto() {
                       rows={5}
                       style={{
                         width: '100%', padding: '12px 16px', borderRadius: '10px',
-                        border: '1.5px solid rgba(0,0,0,0.12)', fontSize: '15px',
+                        border: '1.5px solid var(--border-media)', fontSize: '15px',
                         fontFamily: 'var(--font-cuerpo)', resize: 'vertical', outline: 'none',
                         transition: 'border-color 0.15s', boxSizing: 'border-box'
                       }}
                       onFocus={e => e.target.style.borderColor = 'var(--azul)'}
-                      onBlur={e => e.target.style.borderColor = 'rgba(0,0,0,0.12)'}
+                      onBlur={e => e.target.style.borderColor = 'var(--border-media)'}
                     />
                   </div>
                   <button type="submit" className="btn btn-azul" style={{ width: '100%', justifyContent: 'center', padding: '14px' }}>
@@ -144,10 +164,12 @@ export default function Contacto() {
           <div className="container">
             <div className="aliados-inner">
               <span className="aliados-label">Aliados</span>
-              <div className="aliados-lista">
-                {aliados.map(a => (
-                  <span key={a} className="aliado-item">{a}</span>
-                ))}
+              <div className="aliados-overflow">
+                <div className="aliados-track">
+                  {[...aliados, ...aliados].map((a, i) => (
+                    <span key={i} className="aliado-item">{a}</span>
+                  ))}
+                </div>
               </div>
             </div>
           </div>

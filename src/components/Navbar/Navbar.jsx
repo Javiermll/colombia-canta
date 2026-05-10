@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useTheme } from '../../hooks/useTheme';
 import './Navbar.css';
 
 const eventosDropdown = [
@@ -22,6 +23,7 @@ export default function Navbar({ cartCount = 0 }) {
   const [mobileExpanded, setMobileExpanded] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
+  const { theme, toggle } = useTheme();
 
   const isHome = location.pathname === '/';
 
@@ -143,6 +145,11 @@ export default function Navbar({ cartCount = 0 }) {
             </div>
 
             <Link to="/contacto" className="btn-contacto">Contacto</Link>
+
+            {/* Toggle tema */}
+            <button className="btn-tema" onClick={toggle} aria-label="Cambiar tema">
+              {theme === 'dark' ? '☀️' : '🌙'}
+            </button>
 
             {/* Carrito */}
             <button className="btn-carrito" onClick={() => navigate('/tienda/carrito')}>

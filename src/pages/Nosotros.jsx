@@ -1,6 +1,11 @@
+import { Helmet } from 'react-helmet-async';
 import ContactoSection from '../components/Contacto/Contacto';
 import Footer from '../components/Footer/Footer';
 import '../styles/main.css';
+import { BASE_URL, OG_IMAGE } from '../utils/seo';
+
+const PAGE_TITLE = 'Quiénes Somos | Colombia Canta y Encanta';
+const PAGE_DESC = 'Conoce la historia, el elenco artístico y la misión de Colombia Canta y Encanta, centro cultural y escuela de música tradicional en Medellín.';
 
 const elenco = [
   { nombre: 'Leonardo Tamayo', rol: 'Piano · Director musical', emoji: '🎹' },
@@ -20,13 +25,28 @@ const noticias = [
 export default function Nosotros() {
   return (
     <main>
+      <Helmet>
+        <title>{PAGE_TITLE}</title>
+        <meta name="description" content={PAGE_DESC} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${BASE_URL}/#/nosotros`} />
+        <meta property="og:title" content={PAGE_TITLE} />
+        <meta property="og:description" content={PAGE_DESC} />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:locale" content="es_CO" />
+        <meta property="og:site_name" content="Colombia Canta y Encanta" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={PAGE_TITLE} />
+        <meta name="twitter:description" content={PAGE_DESC} />
+        <meta name="twitter:image" content={OG_IMAGE} />
+      </Helmet>
       <div className="page-header" style={{ paddingTop: '96px' }}>
         <h1>Nosotros</h1>
         <p>Centro cultural y escuela de música tradicional colombiana</p>
       </div>
 
       {/* Quiénes somos */}
-      <section id="quienes-somos" style={{ scrollMarginTop: '80px', padding: '72px 0', background: '#fff' }}>
+      <section id="quienes-somos" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'var(--bg-body)' }}>
         <div className="container">
           <div className="grid-2col">
             <div>
@@ -42,7 +62,7 @@ export default function Nosotros() {
               </p>
             </div>
             <div style={{
-              background: 'linear-gradient(135deg, #0F3A9E, #1A56DB)',
+              background: 'linear-gradient(135deg, var(--azul-oscuro), var(--azul))',
               borderRadius: '16px',
               height: '360px',
               display: 'flex',
@@ -62,11 +82,11 @@ export default function Nosotros() {
           <div className="grid-3col">
             {elenco.map(artista => (
               <div key={artista.nombre} style={{
-                background: '#fff',
+                background: 'var(--bg-card)',
                 borderRadius: '16px',
                 padding: '32px 24px',
                 textAlign: 'center',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.06)'
+                boxShadow: '0 2px 12px var(--sombra-sutil)'
               }}>
                 <div style={{ fontSize: '48px', marginBottom: '16px' }}>{artista.emoji}</div>
                 <div style={{ fontFamily: 'var(--font-titulo)', fontSize: '18px', marginBottom: '6px' }}>{artista.nombre}</div>
@@ -91,14 +111,15 @@ export default function Nosotros() {
       </section>
 
       {/* Noticias */}
-      <section id="noticias" style={{ scrollMarginTop: '80px', padding: '72px 0', background: '#fff' }}>
+      <section id="noticias" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'var(--bg-body)' }}>
         <div className="container">
           <span className="label-seccion label-rojo" style={{ display: 'block', marginBottom: '8px' }}>Noticias</span>
           <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '40px' }}>Novedades</h2>
           <div className="grid-3col-gap-24">
             {noticias.map(n => (
               <div key={n.titulo} style={{
-                border: '1px solid rgba(0,0,0,0.08)',
+                background: 'var(--bg-card)',
+                border: '1px solid var(--border-sutil)',
                 borderRadius: '16px',
                 padding: '28px',
                 transition: 'box-shadow 0.2s ease'

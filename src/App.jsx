@@ -1,5 +1,7 @@
 import { HashRouter as BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/Navbar/Navbar';
+import ScrollToTop from './components/ScrollToTop';
 import Inicio from './pages/Inicio';
 import Nosotros from './pages/Nosotros';
 import Eventos from './pages/Eventos';
@@ -12,7 +14,9 @@ import './styles/main.css';
 
 export default function App() {
   return (
+    <HelmetProvider>
     <BrowserRouter>
+      <ScrollToTop />
       <Navbar />
       <Routes>
         <Route path="/" element={<Inicio />} />
@@ -26,5 +30,6 @@ export default function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
+    </HelmetProvider>
   );
 }

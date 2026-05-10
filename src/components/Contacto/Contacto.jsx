@@ -26,10 +26,12 @@ export default function ContactoSection() {
         <div className="container">
           <div className="aliados-inner">
             <span className="aliados-label">Aliados</span>
-            <div className="aliados-lista">
-              {aliados.map(a => (
-                <span key={a} className="aliado-item">{a}</span>
-              ))}
+            <div className="aliados-overflow">
+              <div className="aliados-track">
+                {[...aliados, ...aliados].map((a, i) => (
+                  <span key={i} className="aliado-item">{a}</span>
+                ))}
+              </div>
             </div>
           </div>
         </div>

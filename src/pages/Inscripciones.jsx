@@ -1,5 +1,10 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import Footer from '../components/Footer/Footer';
+import { BASE_URL, OG_IMAGE } from '../utils/seo';
+
+const PAGE_TITLE = 'Inscripciones | Colombia Canta y Encanta';
+const PAGE_DESC = 'Inscríbete en la escuela de música de Colombia Canta y Encanta. Cursos de bandola, tiple, guitarra, canto y piano en Medellín.';
 
 const cursos = [
   { nombre: 'Bandola', emoji: '🪕', nivel: 'Todos los niveles', horario: 'Mar y Jue · 5:00 PM', desc: 'Aprende a tocar la bandola llanera, instrumento emblema de los Llanos Orientales y la música andina colombiana.' },
@@ -29,13 +34,28 @@ export default function Inscripciones() {
 
   return (
     <main>
+      <Helmet>
+        <title>{PAGE_TITLE}</title>
+        <meta name="description" content={PAGE_DESC} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${BASE_URL}/#/inscripciones`} />
+        <meta property="og:title" content={PAGE_TITLE} />
+        <meta property="og:description" content={PAGE_DESC} />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:locale" content="es_CO" />
+        <meta property="og:site_name" content="Colombia Canta y Encanta" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={PAGE_TITLE} />
+        <meta name="twitter:description" content={PAGE_DESC} />
+        <meta name="twitter:image" content={OG_IMAGE} />
+      </Helmet>
       <div className="page-header" style={{ paddingTop: '96px' }}>
         <h1>Inscripciones</h1>
         <p>Únete a la escuela de música más vibrante de Medellín</p>
       </div>
 
       {/* Cursos */}
-      <section id="cursos" style={{ scrollMarginTop: '80px', padding: '72px 0', background: '#fff' }}>
+      <section id="cursos" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'var(--bg-body)' }}>
         <div className="container">
           <span className="label-seccion label-rojo" style={{ display: 'block', marginBottom: '8px' }}>Nuestros cursos</span>
           <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '40px' }}>
@@ -44,14 +64,14 @@ export default function Inscripciones() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '24px' }}>
             {cursos.map(c => (
               <div key={c.nombre} style={{
-                border: '1px solid rgba(0,0,0,0.08)',
+                border: '1px solid var(--border-sutil)',
                 borderRadius: '16px',
                 padding: '28px',
-                background: '#fff',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+                background: 'var(--bg-card)',
+                boxShadow: '0 2px 12px var(--sombra-sutil)',
                 transition: 'box-shadow 0.2s ease, transform 0.2s ease'
               }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(0,0,0,0.1)'; }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 28px rgba(0,0,0,0.15)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
               >
                 <div style={{ fontSize: '40px', marginBottom: '16px' }}>{c.emoji}</div>
@@ -96,13 +116,13 @@ export default function Inscripciones() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" style={{ scrollMarginTop: '80px', padding: '72px 0', background: '#fff' }}>
+      <section id="faq" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'var(--bg-body)' }}>
         <div className="container" style={{ maxWidth: '720px' }}>
           <span className="label-seccion label-rojo" style={{ display: 'block', marginBottom: '8px' }}>Preguntas frecuentes</span>
           <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '40px' }}>FAQ</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
             {faqs.map((faq, i) => (
-              <div key={i} style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }}>
+              <div key={i} style={{ borderBottom: '1px solid var(--border-sutil)' }}>
                 <button
                   onClick={() => setOpenFaq(openFaq === i ? null : i)}
                   style={{

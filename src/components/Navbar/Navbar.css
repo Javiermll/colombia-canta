@@ -8,7 +8,9 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .navbar--transparent {
@@ -16,14 +18,14 @@
 }
 
 .navbar--white {
-  background: #fff;
-  box-shadow: 0 1px 16px rgba(0,0,0,0.08);
+  background: var(--bg-card);
+  box-shadow: 0 1px 16px var(--sombra-media);
 }
 
 .navbar--sticky {
   position: sticky;
-  background: #fff;
-  box-shadow: 0 1px 16px rgba(0,0,0,0.08);
+  background: var(--bg-card);
+  box-shadow: 0 1px 16px var(--sombra-media);
 }
 
 .navbar-inner {
@@ -115,11 +117,11 @@
 }
 
 .navbar--transparent .nav-link {
-  color: rgba(255,255,255,0.9);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .navbar--transparent .nav-link:hover {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .navbar--white .nav-link,
@@ -129,7 +131,7 @@
 
 .navbar--white .nav-link:hover,
 .navbar--sticky .nav-link:hover {
-  background: rgba(0,0,0,0.05);
+  background: var(--bg-hover);
 }
 
 .nav-chevron {
@@ -154,26 +156,28 @@
 }
 
 .navbar--transparent .btn-contacto {
-  border: 1.5px solid rgba(255,255,255,0.65);
+  border: 1.5px solid rgba(255, 255, 255, 0.65);
   color: #fff;
   background: transparent;
 }
 
 .navbar--transparent .btn-contacto:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .navbar--white .btn-contacto,
 .navbar--sticky .btn-contacto {
-  border: 1.5px solid var(--texto-principal);
+  border: 1.5px solid var(--border-media);
   color: var(--texto-principal);
   background: transparent;
 }
 
 .navbar--white .btn-contacto:hover,
 .navbar--sticky .btn-contacto:hover {
-  background: var(--texto-principal);
+  background: var(--azul-oscuro);
+  border-color: var(--azul-oscuro);
   color: #fff;
+  opacity: 1;
 }
 
 /* --- Carrito --- */
@@ -191,11 +195,11 @@
 }
 
 .navbar--transparent .btn-carrito {
-  color: rgba(255,255,255,0.9);
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .navbar--transparent .btn-carrito:hover {
-  background: rgba(255,255,255,0.12);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .navbar--white .btn-carrito,
@@ -205,7 +209,7 @@
 
 .navbar--white .btn-carrito:hover,
 .navbar--sticky .btn-carrito:hover {
-  background: rgba(0,0,0,0.05);
+  background: var(--bg-hover);
 }
 
 .carrito-icono {
@@ -237,7 +241,9 @@
   transform: translateX(-50%) translateY(-8px);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
   z-index: 200;
 }
 
@@ -249,9 +255,9 @@
 
 /* Simple dropdown */
 .dropdown-simple {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  box-shadow: 0 8px 32px var(--sombra-fuerte);
   padding: 8px;
   min-width: 200px;
   white-space: nowrap;
@@ -267,14 +273,14 @@
 }
 
 .dropdown-simple a:hover {
-  background: rgba(0,0,0,0.05);
+  background: var(--bg-hover);
 }
 
 /* Eventos dropdown */
 .dropdown-eventos {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: 16px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 40px var(--sombra-fuerte);
   padding: 20px;
   width: 520px;
   left: 0;
@@ -291,7 +297,7 @@
   justify-content: space-between;
   margin-bottom: 16px;
   padding-bottom: 12px;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid var(--border-sutil);
 }
 
 .dropdown-header h4 {
@@ -322,13 +328,15 @@
   border-radius: 10px;
   overflow: hidden;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
   text-decoration: none;
 }
 
 .evento-mini-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
 }
 
 .evento-mini-bg {
@@ -350,7 +358,7 @@
 }
 
 .chip-tipo {
-  background: rgba(0,0,0,0.55);
+  background: rgba(0, 0, 0, 0.55);
   color: #fff;
   font-size: 10px;
   font-weight: 600;
@@ -360,8 +368,8 @@
 
 .evento-mini-info {
   padding: 10px 12px 12px;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.06);
+  background: var(--bg-card);
+  border: 1px solid var(--border-sutil);
   border-top: none;
   border-radius: 0 0 10px 10px;
 }
@@ -381,9 +389,9 @@
 
 /* Tienda dropdown */
 .dropdown-tienda {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: 16px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 40px var(--sombra-fuerte);
   padding: 20px;
   width: 460px;
   left: 0;
@@ -423,7 +431,8 @@
 .tienda-mini-info {
   padding: 8px;
   text-align: center;
-  border: 1px solid rgba(0,0,0,0.06);
+  background: var(--bg-card);
+  border: 1px solid var(--border-sutil);
   border-top: none;
   border-radius: 0 0 10px 10px;
 }
@@ -474,8 +483,8 @@
   top: 68px;
   left: 0;
   right: 0;
-  background: #fff;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+  background: var(--bg-card);
+  box-shadow: 0 8px 32px var(--sombra-fuerte);
   padding: 16px;
   z-index: 999;
   max-height: calc(100vh - 68px);
@@ -505,12 +514,12 @@
 
 .mobile-menu a:hover,
 .mobile-menu button.mobile-link:hover {
-  background: rgba(0,0,0,0.05);
+  background: var(--bg-hover);
 }
 
 .mobile-submenu {
   padding-left: 16px;
-  border-left: 2px solid rgba(0,0,0,0.08);
+  border-left: 2px solid var(--border-sutil);
   margin-left: 16px;
 }
 
@@ -518,6 +527,28 @@
   font-size: 14px;
   padding: 10px 12px;
   color: var(--texto-secundario);
+}
+
+/* --- Toggle tema --- */
+.btn-tema {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+  transition: background 0.15s ease;
+}
+
+.navbar--transparent .btn-tema:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.navbar--white .btn-tema:hover,
+.navbar--sticky .btn-tema:hover {
+  background: var(--bg-hover);
 }
 
 @media (max-width: 768px) {

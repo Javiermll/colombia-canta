@@ -74,8 +74,8 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: #fff;
-  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  background: var(--bg-card);
+  box-shadow: 0 2px 16px var(--sombra-media);
   padding: 0 32px;
   height: 60px;
   display: flex;
@@ -142,7 +142,7 @@
 .evento-col-izq section {
   margin-bottom: 40px;
   padding-bottom: 40px;
-  border-bottom: 1px solid rgba(0,0,0,0.06);
+  border-bottom: 1px solid var(--border-sutil);
 }
 
 .evento-col-izq section:last-child {
@@ -177,8 +177,8 @@
   gap: 6px;
   padding: 6px 14px;
   border-radius: 100px;
-  background: rgba(26, 86, 219, 0.08);
-  border: 1px solid rgba(26, 86, 219, 0.2);
+  background: var(--bg-chip);
+  border: 1px solid var(--border-sutil);
   color: var(--azul-oscuro);
   font-size: 14px;
   font-weight: 500;
@@ -216,7 +216,7 @@
   gap: 8px;
   font-size: 32px;
   color: var(--texto-secundario);
-  border: 1px dashed rgba(0,0,0,0.1);
+  border: 1px dashed var(--border-media);
 }
 
 .lugar-mapa-placeholder span {
@@ -228,16 +228,16 @@
 .compra-card {
   position: sticky;
   top: 80px;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.08);
+  background: var(--bg-card);
+  border: 1px solid var(--border-sutil);
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 32px var(--sombra-media);
   overflow: hidden;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
 }
 
 .compra-card:hover {
-  box-shadow: 0 16px 48px rgba(0,0,0,0.15);
+  box-shadow: 0 16px 48px var(--sombra-fuerte);
   transform: translateY(-2px);
 }
 
@@ -267,7 +267,7 @@
 
 .compra-card-body {
   padding: 20px 24px 24px;
-  border-top: 1px solid rgba(0,0,0,0.06);
+  border-top: 1px solid var(--border-sutil);
   margin-top: 16px;
 }
 
@@ -325,7 +325,7 @@
 
 .compra-card-footer {
   padding: 16px 24px;
-  border-top: 1px solid rgba(0,0,0,0.06);
+  border-top: 1px solid var(--border-sutil);
 }
 
 .compra-card-footer p {
@@ -346,7 +346,7 @@
   border-radius: 8px;
   font-size: 12px;
   font-weight: 600;
-  border: 1.5px solid rgba(0,0,0,0.15);
+  border: 1.5px solid var(--border-media);
   background: transparent;
   color: var(--texto-principal);
   cursor: pointer;
@@ -358,7 +358,7 @@
 }
 
 .compra-contacto-btn:hover {
-  background: rgba(0,0,0,0.04);
+  background: var(--bg-hover);
 }
 
 /* BLOQUE 4 — PRUEBA SOCIAL */
@@ -379,10 +379,10 @@
 }
 
 .testimonio-card {
-  background: #fff;
+  background: var(--bg-card);
   border-radius: 16px;
   padding: 28px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 12px var(--sombra-sutil);
 }
 
 .testimonio-comillas {
@@ -519,8 +519,8 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #fff;
-  box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+  background: var(--bg-card);
+  box-shadow: 0 -4px 24px var(--sombra-fuerte);
   padding: 16px 24px;
   z-index: 200;
 }

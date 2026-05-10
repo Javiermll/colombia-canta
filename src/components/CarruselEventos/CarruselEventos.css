@@ -33,7 +33,7 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  border: 1.5px solid rgba(0,0,0,0.15);
+  border: 1.5px solid var(--border-media);
   background: transparent;
   display: flex;
   align-items: center;
@@ -46,7 +46,7 @@
 
 .carrusel-flecha:hover {
   background: var(--texto-principal);
-  color: #fff;
+  color: var(--bg-body);
   border-color: var(--texto-principal);
 }
 
@@ -70,9 +70,9 @@
   max-width: 280px;
   border-radius: 16px;
   overflow: hidden;
-  border: 1px solid rgba(0,0,0,0.06);
-  background: #fff;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  border: 1px solid var(--border-sutil);
+  background: var(--bg-card);
+  box-shadow: 0 2px 12px var(--sombra-sutil);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
   flex-shrink: 0;
   cursor: pointer;
@@ -80,7 +80,7 @@
 
 .event-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.1);
+  box-shadow: 0 12px 32px var(--sombra-media);
 }
 
 .event-card-img {
@@ -127,7 +127,7 @@
 
 .event-card-divider {
   height: 1px;
-  background: rgba(0,0,0,0.06);
+  background: var(--border-sutil);
   margin-bottom: 14px;
 }
 
@@ -167,7 +167,7 @@
 .event-card-btn.secundario {
   background: transparent;
   color: var(--texto-principal);
-  border: 1.5px solid rgba(0,0,0,0.2);
+  border: 1.5px solid var(--border-media);
 }
 
 .event-card-btn:hover {

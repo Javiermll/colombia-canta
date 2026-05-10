@@ -42,7 +42,6 @@ const cols = [
 export default function Footer() {
   return (
     <footer className="footer">
-      <div className="franja-bandera" />
       <div className="container">
         <div className="footer-grid">
           {/* Marca */}

@@ -1,6 +1,11 @@
 import { useState } from 'react';
+import { Helmet } from 'react-helmet-async';
 import ContactoSection from '../components/Contacto/Contacto';
 import Footer from '../components/Footer/Footer';
+import { BASE_URL, OG_IMAGE } from '../utils/seo';
+
+const PAGE_TITLE = 'Tienda | Colombia Canta y Encanta';
+const PAGE_DESC = 'Merch oficial de Colombia Canta y Encanta: poleras, hoodies, tote bags y más. Lleva un pedacito de la cultura colombiana contigo.';
 
 const categorias = ['Todos', 'Poleras', 'Hoodies', 'Bags', 'Otros'];
 
@@ -33,6 +38,21 @@ export default function Tienda() {
 
   return (
     <main>
+      <Helmet>
+        <title>{PAGE_TITLE}</title>
+        <meta name="description" content={PAGE_DESC} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${BASE_URL}/#/tienda`} />
+        <meta property="og:title" content={PAGE_TITLE} />
+        <meta property="og:description" content={PAGE_DESC} />
+        <meta property="og:image" content={OG_IMAGE} />
+        <meta property="og:locale" content="es_CO" />
+        <meta property="og:site_name" content="Colombia Canta y Encanta" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={PAGE_TITLE} />
+        <meta name="twitter:description" content={PAGE_DESC} />
+        <meta name="twitter:image" content={OG_IMAGE} />
+      </Helmet>
       <div className="page-header" style={{ paddingTop: '96px' }}>
         <h1>Tienda</h1>
         <p>Merch oficial de Colombia Canta y Encanta</p>
@@ -65,7 +85,7 @@ export default function Tienda() {
                   padding: '10px 22px',
                   borderRadius: '100px',
                   border: '1.5px solid',
-                  borderColor: filtro === cat ? 'var(--azul-oscuro)' : 'rgba(0,0,0,0.15)',
+                  borderColor: filtro === cat ? 'var(--azul-oscuro)' : 'var(--border-media)',
                   background: filtro === cat ? 'var(--azul-oscuro)' : 'transparent',
                   color: filtro === cat ? '#fff' : 'var(--texto-principal)',
                   fontSize: '14px',
@@ -88,14 +108,14 @@ export default function Tienda() {
           }}>
             {filtrados.map(prod => (
               <div key={prod.id} style={{
-                border: '1px solid rgba(0,0,0,0.08)',
+                border: '1px solid var(--border-sutil)',
                 borderRadius: '16px',
                 overflow: 'hidden',
-                background: '#fff',
-                boxShadow: '0 2px 12px rgba(0,0,0,0.05)',
+                background: 'var(--bg-card)',
+                boxShadow: '0 2px 12px var(--sombra-sutil)',
                 transition: 'transform 0.2s ease, box-shadow 0.2s ease',
               }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.1)'; }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.15)'; }}
                 onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; }}
               >
                 <div style={{

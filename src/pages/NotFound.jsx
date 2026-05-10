@@ -1,7 +1,13 @@
+import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 export default function NotFound() {
   return (
+    <>
+      <Helmet>
+        <title>Página no encontrada | Colombia Canta y Encanta</title>
+        <meta name="robots" content="noindex" />
+      </Helmet>
     <div style={{
       minHeight: '100vh',
       background: 'var(--crema)',
@@ -46,5 +52,6 @@ export default function NotFound() {
 
       <Link to="/" className="btn btn-azul">Volver al Inicio</Link>
     </div>
+    </>
   );
 }
