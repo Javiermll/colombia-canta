@@ -134,7 +134,10 @@ export default function Carrito() {
                         color: 'var(--texto-secundario)',
                         marginBottom: '12px'
                       }}>
-                        {item.categoria} · {item.precio} c/u
+                        {item.categoria}
+                        {item.talla && ` · Talla: ${item.talla}`}
+                        {item.color && ` · ${item.color.nombre}`}
+                        {` · ${item.precio} c/u`}
                       </div>
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         <button

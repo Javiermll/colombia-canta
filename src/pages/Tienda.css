@@ -1,0 +1,127 @@
+/* ==========================================
+   TIENDA — CARDS DE PRODUCTOS
+   ========================================== */
+
+.producto-card {
+  border: 1px solid var(--border-sutil);
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-card);
+  box-shadow: 0 2px 12px var(--sombra-sutil);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.producto-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px var(--sombra-media);
+}
+
+[data-theme="dark"] .producto-card {
+  background: #090d1a;
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+[data-theme="dark"] .producto-card:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Badge de categoría sobre la imagen */
+.producto-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  backdrop-filter: blur(4px);
+}
+
+[data-theme="dark"] .producto-card-badge {
+  background: var(--amarillo);
+  color: #090d1a;
+}
+
+/* Precio */
+.producto-card-precio {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--azul-oscuro);
+}
+
+[data-theme="dark"] .producto-card-precio {
+  color: var(--amarillo);
+}
+
+/* Fila de acciones */
+.producto-card-acciones {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+/* Botón Añadir */
+.producto-card-btn-add {
+  flex: 1;
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--azul-oscuro);
+  background: var(--azul-oscuro);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-cuerpo);
+  transition: opacity 0.15s, background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.producto-card-btn-add:hover {
+  opacity: 0.85;
+}
+
+[data-theme="dark"] .producto-card-btn-add {
+  background: var(--amarillo);
+  border-color: var(--amarillo);
+  color: #090d1a;
+}
+
+[data-theme="dark"] .producto-card-btn-add:hover {
+  opacity: 0.9;
+}
+
+/* Botón Ver opciones */
+.producto-card-btn-ver {
+  padding: 9px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--border-media);
+  background: transparent;
+  color: var(--texto-secundario);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: var(--font-cuerpo);
+  transition: border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+}
+
+.producto-card-btn-ver:hover {
+  border-color: var(--azul);
+  color: var(--azul);
+}
+
+[data-theme="dark"] .producto-card-btn-ver {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+}
+
+[data-theme="dark"] .producto-card-btn-ver:hover {
+  border-color: var(--amarillo);
+  color: var(--amarillo);
+}

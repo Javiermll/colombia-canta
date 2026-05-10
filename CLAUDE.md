@@ -120,7 +120,10 @@ src/
 | Aliados — carrusel marquee | ✅ | ✅ Loop infinito, pausa al hover |
 | Filtros /eventos y /tienda | ✅ | ✅ (useState) |
 | Carrito de tienda | ✅ | ✅ `CarritoContext` + `localStorage` + página `/tienda/carrito` |
-| Formulario de contacto | ✅ | ❌ No envía datos reales (EmailJS pendiente) |
+| Quick view de productos | ✅ | ✅ Modal 2 col, tallas, colores, cantidad, COP + USD, stock badge |
+| Cards dark mode (tienda) | ✅ | ✅ Fondo negro, borde blanco, precio amarillo, badge categoría |
+| Logo real en Navbar/Footer | ✅ | ✅ `Col_Logo.png` vía `import.meta.env.BASE_URL` |
+| Formulario de contacto | ✅ | ❌ No envía datos reales (Resend + backend en Mes 2) |
 | Inscripciones | ✅ | ❌ Redirige a WhatsApp |
 | Pagos | ✅ botones | ❌ Sin integración |
 | Panel admin | ❌ | ❌ No existe |
@@ -147,6 +150,10 @@ src/
 - **Carrusel Aliados (marquee CSS):** items duplicados (`[...aliados, ...aliados]`) + `@keyframes aliados-scroll` animando `translateX(-50%)`. Fade en bordes con `mask-image`. Pausa al hover. Implementado en `ContactoSection` y en la página `/contacto`.
 - **Botón Contacto en navbar:** hover usa `--azul-oscuro` + texto blanco (antes usaba `--texto-principal` que en dark mode era casi blanco, generando contraste incorrecto).
 - **HashRouter + Open Graph (limitación conocida):** los scrapers de redes sociales ignoran el hash en la URL y siempre leen las meta tags de la raíz. Los tags por página funcionan para SEO en buscadores. Se resuelve en Mes 6 con la migración a BrowserRouter.
+- **CarritoContext:** estado global del carrito en `src/context/CarritoContext.jsx`. Persiste en `localStorage` bajo la clave `colombia-canta-carrito`. `agregar(producto, cantidad)` hace stacking por ID compuesto `${id}-${talla}-${color}` para distinguir variantes del mismo producto.
+- **ProductoModal (quick view):** `src/components/ProductoModal/`. Se abre al clickear cualquier card o el botón "🛒 Añadir". Muestra precio en COP y equivalente USD con tasa fija `TASA_USD = 4200` (se reemplaza por API real en Mes 2 — tarea 2.10). Cierre con Escape, clic en overlay o botón ✕. Bloquea scroll del body mientras está abierto.
+- **Cards dark mode tienda:** `src/pages/Tienda.css` con selectores `[data-theme="dark"] .producto-card`. Fondo `#090d1a`, borde blanco `rgba(255,255,255,0.15)`, precio en `var(--amarillo)`, badge de categoría amarillo sobre la imagen.
+- **Logo real:** `public/Col_Logo.png` referenciado como `${import.meta.env.BASE_URL}Col_Logo.png` para que funcione correctamente con `base: '/colombia-canta/'` en `vite.config.js`.
 
 ---
 
@@ -230,6 +237,7 @@ colombia-canta-docs/
 ### Mes 5 — Septiembre · Panel de administración
 - [ ] Autenticación JWT (solo admin)
 - [ ] Panel `/admin` protegido: pedidos, inscripciones, CRUD eventos y productos
+- [ ] Gestión completa del catálogo: formulario de producto con nombre, descripción, categoría, precio COP, tallas (array), colores (nombre + hex), stock, imagen, activo/inactivo
 - [ ] Estadísticas básicas
 
 ### Mes 6 — Octubre · Optimización y lanzamiento

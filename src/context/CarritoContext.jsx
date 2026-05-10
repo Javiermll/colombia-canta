@@ -16,17 +16,17 @@ export function CarritoProvider({ children }) {
     localStorage.setItem('colombia-canta-carrito', JSON.stringify(items));
   }, [items]);
 
-  const agregar = (producto) => {
+  const agregar = (producto, cantidad = 1) => {
     setItems(prev => {
       const existente = prev.find(item => item.id === producto.id);
       if (existente) {
         return prev.map(item =>
           item.id === producto.id
-            ? { ...item, cantidad: item.cantidad + 1 }
+            ? { ...item, cantidad: item.cantidad + cantidad }
             : item
         );
       }
-      return [...prev, { ...producto, cantidad: 1 }];
+      return [...prev, { ...producto, cantidad }];
     });
   };
 
