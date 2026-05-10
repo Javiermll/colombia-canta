@@ -3,7 +3,7 @@
 ## Descripción
 Plataforma web oficial de **Colombia Canta y Encanta**, asociación cultural con sede en Medellín dedicada a la formación musical de niños y jóvenes en música tradicional colombiana. El objetivo final es una plataforma completa: presentación institucional, venta de merch con pagos reales y sistema de inscripciones digitalizado.
 
-**Estado actual:** ~40% — Capa visual completa + SEO base implementado (títulos, meta descriptions, Open Graph, Twitter Card). Sin backend ni funcionalidad transaccional real.
+**Estado actual:** ~50% — Capa visual completa + SEO implementado + dark mode toggle + mejoras de UX (scroll to top, carruseles). Sin backend ni funcionalidad transaccional real.
 
 ---
 
@@ -63,7 +63,7 @@ Todas las variables están en `src/styles/main.css`. **Nunca hardcodear hex en l
 /eventos            → Eventos (grid filtrable por tipo)
 /eventos/:id        → EventoDetallePage (useParams → pasa evento a EventoDetalle)
 /tienda             → Tienda (grid + filtros + carrito básico)
-/tienda/carrito     → [PENDIENTE] Página de carrito
+/tienda/carrito     → Carrito (lista, cantidades, totales)
 /inscripciones      → Inscripciones (#cursos, #como-inscribirse, #faq)
 /contacto           → Contacto (formulario + info)
 /admin              → [PENDIENTE] Panel de administración (protegido)
@@ -80,10 +80,11 @@ src/
 │   ├── Hero/            — 3 columnas 100vh con letras superpuestas
 │   ├── CarruselEventos/ — Carrusel horizontal (useState offset)
 │   │   └── EventCard.jsx — Card reutilizable en carrusel y en /eventos
-│   ├── Historia/        — Sección "Desde Medellín para el mundo"
+│   ├── Historia/        — Carrusel fade automático (3s) + dots indicadores
 │   ├── Escuela/         — Sección fondo azul oscuro con pills de cursos
-│   ├── Contacto/        — ContactoSection reutilizable + barra de aliados
+│   ├── Contacto/        — ContactoSection reutilizable + carrusel de aliados
 │   ├── EventoDetalle/   — Landing completa de cada concierto
+│   ├── ScrollToTop.jsx  — Scroll al tope en cada cambio de ruta
 │   └── Footer/          — Footer 6 columnas (sin franja de bandera)
 ├── pages/
 │   ├── Inicio.jsx
@@ -98,6 +99,8 @@ src/
 │   └── eventos.js       — Array con 5 eventos. Campos clave: id, titulo, slug, tipo,
 │                          fecha, fechaCompleta, ciudad, lugar, descripcion,
 │                          descripcionLarga, programa, precio, color, testimonios
+├── hooks/
+│   └── useTheme.js      — Toggle dark/light mode; persiste en localStorage; aplica data-theme en <html>
 ├── utils/
 │   └── seo.js           — BASE_URL y OG_IMAGE (constantes compartidas para Helmet)
 └── styles/
@@ -113,12 +116,16 @@ src/
 | Navbar + dropdowns + mobile | ✅ | ✅ |
 | Hero 3 columnas | ✅ | — |
 | Carrusel de eventos | ✅ | ✅ (navegación) |
+| Historia — carrusel fade | ✅ | ✅ Auto-avance 3s, dots indicadores |
+| Aliados — carrusel marquee | ✅ | ✅ Loop infinito, pausa al hover |
 | Filtros /eventos y /tienda | ✅ | ✅ (useState) |
-| Carrito de tienda | ✅ | ⚠️ Solo estado local, sin persistencia |
-| Formulario de contacto | ✅ | ❌ No envía datos reales |
+| Carrito de tienda | ✅ | ✅ `CarritoContext` + `localStorage` + página `/tienda/carrito` |
+| Formulario de contacto | ✅ | ❌ No envía datos reales (EmailJS pendiente) |
 | Inscripciones | ✅ | ❌ Redirige a WhatsApp |
 | Pagos | ✅ botones | ❌ Sin integración |
 | Panel admin | ❌ | ❌ No existe |
+| Dark mode toggle | ✅ | ✅ useTheme hook, localStorage, data-theme en html |
+| Scroll to top en navegación | ✅ | ✅ ScrollToTop component |
 | SEO — títulos dinámicos | ✅ react-helmet-async | ✅ Implementado |
 | SEO — meta descriptions | ✅ | ✅ Implementado |
 | SEO — Open Graph tags | ✅ | ✅ Implementado (todas las páginas) |
@@ -134,7 +141,11 @@ src/
 - **HelmetProvider** envuelve toda la app en `App.jsx`, por encima del router.
 - **Poppins sobre Playfair Display:** fuente de títulos cambiada a Poppins (más moderna, sin serifa). Inter sigue como fuente de cuerpo. Ambas desde Google Fonts en `main.css` `@import`.
 - **Sin franja de bandera en el footer:** se eliminó el `<div className="franja-bandera">` y su CSS. Decisión estética del cliente.
-- **Dark mode: pendiente de implementar.** El usuario quiere un toggle de modo oscuro (fondo negro + contraste correcto). Complejidad estimada: 4–6 horas. Muchos componentes usan colores hex hardcodeados en estilos inline (no solo variables CSS), lo que requiere revisión manual. Opciones: (a) añadir variables CSS dark en `:root[data-theme="dark"]` + `data-theme` en `<html>`, (b) default dark en toda la app. Pendiente de decidir antes de implementar.
+- **Dark mode implementado** con `src/hooks/useTheme.js`: toggle 🌙/☀️ en el Navbar, `data-theme="dark"` en `<html>`, preferencia persistida en `localStorage`. Variables semánticas en `:root` (`--bg-body`, `--bg-card`, `--bg-surface`, `--border-sutil`, `--border-media`, `--sombra-*`) y bloque `[data-theme="dark"]` en `main.css`. Todos los componentes y páginas actualizados para usar variables en lugar de hex hardcodeados.
+- **ScrollToTop:** componente `src/components/ScrollToTop.jsx` montado en `App.jsx` dentro del router. Escucha `pathname` con `useLocation` y llama `window.scrollTo(0, 0)` en cada navegación.
+- **Carrusel Historia (fade):** `useEffect` + `setInterval` de 3s. Slides en `position: absolute` con `opacity: 0/1` y `transition: opacity 1s`. Dots visuales en la parte inferior.
+- **Carrusel Aliados (marquee CSS):** items duplicados (`[...aliados, ...aliados]`) + `@keyframes aliados-scroll` animando `translateX(-50%)`. Fade en bordes con `mask-image`. Pausa al hover. Implementado en `ContactoSection` y en la página `/contacto`.
+- **Botón Contacto en navbar:** hover usa `--azul-oscuro` + texto blanco (antes usaba `--texto-principal` que en dark mode era casi blanco, generando contraste incorrecto).
 - **HashRouter + Open Graph (limitación conocida):** los scrapers de redes sociales ignoran el hash en la URL y siempre leen las meta tags de la raíz. Los tags por página funcionan para SEO en buscadores. Se resuelve en Mes 6 con la migración a BrowserRouter.
 
 ---
@@ -183,12 +194,16 @@ colombia-canta-docs/
 - [x] Títulos dinámicos por página
 - [x] Meta descriptions por página
 - [x] Open Graph tags por página (tarea 1.5)
-- [ ] Integrar EmailJS en formulario de contacto (tarea 1.6 — requiere correo corporativo)
-- [ ] Persistencia del carrito con `localStorage` (tarea 1.7)
-- [ ] Página `/tienda/carrito` (tarea 1.8)
-- [ ] Arreglar botón carrito del navbar (tarea 1.9 — depende de 1.8)
-- [ ] Reemplazar placeholders con imágenes reales del cliente (tarea 1.10)
-- [ ] Deploy final del mes a GitHub Pages (tarea 1.11)
+- [x] Dark mode toggle con `useTheme` hook (fuera de roadmap original — implementado)
+- [x] ScrollToTop en cada navegación de ruta (fuera de roadmap original — implementado)
+- [x] Carrusel fade en sección Historia (fuera de roadmap original — implementado)
+- [x] Carrusel marquee en barra de aliados (fuera de roadmap original — implementado)
+- [x] EmailJS descartado — email seguro via Resend + backend en Mes 2 (tarea 1.6 removida del mes)
+- [x] Persistencia del carrito con `localStorage` + `CarritoContext` (tarea 1.6)
+- [x] Página `/tienda/carrito` con cantidades, eliminar, totales y estado vacío (tarea 1.7)
+- [x] Botón carrito del navbar muestra badge con total y navega a `/tienda/carrito` (tarea 1.8)
+- [ ] Reemplazar placeholders con imágenes reales del cliente (tarea 1.9)
+- [ ] Deploy final del mes a GitHub Pages (tarea 1.10)
 
 ### Mes 2 — Junio · Backend: cimientos
 - [ ] Proyecto Node.js + Express en repo separado (`colombia-canta-api`)

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { useCarrito } from '../context/CarritoContext';
 import ContactoSection from '../components/Contacto/Contacto';
 import Footer from '../components/Footer/Footer';
 import { BASE_URL, OG_IMAGE } from '../utils/seo';
@@ -23,15 +24,15 @@ const productos = [
 
 export default function Tienda() {
   const [filtro, setFiltro] = useState('Todos');
-  const [carrito, setCarrito] = useState([]);
   const [toast, setToast] = useState(null);
+  const { agregar } = useCarrito();
 
   const filtrados = filtro === 'Todos'
     ? productos
     : productos.filter(p => p.categoria === filtro);
 
   const agregarAlCarrito = (producto) => {
-    setCarrito(c => [...c, producto]);
+    agregar(producto);
     setToast(`"${producto.nombre}" agregado al carrito`);
     setTimeout(() => setToast(null), 2500);
   };

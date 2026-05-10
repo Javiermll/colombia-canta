@@ -49,18 +49,13 @@
 .footer-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
 }
 
-.footer-logo-circulo {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--amarillo);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
+.footer-logo-img {
+  height: 64px;
+  width: auto;
+  object-fit: contain;
   flex-shrink: 0;
 }
 

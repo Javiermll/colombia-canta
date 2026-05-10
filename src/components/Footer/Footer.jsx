@@ -47,8 +47,7 @@ export default function Footer() {
           {/* Marca */}
           <div className="footer-marca">
             <div className="footer-logo">
-              <div className="footer-logo-circulo">🎵</div>
-              <span className="footer-logo-nombre">Colombia Canta y Encanta</span>
+              <img src={`${import.meta.env.BASE_URL}Col_Logo.png`} alt="Colombia Canta y Encanta" className="footer-logo-img" />
             </div>
             <p className="footer-desc">
               Centro cultural y escuela de música tradicional colombiana con sede en Medellín. Formando artistas desde hace más de 10 años.

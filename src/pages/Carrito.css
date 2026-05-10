@@ -1,0 +1,43 @@
+.carrito-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 32px;
+  align-items: start;
+}
+
+.carrito-item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 16px;
+  padding: 20px 24px;
+  align-items: center;
+}
+
+.carrito-resumen {
+  position: sticky;
+  top: 100px;
+}
+
+@media (max-width: 900px) {
+  .carrito-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .carrito-resumen {
+    position: static;
+  }
+}
+
+@media (max-width: 520px) {
+  .carrito-item {
+    grid-template-columns: 64px 1fr;
+    gap: 12px;
+  }
+
+  .carrito-item-acciones {
+    grid-column: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}

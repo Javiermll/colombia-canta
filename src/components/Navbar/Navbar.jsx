@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
+import { useCarrito } from '../../context/CarritoContext';
 import './Navbar.css';
 
 const eventosDropdown = [
@@ -17,13 +18,14 @@ const tiendaDropdown = [
   { nombre: "Otros", precio: "termos · café", emoji: "☕", bg: "linear-gradient(135deg, #16A34A, #1A56DB)" },
 ];
 
-export default function Navbar({ cartCount = 0 }) {
+export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { theme, toggle } = useTheme();
+  const { totalItems } = useCarrito();
 
   const isHome = location.pathname === '/';
 
@@ -56,11 +58,7 @@ export default function Navbar({ cartCount = 0 }) {
         <div className="navbar-inner">
           {/* Logo */}
           <Link to="/" className="navbar-logo">
-            <div className="logo-circulo">🎵</div>
-            <div className="logo-texto">
-              <span className="logo-nombre">Colombia Canta y Encanta</span>
-              <span className="logo-tagline">Medellín · Cultura viva</span>
-            </div>
+            <img src={`${import.meta.env.BASE_URL}Col_Logo.png`} alt="Colombia Canta y Encanta" className="logo-img" />
           </Link>
 
           {/* Desktop links */}
@@ -154,7 +152,7 @@ export default function Navbar({ cartCount = 0 }) {
             {/* Carrito */}
             <button className="btn-carrito" onClick={() => navigate('/tienda/carrito')}>
               <span className="carrito-icono">🛒</span>
-              {cartCount > 0 && <span className="carrito-badge">{cartCount}</span>}
+              {totalItems > 0 && <span className="carrito-badge">{totalItems}</span>}
             </button>
           </div>
 
