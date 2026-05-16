@@ -46,9 +46,11 @@ Plataforma web oficial de **Colombia Canta y Encanta**, asociación cultural con
 --amarillo:      #F5C800
 --azul:          #1A56DB
 --rojo:          #E8341A
+--coral:         #F03A6E
 --amarillo-oscuro: #B8960A
 --azul-oscuro:   #0F3A9E
 --rojo-oscuro:   #A8240E
+--coral-oscuro:  #C42D57
 --footer-bg:     #0A0F1E
 --crema:         #FFFDF0
 ```
@@ -114,7 +116,7 @@ src/
 | Sección | Visual | Lógica real |
 |---|---|---|
 | Navbar + dropdowns + mobile | ✅ | ✅ |
-| Hero 3 columnas | ✅ | — |
+| Hero v2 (ilustración + texto) | ✅ | ✅ Scroll indicator, placeholder animación, responsive |
 | Carrusel de eventos | ✅ | ✅ (navegación) |
 | Historia — carrusel fade | ✅ | ✅ Auto-avance 3s, dots indicadores |
 | Aliados — carrusel marquee | ✅ | ✅ Loop infinito, pausa al hover |
@@ -154,6 +156,7 @@ src/
 - **ProductoModal (quick view):** `src/components/ProductoModal/`. Se abre al clickear cualquier card o el botón "🛒 Añadir". Muestra precio en COP y equivalente USD con tasa fija `TASA_USD = 4200` (se reemplaza por API real en Mes 2 — tarea 2.10). Cierre con Escape, clic en overlay o botón ✕. Bloquea scroll del body mientras está abierto.
 - **Cards dark mode tienda:** `src/pages/Tienda.css` con selectores `[data-theme="dark"] .producto-card`. Fondo `#090d1a`, borde blanco `rgba(255,255,255,0.15)`, precio en `var(--amarillo)`, badge de categoría amarillo sobre la imagen.
 - **Logo real:** `public/Col_Logo.png` referenciado como `${import.meta.env.BASE_URL}Col_Logo.png` para que funcione correctamente con `base: '/colombia-canta/'` en `vite.config.js`.
+- **Hero v2:** `src/components/Hero/`. Layout dos columnas (texto izquierda / animación derecha). Fondo siempre `var(--footer-bg)` independiente del tema. Botón primario usa `var(--coral)`. En mobile (≤900px) la zona de animación va arriba y el texto abajo. Placeholder de animación en `.hero-animacion-placeholder` — reemplazar por Lottie/CSS/Spline cuando esté disponible. Scroll indicator con animación `heroScrollBounce`. Hero v1 (3 columnas) guardado en `colombia-canta-docs/referencia/hero-v1-original.md`.
 
 ---
 
@@ -209,6 +212,10 @@ colombia-canta-docs/
 - [x] Persistencia del carrito con `localStorage` + `CarritoContext` (tarea 1.6)
 - [x] Página `/tienda/carrito` con cantidades, eliminar, totales y estado vacío (tarea 1.7)
 - [x] Botón carrito del navbar muestra badge con total y navega a `/tienda/carrito` (tarea 1.8)
+- [ ] Sección de noticias en el home entre Historia y Escuela, datos en `src/data/noticias.js` (tarea 1.11)
+- [ ] Quick view de artistas en /nosotros — modal con bio, especialidades y enlace YouTube (tarea 1.12)
+- [ ] Separación eventos próximos / pasados con estilo diferenciado en /eventos (tarea 1.13)
+- [ ] Quick view de cursos en /inscripciones — modal con horarios, fotos y botón WhatsApp (tarea 1.14)
 - [ ] Reemplazar placeholders con imágenes reales del cliente (tarea 1.9)
 - [ ] Deploy final del mes a GitHub Pages (tarea 1.10)
 
