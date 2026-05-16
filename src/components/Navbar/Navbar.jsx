@@ -161,6 +161,7 @@ export default function Navbar() {
             <span className="hamburger-line" />
             <span className="hamburger-line" />
             <span className="hamburger-line" />
+            {totalItems > 0 && <span className="hamburger-badge">{totalItems}</span>}
           </button>
         </div>
       </nav>
@@ -194,6 +195,10 @@ export default function Navbar() {
         )}
 
         <Link to="/tienda">Tienda</Link>
+        <button className="mobile-link mobile-carrito" onClick={() => navigate('/tienda/carrito')}>
+          🛒 Carrito
+          {totalItems > 0 && <span className="mobile-carrito-badge">{totalItems}</span>}
+        </button>
         <Link to="/inscripciones">Inscripciones</Link>
         <Link to="/contacto">Contacto</Link>
       </div>
