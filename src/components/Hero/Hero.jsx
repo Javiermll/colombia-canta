@@ -24,23 +24,19 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── Columna derecha: animación ───────────────────────────────── */}
+      {/* ── Columna derecha: video ──────────────────────────────────── */}
       <div className="hero-animacion">
-        {/*
-          ── PLACEHOLDER DE ANIMACIÓN ──────────────────────────────────
-          Aquí va la animación de los personajes del folclor colombiano.
-
-          Opciones evaluadas (pendiente de definir con diseñadora UX/UI):
-            • Lottie   → <Player src="animacion.json" /> con react-lottie-player
-            • CSS/SVG  → keyframes con sprites exportados desde Illustrator
-            • Spline   → escena 3D embebida con @splinetool/react-spline
-            • GIF/WebP → imagen animada optimizada para web
-
-          Reemplazar el <div className="hero-animacion-placeholder" /> por
-          el componente de animación elegido cuando esté disponible.
-          ──────────────────────────────────────────────────────────────
-        */}
-        <div className="hero-animacion-placeholder" aria-hidden="true" />
+        <video
+          className="hero-video"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        >
+          <source src={`${import.meta.env.BASE_URL}ninos.mp4`} type="video/mp4" />
+        </video>
       </div>
 
       {/* ── Indicador de scroll ──────────────────────────────────────── */}
