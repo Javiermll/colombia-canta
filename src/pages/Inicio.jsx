@@ -29,8 +29,8 @@ export default function Inicio() {
         <meta name="twitter:image" content={OG_IMAGE} />
       </Helmet>
       <Hero />
-      <CarruselEventos />
       <Historia />
+      <CarruselEventos />
       <Escuela />
       <ContactoSection />
       <Footer />

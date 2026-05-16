@@ -546,6 +546,14 @@
   background: var(--bg-hover);
 }
 
+/* --- Utilidades (carrito + tema) --- */
+.navbar-utils {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
 @media (max-width: 768px) {
   .navbar-links {
     display: none;
@@ -556,6 +564,11 @@
   }
 
   .navbar-inner {
-    padding: 0 20px;
+    padding: 0 16px;
+  }
+
+  /* Empuja utils + hamburger al extremo derecho */
+  .navbar-utils {
+    margin-left: auto;
   }
 }

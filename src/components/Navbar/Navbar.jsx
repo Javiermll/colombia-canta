@@ -143,13 +143,13 @@ export default function Navbar() {
             </div>
 
             <Link to="/contacto" className="btn-contacto">Contacto</Link>
+          </div>
 
-            {/* Toggle tema */}
+          {/* Utilidades: siempre visibles en desktop y mobile */}
+          <div className="navbar-utils">
             <button className="btn-tema" onClick={toggle} aria-label="Cambiar tema">
               {theme === 'dark' ? '☀️' : '🌙'}
             </button>
-
-            {/* Carrito */}
             <button className="btn-carrito" onClick={() => navigate('/tienda/carrito')}>
               <span className="carrito-icono">🛒</span>
               {totalItems > 0 && <span className="carrito-badge">{totalItems}</span>}
