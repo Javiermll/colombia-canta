@@ -35,6 +35,7 @@ export default function Hero() {
           preload="metadata"
           aria-hidden="true"
         >
+          <source src={`${import.meta.env.BASE_URL}ninos.webm`} type="video/webm" />
           <source src={`${import.meta.env.BASE_URL}ninos.mp4`} type="video/mp4" />
         </video>
       </div>
