@@ -50,6 +50,24 @@
   width: auto;
   object-fit: contain;
   flex-shrink: 0;
+  transition: filter 0.3s ease;
+}
+
+/* Logo blanco en navbar transparente (sobre hero oscuro) */
+.navbar--transparent .logo-img {
+  filter: none;
+}
+
+/* Logo negro en navbar light y sticky (solo en light mode) */
+.navbar--white .logo-img,
+.navbar--sticky .logo-img {
+  filter: brightness(0);
+}
+
+/* En dark mode el fondo del navbar siempre es oscuro — logo siempre blanco */
+[data-theme="dark"] .navbar--white .logo-img,
+[data-theme="dark"] .navbar--sticky .logo-img {
+  filter: none;
 }
 
 .logo-texto {

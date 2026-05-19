@@ -58,7 +58,7 @@ export default function Navbar() {
         <div className="navbar-inner">
           {/* Logo */}
           <Link to="/" className="navbar-logo">
-            <img src={`${import.meta.env.BASE_URL}Col_Logo.png`} alt="Colombia Canta y Encanta" className="logo-img" />
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Colombia Canta y Encanta" className="logo-img" />
           </Link>
 
           {/* Desktop links */}
