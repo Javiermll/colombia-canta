@@ -31,7 +31,7 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!isHome) return;
-    const onScroll = () => setScrolled(window.scrollY > 300);
+    const onScroll = () => setScrolled(window.scrollY > 0);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, [isHome]);
@@ -43,9 +43,13 @@ export default function Navbar() {
 
   let navClass = 'navbar';
   if (isHome) {
-    navClass += scrolled ? ' navbar--white' : ' navbar--transparent';
+    if (scrolled) {
+      navClass += ' navbar--white navbar--flotante';
+    } else {
+      navClass += ' navbar--transparent';
+    }
   } else {
-    navClass += ' navbar--sticky';
+    navClass += ' navbar--sticky navbar--flotante';
   }
 
   const toggleMobile = (section) => {

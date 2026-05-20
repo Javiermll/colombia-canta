@@ -2,7 +2,29 @@
 /* Component-specific overrides: */
 
 .contacto-section {
-  background: var(--crema);
-  padding-top: 80px;
+  background: transparent;
+  padding-top: 20px;
   overflow: hidden;
+}
+
+/* Franja bandera de Colombia */
+.bandera-colombia {
+  display: flex;
+  height: 10px;
+  width: 100%;
+}
+
+.bandera-amarillo {
+  flex: 2;
+  background: #FCD116;
+}
+
+.bandera-azul {
+  flex: 1;
+  background: #003087;
+}
+
+.bandera-rojo {
+  flex: 1;
+  background: #CE1126;
 }

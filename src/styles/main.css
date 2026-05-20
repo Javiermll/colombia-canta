@@ -2,70 +2,75 @@
    COLOMBIA CANTA Y ENCANTA — main.css
    ========================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap");
 
 /* --- Variables --- */
 :root {
   /* Colores de marca */
-  --amarillo: #F5C800;
-  --azul: #1A56DB;
-  --rojo: #E8341A;
-  --coral: #F03A6E;
-  --amarillo-oscuro: #B8960A;
-  --azul-oscuro: #0F3A9E;
-  --rojo-oscuro: #A8240E;
-  --coral-oscuro: #C42D57;
-  --footer-bg: #0A0F1E;
-  --crema: #FFFDF0;
-  --texto-principal: #0A0F1E;
+  --amarillo: #f5c800;
+  --azul: #1a56db;
+  --rojo: #e8341a;
+  --coral: #f03a6e;
+  --amarillo-oscuro: #b8960a;
+  --azul-oscuro: #0f3a9e;
+  --rojo-oscuro: #a8240e;
+  --coral-oscuro: #c42d57;
+  --footer-bg: #0a0f1e;
+  --crema: #fffdf0;
+  --texto-principal: #0a0f1e;
   --texto-secundario: rgba(10, 15, 30, 0.6);
-  --font-titulo: 'Poppins', system-ui, sans-serif;
-  --font-cuerpo: 'Inter', system-ui, sans-serif;
+  --font-titulo: "Poppins", system-ui, sans-serif;
+  --font-cuerpo: "Inter", system-ui, sans-serif;
 
   /* Semánticas (cambian con el tema) */
-  --bg-body: #ffffff;
+  --bg-body: #fdf9f2;
   --bg-card: #ffffff;
-  --bg-surface: #FFFDF0;
+  --bg-surface: #fffdf0;
   --bg-input: #ffffff;
   --bg-hover: rgba(0, 0, 0, 0.05);
   --bg-chip: rgba(0, 0, 0, 0.06);
   --border-sutil: rgba(0, 0, 0, 0.07);
   --border-media: rgba(0, 0, 0, 0.13);
   --sombra-sutil: rgba(0, 0, 0, 0.05);
-  --sombra-media: rgba(0, 0, 0, 0.10);
+  --sombra-media: rgba(0, 0, 0, 0.1);
   --sombra-fuerte: rgba(0, 0, 0, 0.15);
 }
 
 /* --- Dark mode --- */
 [data-theme="dark"] {
-  --crema: #1A2237;
-  --texto-principal: #E8EAF0;
+  --crema: #1a2237;
+  --texto-principal: #e8eaf0;
   --texto-secundario: rgba(232, 234, 240, 0.55);
 
-  --bg-body: #0D1117;
-  --bg-card: #161B27;
-  --bg-surface: #1A2237;
-  --bg-input: #1E2740;
+  --bg-body: #0d1117;
+  --bg-card: #161b27;
+  --bg-surface: #1a2237;
+  --bg-input: #1e2740;
   --bg-hover: rgba(255, 255, 255, 0.06);
   --bg-chip: rgba(255, 255, 255, 0.08);
   --border-sutil: rgba(255, 255, 255, 0.08);
   --border-media: rgba(255, 255, 255, 0.14);
-  --sombra-sutil: rgba(0, 0, 0, 0.30);
+  --sombra-sutil: rgba(0, 0, 0, 0.3);
   --sombra-media: rgba(0, 0, 0, 0.45);
-  --sombra-fuerte: rgba(0, 0, 0, 0.60);
+  --sombra-fuerte: rgba(0, 0, 0, 0.6);
 
   color-scheme: dark;
 }
 
 /* --- Reset & Base --- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
 * {
-  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 html {
@@ -76,13 +81,34 @@ html {
 body {
   font-family: var(--font-cuerpo);
   color: var(--texto-principal);
-  background: var(--bg-body);
+  background-color: var(--bg-body);
+  background-image: linear-gradient(
+    135deg,
+    rgba(245, 200, 0, 0.35) 0%,
+    #fdf9f2 22%,
+    #fdf9f2 63%,
+    rgba(26, 86, 219, 0.2) 83%,
+    rgba(232, 52, 26, 0.18) 100%
+  );
+  background-attachment: fixed;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
-input, textarea, select {
+[data-theme="dark"] body {
+  background-image: linear-gradient(
+    135deg,
+    #080e1f 0%,
+    #0f1e3a 50%,
+    #1a0808 100%
+  );
+  background-attachment: fixed;
+}
+
+input,
+textarea,
+select {
   background: var(--bg-input);
   color: var(--texto-principal);
 }
@@ -109,7 +135,11 @@ button {
 }
 
 /* --- Tipografía base --- */
-h1, h2, h3, h4, h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
   font-family: var(--font-titulo);
   line-height: 1.2;
 }
@@ -129,9 +159,15 @@ h1, h2, h3, h4, h5 {
   margin-bottom: 12px;
 }
 
-.label-rojo { color: var(--rojo); }
-.label-amarillo { color: var(--amarillo); }
-.label-muted { color: var(--texto-secundario); }
+.label-rojo {
+  color: var(--rojo);
+}
+.label-amarillo {
+  color: var(--amarillo);
+}
+.label-muted {
+  color: var(--texto-secundario);
+}
 
 /* --- Botones --- */
 .btn {
@@ -144,7 +180,11 @@ h1, h2, h3, h4, h5 {
   font-size: 14px;
   font-weight: 600;
   cursor: pointer;
-  transition: opacity 0.2s ease, transform 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .btn:hover {
@@ -185,11 +225,11 @@ h1, h2, h3, h4, h5 {
 .btn-outline-blanco {
   background: transparent;
   color: #fff;
-  border: 1.5px solid rgba(255,255,255,0.7);
+  border: 1.5px solid rgba(255, 255, 255, 0.7);
 }
 
 .btn-outline-blanco:hover {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   opacity: 1;
 }
 
@@ -197,8 +237,16 @@ h1, h2, h3, h4, h5 {
 .page-header {
   background: var(--azul-oscuro);
   border-bottom: 3px solid var(--amarillo);
-  padding: 80px 0 48px;
+  padding: 160px 0 80px;
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .page-header h1 {
@@ -208,14 +256,14 @@ h1, h2, h3, h4, h5 {
 }
 
 .page-header p {
-  color: rgba(255,255,255,0.65);
+  color: rgba(255, 255, 255, 0.65);
   font-size: 17px;
 }
 
 /* --- Sección ContactoSection reutilizable --- */
 .contacto-section {
-  background: var(--crema);
-  padding: 80px 0 0;
+  background: transparent;
+  padding: 25px 0 0;
   overflow: hidden;
 }
 
@@ -223,7 +271,8 @@ h1, h2, h3, h4, h5 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0;
-  align-items: end;
+  align-items: center;
+  padding-bottom: 64px;
 }
 
 .contacto-content {
@@ -250,19 +299,67 @@ h1, h2, h3, h4, h5 {
 .contacto-imagen {
   position: relative;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  align-self: center;
   justify-content: center;
   min-height: 360px;
 }
 
 .contacto-semicirculo {
   position: absolute;
-  bottom: 0;
+  bottom: -5px;
   right: 40px;
   width: 280px;
   height: 280px;
   border-radius: 50% 50% 0 0;
-  background: rgba(26, 86, 219, 0.12);
+  background: rgba(26, 86, 219, 0.22);
+  transition:
+    transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.4s ease;
+}
+
+.contacto-anillo {
+  position: absolute;
+  top: 16px;
+  left: 0px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 2.5px solid rgba(245, 200, 0, 0.55);
+  z-index: 0;
+  transform: translate(48px, 88px);
+  transition:
+    transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.4s ease;
+}
+
+.contacto-punto {
+  position: absolute;
+  top: 40px;
+  right: 24px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(240, 58, 110, 0.3);
+  z-index: 0;
+  transform: translate(-44px, 110px);
+  transition:
+    transform 0.55s cubic-bezier(0.4, 0, 0.2, 1),
+    background 0.4s ease;
+}
+
+[data-theme="dark"] .contacto-semicirculo {
+  background: rgba(26, 86, 219, 0.32);
+}
+
+[data-theme="dark"] .contacto-anillo {
+  border-color: rgba(245, 200, 0, 0.55);
+  transform: translate(0, 0);
+}
+
+[data-theme="dark"] .contacto-punto {
+  background: rgba(240, 58, 110, 0.4);
+  transform: translate(0, 0);
 }
 
 .contacto-imagen-placeholder {
@@ -270,12 +367,25 @@ h1, h2, h3, h4, h5 {
   z-index: 1;
   width: 260px;
   height: 340px;
-  background: linear-gradient(180deg, rgba(26,86,219,0.1) 0%, rgba(26,86,219,0.25) 100%);
+  background: linear-gradient(
+    180deg,
+    rgba(26, 86, 219, 0.1) 0%,
+    rgba(26, 86, 219, 0.25) 100%
+  );
   border-radius: 12px 12px 0 0;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 80px;
+}
+
+.contacto-foto {
+  position: relative;
+  z-index: 1;
+  height: 380px;
+  width: auto;
+  object-fit: contain;
+  object-position: bottom;
 }
 
 /* Aliados */
@@ -305,8 +415,20 @@ h1, h2, h3, h4, h5 {
 .aliados-overflow {
   overflow: hidden;
   flex: 1;
-  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
-  mask-image: linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    black 8%,
+    black 92%,
+    transparent 100%
+  );
 }
 
 .aliados-track {
@@ -329,8 +451,12 @@ h1, h2, h3, h4, h5 {
 }
 
 @keyframes aliados-scroll {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
 }
 
 /* --- Grids responsivos reutilizables --- */
@@ -386,7 +512,27 @@ h1, h2, h3, h4, h5 {
   }
 
   .contacto-imagen {
+    display: flex;
+    justify-content: center;
+    min-height: unset;
+    padding-top: 8px;
+  }
+
+  .contacto-foto {
+    height: 280px;
+  }
+
+  .contacto-semicirculo {
     display: none;
+  }
+
+  .contacto-content {
+    text-align: center;
+    align-items: center;
+  }
+
+  .contacto-content .label-seccion {
+    align-self: center;
   }
 
   .page-header h1 {

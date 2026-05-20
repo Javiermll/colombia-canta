@@ -18,10 +18,23 @@ export default function ContactoSection() {
           </div>
           <div className="contacto-imagen">
             <div className="contacto-semicirculo" />
-            <div className="contacto-imagen-placeholder">🩰</div>
+            <div className="contacto-anillo" />
+            <div className="contacto-punto" />
+            <img
+              src={`${import.meta.env.BASE_URL}Contacto.png`}
+              alt="Bailarina de folclor colombiano"
+              className="contacto-foto"
+            />
           </div>
         </div>
       </div>
+
+      <div className="bandera-colombia">
+        <div className="bandera-amarillo" />
+        <div className="bandera-azul" />
+        <div className="bandera-rojo" />
+      </div>
+
       <div className="aliados-bar">
         <div className="container">
           <div className="aliados-inner">

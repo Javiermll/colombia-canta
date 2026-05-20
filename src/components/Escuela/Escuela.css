@@ -5,10 +5,14 @@
 .escuela-section {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  margin: 0 10px 64px;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 32px var(--sombra-sutil);
 }
 
 .escuela-contenido {
-  background: var(--azul-oscuro);
+  background: transparent;
   padding: 72px 56px;
   display: flex;
   flex-direction: column;
@@ -17,13 +21,13 @@
 
 .escuela-contenido h2 {
   font-size: 38px;
-  color: #fff;
+  color: var(--texto-principal);
   margin-bottom: 20px;
   line-height: 1.2;
 }
 
 .escuela-contenido p {
-  color: rgba(255,255,255,0.7);
+  color: var(--texto-secundario);
   font-size: 16px;
   line-height: 1.8;
   margin-bottom: 32px;
@@ -39,9 +43,9 @@
 .escuela-pill {
   padding: 8px 18px;
   border-radius: 100px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.2);
-  color: rgba(255,255,255,0.9);
+  background: var(--bg-chip);
+  border: 1px solid var(--border-media);
+  color: var(--texto-principal);
   font-size: 13px;
   font-weight: 500;
 }
@@ -66,6 +70,8 @@
 @media (max-width: 768px) {
   .escuela-section {
     grid-template-columns: 1fr;
+    margin: 0 10px 40px;
+    border-radius: 16px;
   }
 
   .escuela-contenido {

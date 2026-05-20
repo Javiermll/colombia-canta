@@ -49,13 +49,21 @@ export default function Inscripciones() {
         <meta name="twitter:description" content={PAGE_DESC} />
         <meta name="twitter:image" content={OG_IMAGE} />
       </Helmet>
-      <div className="page-header" style={{ paddingTop: '96px' }}>
+      <div
+        className="page-header"
+        style={{
+          paddingTop: '96px',
+          backgroundImage: `linear-gradient(rgba(10,15,30,0.5), rgba(10,15,30,0.72)), url(${import.meta.env.BASE_URL}Nuestra_Historia.avif)`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center center',
+        }}
+      >
         <h1>Inscripciones</h1>
         <p>Únete a la escuela de música más vibrante de Medellín</p>
       </div>
 
       {/* Cursos */}
-      <section id="cursos" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'var(--bg-body)' }}>
+      <section id="cursos" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'transparent' }}>
         <div className="container">
           <span className="label-seccion label-rojo" style={{ display: 'block', marginBottom: '8px' }}>Nuestros cursos</span>
           <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '40px' }}>
@@ -116,7 +124,7 @@ export default function Inscripciones() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'var(--bg-body)' }}>
+      <section id="faq" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'transparent' }}>
         <div className="container" style={{ maxWidth: '720px' }}>
           <span className="label-seccion label-rojo" style={{ display: 'block', marginBottom: '8px' }}>Preguntas frecuentes</span>
           <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '40px' }}>FAQ</h2>
