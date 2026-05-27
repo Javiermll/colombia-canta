@@ -18,7 +18,7 @@ export default function EventoDetalle({ evento }) {
 
   const esEntradaLibre = evento.precio === 'Entrada libre';
   const esProximamente = evento.precio === 'Próximamente';
-  const ctaColor = esEntradaLibre || esProximamente ? 'var(--azul-oscuro)' : 'var(--rojo)';
+  const ctaColor = 'var(--coral)';
 
   const waLink = `https://wa.me/573015315119?text=Hola%2C+tengo+una+consulta+sobre+${encodeURIComponent(evento.titulo)}`;
 

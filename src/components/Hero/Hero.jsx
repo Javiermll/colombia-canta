@@ -7,10 +7,13 @@ export default function Hero() {
 
       {/* ── Columna izquierda: texto ─────────────────────────────────── */}
       <div className="hero-contenido">
-        <span className="hero-badge">Fundación</span>
+        <span className="hero-badge">
+          <span className="hero-badge-dot" aria-hidden="true" />
+          Fundación
+        </span>
 
         <h1 className="hero-titulo">
-          Donde el talento colombiano florece
+          Donde el talento<br />colombiano <span className="hero-titulo-acento">florece</span>
         </h1>
 
         <p className="hero-subtexto">
@@ -24,20 +27,15 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── Columna derecha: video ──────────────────────────────────── */}
+      {/* ── Columna derecha: imagen ─────────────────────────────────── */}
       <div className="hero-animacion">
-        <video
+        <img
+          src={`${import.meta.env.BASE_URL}hero.webp`}
+          alt="Colombia Canta y Encanta"
           className="hero-video"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          aria-hidden="true"
-        >
-          <source src={`${import.meta.env.BASE_URL}ninos.webm`} type="video/webm" />
-          <source src={`${import.meta.env.BASE_URL}ninos.mp4`} type="video/mp4" />
-        </video>
+          loading="eager"
+          decoding="async"
+        />
       </div>
 
       {/* ── Indicador de scroll ──────────────────────────────────────── */}

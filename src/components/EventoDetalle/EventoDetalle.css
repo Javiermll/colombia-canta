@@ -110,7 +110,7 @@
 .sticky-precio {
   font-size: 15px;
   font-weight: 700;
-  color: var(--azul-oscuro);
+  color: var(--coral);
   white-space: nowrap;
 }
 
@@ -155,7 +155,7 @@
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
-  color: var(--rojo);
+  color: var(--texto-principal);
   margin-bottom: 16px;
 }
 
@@ -179,7 +179,7 @@
   border-radius: 100px;
   background: var(--bg-chip);
   border: 1px solid var(--border-sutil);
-  color: var(--azul-oscuro);
+  color: var(--texto-secundario);
   font-size: 14px;
   font-weight: 500;
 }
@@ -420,7 +420,7 @@
   font-family: var(--font-titulo);
   font-size: 48px;
   font-weight: 700;
-  color: var(--azul-oscuro);
+  color: var(--coral);
   display: block;
 }
 
@@ -432,7 +432,7 @@
 
 /* BLOQUE 5 — CIERRE CTA */
 .evento-cierre {
-  background: var(--azul-oscuro);
+  background: var(--coral-oscuro);
   padding: 80px 0;
   text-align: center;
   position: relative;
@@ -463,7 +463,7 @@
   padding: 16px 0;
   border-radius: 10px;
   background: var(--amarillo);
-  color: var(--azul-oscuro);
+  color: var(--coral);
   font-size: 16px;
   font-weight: 700;
   border: none;

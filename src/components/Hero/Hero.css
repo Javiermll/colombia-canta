@@ -14,6 +14,7 @@
   overflow: hidden;
 }
 
+
 /* ── Contenido de texto ─────────────────── */
 
 .hero-contenido {
@@ -26,22 +27,37 @@
 }
 
 .hero-badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   width: fit-content;
   padding: 6px 16px;
-  border: 1.5px solid var(--border-media);
+  border: 1.5px solid var(--amarillo-oscuro);
   border-radius: 100px;
   font-family: var(--font-cuerpo);
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--texto-secundario);
+  color: var(--amarillo-oscuro);
+}
+
+.hero-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--amarillo-oscuro);
+  flex-shrink: 0;
+  animation: heroBadgePulse 2s ease-in-out infinite;
 }
 
 [data-theme="dark"] .hero-badge {
-  border-color: rgba(255, 255, 255, 0.3);
-  color: rgba(255, 255, 255, 0.65);
+  border-color: var(--amarillo);
+  color: var(--amarillo);
+}
+
+[data-theme="dark"] .hero-badge-dot {
+  background: var(--amarillo);
 }
 
 .hero-titulo {
@@ -55,6 +71,13 @@
 
 [data-theme="dark"] .hero-titulo {
   color: #ffffff;
+}
+
+.hero-titulo-acento {
+  background: linear-gradient(135deg, var(--coral) 0%, var(--amarillo) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .hero-subtexto {
@@ -79,7 +102,7 @@
   align-items: center;
   padding: 14px 28px;
   background: var(--coral);
-  color: #ffffff;
+  color: #fff;
   border-radius: 100px;
   font-family: var(--font-cuerpo);
   font-size: 13px;
@@ -149,8 +172,6 @@
   width: auto;
   max-width: 100%;
   object-fit: contain;
-  border-radius: 24px;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
 }
 
 /* ── Indicador de scroll ────────────────── */
@@ -195,6 +216,28 @@
     opacity: 0.75;
   }
 }
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroBadgePulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.35; transform: scale(0.65); }
+}
+
+.hero-badge    { animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 0.05s; }
+.hero-titulo   { animation: heroFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 0.2s; }
+.hero-subtexto { animation: heroFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 0.35s; }
+.hero-ctas     { animation: heroFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 0.5s; }
+.hero-animacion { animation: heroFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 0.1s; }
 
 /* ── Responsive ─────────────────────────── */
 

@@ -20,6 +20,9 @@ dist-ssr
 # Documentation (kept in colombia-canta-docs repo)
 docs/
 
+# Claude Code context file
+CLAUDE.md
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

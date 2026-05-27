@@ -90,7 +90,7 @@ export default function Historia() {
             <span className="stat-label">países visitados</span>
           </div>
         </div>
-        <Link to="/nosotros" className="btn btn-azul">Conocer más →</Link>
+        <Link to="/nosotros" className="btn btn-azul">Saber más →</Link>
       </div>
 
     </section>

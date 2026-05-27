@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { BASE_URL, OG_IMAGE } from '../utils/seo';
 import Hero from '../components/Hero/Hero';
@@ -8,9 +10,19 @@ import CarruselEventos from '../components/CarruselEventos/CarruselEventos';
 import Historia from '../components/Historia/Historia';
 import Escuela from '../components/Escuela/Escuela';
 import ContactoSection from '../components/Contacto/Contacto';
+import Noticias from '../components/Noticias/Noticias';
 import Footer from '../components/Footer/Footer';
 
 export default function Inicio() {
+  const { state } = useLocation();
+
+  useEffect(() => {
+    if (state?.scrollTo) {
+      const el = document.getElementById(state.scrollTo);
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 80);
+    }
+  }, [state]);
+
   return (
     <main>
       <Helmet>
@@ -32,6 +44,7 @@ export default function Inicio() {
       <Historia />
       <CarruselEventos />
       <Escuela />
+      <Noticias />
       <ContactoSection />
       <Footer />
     </main>

@@ -3,8 +3,42 @@
    ========================================== */
 
 .footer {
-  background: var(--footer-bg);
-  padding: 64px 0 0;
+  background: linear-gradient(to bottom, transparent, #000000 64px);
+  background-color: #000000;
+  margin-top: -64px;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Franja bandera Colombia — inicio visual de la sección aliados */
+.footer-bandera {
+  display: flex;
+  height: 6px;
+  width: 100%;
+  margin-top: 64px; /* empuja fuera de la zona transparente del gradiente */
+}
+
+.footer-bandera-amarillo {
+  flex: 2;
+  background: #fcd116;
+}
+.footer-bandera-azul {
+  flex: 1;
+  background: #003087;
+}
+.footer-bandera-rojo {
+  flex: 1;
+  background: #ce1126;
+}
+
+/* Aliados dentro del footer */
+.footer-aliados {
+  padding: 0 0 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footer-contenido {
+  padding-top: 56px;
 }
 
 .footer-grid {
@@ -12,6 +46,7 @@
   grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1.4fr;
   gap: 40px;
   padding-bottom: 48px;
+  justify-items: center;
 }
 
 .footer-col-titulo {
@@ -70,31 +105,36 @@
   font-size: 13px;
   color: rgba(255, 255, 255, 0.5);
   line-height: 1.7;
+  text-align: -webkit-center;
 }
 
 .footer-redes {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+  align-self: center;
 }
 
-.footer-red-pill {
+.footer-red-icono {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 100px;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.8);
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: background 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
 }
 
-.footer-red-pill:hover {
-  background: rgba(255, 255, 255, 0.15);
+.footer-red-icono:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  transform: translateY(-2px);
 }
 
 /* Contacto col */

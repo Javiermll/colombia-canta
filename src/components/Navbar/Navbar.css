@@ -37,9 +37,9 @@
 
 [data-theme="dark"] .navbar--white,
 [data-theme="dark"] .navbar--sticky {
-  background: rgba(8, 12, 28, 0.94);
+  background: rgba(0, 0, 0, 0.92);
   border-color: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.40);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.60);
 }
 
 /* ── Estado flotante (desktop ≥769px) ───────────── */
@@ -204,6 +204,12 @@
   transform: rotate(180deg);
 }
 
+/* Link activo y hover en coral */
+.nav-link.active,
+.nav-group:hover > .nav-link {
+  color: var(--coral);
+}
+
 /* --- Botón Contacto --- */
 .btn-contacto {
   padding: 8px 18px;
@@ -243,8 +249,8 @@
 
 .navbar--white .btn-contacto:hover,
 .navbar--sticky .btn-contacto:hover {
-  background: var(--azul-oscuro);
-  border-color: var(--azul-oscuro);
+  background: var(--coral);
+  border-color: var(--coral);
   color: #fff;
   opacity: 1;
 }
@@ -289,9 +295,16 @@
   background: var(--bg-hover);
 }
 
-.carrito-icono {
-  font-size: 20px;
-  color: var(--rojo);
+.carrito-icono-img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  display: block;
+  transition: opacity 0.2s ease, filter 0.2s ease;
+}
+
+[data-theme="dark"] .carrito-icono-img {
+  filter: brightness(0) invert(1);
 }
 
 .carrito-badge {
@@ -313,14 +326,15 @@
 /* --- Dropdowns --- */
 .dropdown {
   position: absolute;
-  top: calc(100% + 8px);
+  top: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(-8px);
   opacity: 0;
   pointer-events: none;
+  padding-top: 12px;
   transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
+    opacity 0.2s ease 0.12s,
+    transform 0.2s ease 0.12s;
   z-index: 200;
 }
 
@@ -328,6 +342,9 @@
   opacity: 1;
   transform: translateX(-50%) translateY(0);
   pointer-events: all;
+  transition:
+    opacity 0.15s ease 0s,
+    transform 0.15s ease 0s;
 }
 
 /* Simple dropdown */
@@ -338,6 +355,7 @@
   padding: 8px;
   min-width: 200px;
   white-space: nowrap;
+  border-top: 2px solid var(--coral);
 }
 
 .dropdown-simple a {
@@ -359,7 +377,9 @@
   border-radius: 16px;
   box-shadow: 0 8px 40px var(--sombra-fuerte);
   padding: 20px;
+  padding-top: 8px;
   width: 520px;
+  border-top: 2px solid var(--coral);
   left: 0;
   transform: translateX(-20%) translateY(-8px);
 }
@@ -389,7 +409,7 @@
 .dropdown-ver-todos {
   font-size: 12px;
   font-weight: 600;
-  color: var(--azul);
+  color: var(--coral);
   display: flex;
   align-items: center;
   gap: 4px;
@@ -470,7 +490,9 @@
   border-radius: 16px;
   box-shadow: 0 8px 40px var(--sombra-fuerte);
   padding: 20px;
+  padding-top: 8px;
   width: 460px;
+  border-top: 2px solid var(--coral);
   left: 0;
   transform: translateX(-30%) translateY(-8px);
 }

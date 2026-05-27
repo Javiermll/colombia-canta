@@ -50,11 +50,22 @@
   position: sticky;
   top: 0;
   align-self: start;
+  overflow: hidden;
+}
+
+.modal-imagen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 38%, rgba(0, 0, 0, 0.42) 100%);
+  pointer-events: none;
 }
 
 .modal-emoji {
-  font-size: 100px;
-  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.3));
+  font-size: 130px;
+  filter: drop-shadow(0 12px 32px rgba(0, 0, 0, 0.45));
+  position: relative;
+  z-index: 1;
 }
 
 /* ---- Columna info ---- */
@@ -104,7 +115,7 @@
   font-family: var(--font-titulo);
   font-size: 24px;
   font-weight: 700;
-  color: var(--azul-oscuro);
+  color: var(--coral);
   display: flex;
   align-items: baseline;
   gap: 6px;
@@ -130,6 +141,7 @@
   gap: 6px;
   padding: 5px 12px;
   border-radius: 100px;
+  font-family: var(--font-cuerpo);
   font-size: 12px;
   font-weight: 600;
   width: fit-content;
@@ -155,6 +167,7 @@
 
 /* ---- Descripción ---- */
 .modal-descripcion {
+  font-family: var(--font-cuerpo);
   font-size: 14px;
   color: var(--texto-secundario);
   line-height: 1.75;
@@ -163,6 +176,7 @@
 
 /* ---- Labels de sección ---- */
 .modal-label {
+  font-family: var(--font-cuerpo);
   font-size: 13px;
   color: var(--texto-secundario);
   margin-bottom: 10px;
@@ -193,7 +207,7 @@
 }
 
 .color-swatch.activo {
-  outline-color: var(--azul);
+  outline-color: var(--coral);
   outline-offset: 3px;
   transform: scale(1.1);
 }
@@ -223,13 +237,13 @@
 }
 
 .talla-btn:hover:not(.activo) {
-  border-color: var(--azul);
-  color: var(--azul);
+  border-color: var(--coral);
+  color: var(--coral);
 }
 
 .talla-btn.activo {
-  background: var(--azul-oscuro);
-  border-color: var(--azul-oscuro);
+  background: var(--coral);
+  border-color: var(--coral);
   color: #fff;
 }
 
@@ -313,7 +327,7 @@
   }
 
   .modal-emoji {
-    font-size: 72px;
+    font-size: 90px;
   }
 
   .modal-info {

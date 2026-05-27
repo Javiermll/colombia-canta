@@ -11,6 +11,9 @@ import Tienda from './pages/Tienda';
 import Carrito from './pages/Carrito';
 import Inscripciones from './pages/Inscripciones';
 import Contacto from './pages/Contacto';
+import Elenco from './pages/Elenco';
+import NoticiasPage from './pages/Noticias';
+import NoticiaDetallePage from './pages/NoticiaDetallePage';
 import NotFound from './pages/NotFound';
 import './styles/main.css';
 
@@ -29,7 +32,10 @@ export default function App() {
             <Route path="/tienda" element={<Tienda />} />
             <Route path="/tienda/carrito" element={<Carrito />} />
             <Route path="/inscripciones" element={<Inscripciones />} />
+            <Route path="/elenco" element={<Elenco />} />
             <Route path="/contacto" element={<Contacto />} />
+            <Route path="/noticias" element={<NoticiasPage />} />
+            <Route path="/noticias/:slug" element={<NoticiaDetallePage />} />
             <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Routes>

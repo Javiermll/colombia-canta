@@ -33,9 +33,15 @@ export default function Carrito() {
         <meta name="twitter:image" content={OG_IMAGE} />
       </Helmet>
 
-      <div className="page-header" style={{ paddingTop: '96px' }}>
-        <h1>Carrito</h1>
-        <p>Revisa tu pedido antes de continuar</p>
+      <div className="page-header">
+        <div className="container">
+          <div className="page-header-inner">
+            <span className="page-header-label">Tu pedido</span>
+            <h1>Carrito</h1>
+          </div>
+          <div className="page-header-divisor" />
+          <p className="page-header-sub">Revisa tu selección y lleva un pedacito de Colombia contigo</p>
+        </div>
       </div>
 
       <section style={{ padding: '56px 0 80px', background: 'var(--bg-body)' }}>
@@ -88,7 +94,7 @@ export default function Carrito() {
                     {items.length} {items.length === 1 ? 'producto' : 'productos'}
                   </h2>
                   <Link to="/tienda" style={{
-                    color: 'var(--azul)',
+                    color: 'var(--coral)',
                     fontSize: '14px',
                     fontWeight: '600',
                     textDecoration: 'none'
@@ -200,7 +206,7 @@ export default function Carrito() {
                         fontFamily: 'var(--font-titulo)',
                         fontSize: '17px',
                         fontWeight: '700',
-                        color: 'var(--azul-oscuro)'
+                        color: 'var(--coral)'
                       }}>
                         {formatPrecio(parsePrecio(item.precio) * item.cantidad)}
                       </span>
@@ -267,7 +273,7 @@ export default function Carrito() {
                     fontFamily: 'var(--font-titulo)',
                     fontSize: '22px',
                     fontWeight: '700',
-                    color: 'var(--azul-oscuro)'
+                    color: 'var(--coral)'
                   }}>
                     {formatPrecio(subtotal)}
                   </span>

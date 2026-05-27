@@ -52,6 +52,9 @@ export default function Navbar() {
     navClass += ' navbar--sticky navbar--flotante';
   }
 
+  const isActive = (path) =>
+    location.pathname === path || location.pathname.startsWith(path + '/');
+
   const toggleMobile = (section) => {
     setMobileExpanded(prev => prev === section ? null : section);
   };
@@ -69,21 +72,20 @@ export default function Navbar() {
           <div className="navbar-links">
             {/* Nosotros */}
             <div className="nav-group">
-              <Link to="/nosotros" className="nav-link">
+              <Link to="/nosotros" className={`nav-link${isActive('/nosotros') ? ' active' : ''}`}>
                 Nosotros <span className="nav-chevron">▾</span>
               </Link>
               <div className="dropdown dropdown-simple">
                 <Link to="/nosotros#quienes-somos">Quiénes somos</Link>
-                <Link to="/nosotros#elenco">Elenco artístico</Link>
-                <Link to="/nosotros#inspiracion">Inspiración y comunidad</Link>
-                <Link to="/nosotros#noticias">Noticias</Link>
+                <Link to="/elenco">Elenco artístico</Link>
+                <Link to="/noticias">Noticias</Link>
                 <Link to="/contacto">Contacto</Link>
               </div>
             </div>
 
             {/* Eventos */}
             <div className="nav-group">
-              <Link to="/eventos" className="nav-link">
+              <Link to="/eventos" className={`nav-link${isActive('/eventos') ? ' active' : ''}`}>
                 Eventos <span className="nav-chevron">▾</span>
               </Link>
               <div className="dropdown dropdown-eventos">
@@ -110,7 +112,7 @@ export default function Navbar() {
 
             {/* Tienda */}
             <div className="nav-group">
-              <Link to="/tienda" className="nav-link">
+              <Link to="/tienda" className={`nav-link${isActive('/tienda') ? ' active' : ''}`}>
                 Tienda <span className="nav-chevron">▾</span>
               </Link>
               <div className="dropdown dropdown-tienda">
@@ -136,7 +138,7 @@ export default function Navbar() {
 
             {/* Inscripciones */}
             <div className="nav-group">
-              <Link to="/inscripciones" className="nav-link">
+              <Link to="/inscripciones" className={`nav-link${isActive('/inscripciones') ? ' active' : ''}`}>
                 Inscripciones <span className="nav-chevron">▾</span>
               </Link>
               <div className="dropdown dropdown-simple">
@@ -155,7 +157,11 @@ export default function Navbar() {
               {theme === 'dark' ? '☀️' : '🌙'}
             </button>
             <button className="btn-carrito" onClick={() => navigate('/tienda/carrito')}>
-              <span className="carrito-icono">🛒</span>
+              <img
+                src={`${import.meta.env.BASE_URL}${theme === 'dark' ? 'carrito-de-compras.png' : 'carrito-de-compras (1).png'}`}
+                alt="Carrito"
+                className="carrito-icono-img"
+              />
               {totalItems > 0 && <span className="carrito-badge">{totalItems}</span>}
             </button>
           </div>
@@ -180,8 +186,7 @@ export default function Navbar() {
         {mobileExpanded === 'nosotros' && (
           <div className="mobile-submenu">
             <Link to="/nosotros#quienes-somos">Quiénes somos</Link>
-            <Link to="/nosotros#elenco">Elenco artístico</Link>
-            <Link to="/nosotros#inspiracion">Inspiración y comunidad</Link>
+            <Link to="/elenco">Elenco artístico</Link>
             <Link to="/nosotros#noticias">Noticias</Link>
           </div>
         )}
@@ -200,7 +205,12 @@ export default function Navbar() {
 
         <Link to="/tienda">Tienda</Link>
         <button className="mobile-link mobile-carrito" onClick={() => navigate('/tienda/carrito')}>
-          🛒 Carrito
+          <img
+            src={`${import.meta.env.BASE_URL}${theme === 'dark' ? 'carrito-de-compras.png' : 'carrito-de-compras (1).png'}`}
+            alt=""
+            className="carrito-icono-img"
+          />
+          Carrito
           {totalItems > 0 && <span className="mobile-carrito-badge">{totalItems}</span>}
         </button>
         <Link to="/inscripciones">Inscripciones</Link>

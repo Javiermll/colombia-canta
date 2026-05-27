@@ -1,25 +1,43 @@
-import { Helmet } from 'react-helmet-async';
-import ContactoSection from '../components/Contacto/Contacto';
-import Footer from '../components/Footer/Footer';
-import '../styles/main.css';
-import { BASE_URL, OG_IMAGE } from '../utils/seo';
+import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
+import ContactoSection from "../components/Contacto/Contacto";
+import Footer from "../components/Footer/Footer";
+import "../styles/main.css";
+import { BASE_URL, OG_IMAGE } from "../utils/seo";
 
-const PAGE_TITLE = 'Quiénes Somos | Colombia Canta y Encanta';
-const PAGE_DESC = 'Conoce la historia, el elenco artístico y la misión de Colombia Canta y Encanta, centro cultural y escuela de música tradicional en Medellín.';
+const PAGE_TITLE = "Quiénes Somos | Colombia Canta y Encanta";
+const PAGE_DESC =
+  "Conoce la historia de Silvia Zapata y la misión de Colombia Canta y Encanta, centro cultural y escuela de música tradicional en Medellín.";
 
-const elenco = [
-  { nombre: 'Leonardo Tamayo', rol: 'Piano · Director musical', emoji: '🎹' },
-  { nombre: 'Luciana Obregón', rol: 'Piano · Cantante', emoji: '🎤' },
-  { nombre: 'Trío Tritono', rol: 'Conjunto musical', emoji: '🎻' },
-  { nombre: 'Artistas Senior', rol: 'Elenco principal', emoji: '🎺' },
-  { nombre: 'Elenco Juvenil', rol: 'Formación musical', emoji: '🎸' },
-  { nombre: 'Grupo de Danza', rol: 'Danza tradicional', emoji: '💃' },
+const stats = [
+  { num: "+20", label: "años de historia" },
+  { num: "+200", label: "estudiantes formados" },
+  { num: "5", label: "ritmos colombianos" },
 ];
 
-const noticias = [
-  { titulo: 'Gira USA 2026: Miami y Disney Springs', fecha: 'Mar 2026', desc: 'Colombia Canta y Encanta anuncia su gira más ambiciosa con presentaciones en Miami y Orlando, Florida.' },
-  { titulo: 'Nueva temporada de la Escuela', fecha: 'Feb 2026', desc: 'Abrimos inscripciones para los cursos de Bandola, Tiple, Guitarra, Canto y Piano.' },
-  { titulo: 'Festival Nacional 2026', fecha: 'Ene 2026', desc: 'Preparamos el Festival Nacional Colombia Canta, el evento cultural del año en Medellín.' },
+const reconocimientos = [
+  "Ministerio de Cultura",
+  "Congreso de la República",
+  "Gobernación de Antioquia",
+  "Concejo de Medellín",
+];
+
+const pilares = [
+  {
+    icono: "🎵",
+    titulo: "Formación Musical",
+    desc: "Formamos músicos desde la infancia cultivando el talento y el amor por el bambuco, el pasillo, la guabina, la cumbia y el currulao.",
+  },
+  {
+    icono: "🏛️",
+    titulo: "Patrimonio Vivo",
+    desc: "Preservamos los ritmos que definen la identidad cultural de Colombia y los transmitimos a las nuevas generaciones como un legado vivo.",
+  },
+  {
+    icono: "🌍",
+    titulo: "Colombia al Mundo",
+    desc: "Reconectamos a los colombianos en el exterior con sus raíces y llevamos nuestra riqueza musical a escenarios de Estados Unidos, Chile y más allá.",
+  },
 ];
 
 export default function Nosotros() {
@@ -40,95 +58,172 @@ export default function Nosotros() {
         <meta name="twitter:description" content={PAGE_DESC} />
         <meta name="twitter:image" content={OG_IMAGE} />
       </Helmet>
-      <div className="page-header" style={{ paddingTop: '96px' }}>
-        <h1>Nosotros</h1>
-        <p>Centro cultural y escuela de música tradicional colombiana</p>
-      </div>
 
-      {/* Quiénes somos */}
-      <section id="quienes-somos" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'var(--bg-body)' }}>
+      {/* Hero */}
+      <div className="page-header">
         <div className="container">
-          <div className="grid-2col">
-            <div>
-              <span className="label-seccion label-rojo">Quiénes somos</span>
-              <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '20px', lineHeight: '1.2' }}>
-                Un proyecto cultural que nació en Medellín
-              </h2>
-              <p style={{ color: 'var(--texto-secundario)', lineHeight: '1.8', marginBottom: '16px' }}>
-                Colombia Canta y Encanta es una organización cultural dedicada a la formación musical de niños y jóvenes en música tradicional colombiana. Con sede en el Sector Estadio de Medellín, llevamos más de diez años preservando y difundiendo el patrimonio musical de nuestra nación.
-              </p>
-              <p style={{ color: 'var(--texto-secundario)', lineHeight: '1.8' }}>
-                Nuestra misión es conectar a las nuevas generaciones con las raíces del bambuco, el pasillo, la cumbia y todos los ritmos que hacen única a la música colombiana, llevando esa riqueza cultural a escenarios de todo el mundo.
-              </p>
-            </div>
-            <div style={{
-              background: 'linear-gradient(135deg, var(--azul-oscuro), var(--azul))',
-              borderRadius: '16px',
-              height: '360px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '80px'
-            }}>🇨🇴</div>
+          <div className="page-header-inner">
+            <span className="page-header-label">
+              Cultura · Identidad · Legado
+            </span>
+            <h1>Nosotros</h1>
           </div>
-        </div>
-      </section>
-
-      {/* Elenco */}
-      <section id="elenco" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'var(--crema)' }}>
-        <div className="container">
-          <span className="label-seccion label-rojo" style={{ display: 'block', marginBottom: '8px' }}>Elenco artístico</span>
-          <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '40px' }}>Nuestros artistas</h2>
-          <div className="grid-3col">
-            {elenco.map(artista => (
-              <div key={artista.nombre} style={{
-                background: 'var(--bg-card)',
-                borderRadius: '16px',
-                padding: '32px 24px',
-                textAlign: 'center',
-                boxShadow: '0 2px 12px var(--sombra-sutil)'
-              }}>
-                <div style={{ fontSize: '48px', marginBottom: '16px' }}>{artista.emoji}</div>
-                <div style={{ fontFamily: 'var(--font-titulo)', fontSize: '18px', marginBottom: '6px' }}>{artista.nombre}</div>
-                <div style={{ fontSize: '13px', color: 'var(--texto-secundario)' }}>{artista.rol}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Inspiración */}
-      <section id="inspiracion" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'var(--azul-oscuro)' }}>
-        <div className="container" style={{ textAlign: 'center', maxWidth: '720px' }}>
-          <span className="label-seccion label-amarillo" style={{ display: 'block', marginBottom: '16px' }}>Inspiración y comunidad</span>
-          <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '40px', color: '#fff', marginBottom: '24px' }}>
-            La música como puente cultural
-          </h2>
-          <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: '17px', lineHeight: '1.8' }}>
-            Creemos que la música tradicional colombiana es un puente que conecta generaciones, culturas y comunidades. Cada bambuco, cada pasillo, cada tonada guarda la historia de un pueblo y la identidad de una nación. Nuestra labor es asegurarnos de que esa historia siga viva.
+          <div className="page-header-divisor" />
+          <p className="page-header-sub">
+            Centro cultural y escuela de música tradicional colombiana
           </p>
         </div>
+      </div>
+
+      {/* ── Quiénes somos ─────────────────────────────────────── */}
+      <section id="quienes-somos" className="nosotros-seccion">
+        <div className="container">
+          <div className="nosotros-qs-grid">
+            <div className="nosotros-qs-texto">
+              <div>
+                <span className="label-seccion label-rojo">Quiénes somos</span>
+                <h2 className="nosotros-h2">
+                  Un proyecto cultural que
+                  <br />
+                  nació en Medellín
+                </h2>
+                <p className="nosotros-bajada">
+                  Más de veinte años preservando el patrimonio musical de
+                  Colombia.
+                </p>
+                <p className="nosotros-parrafo">
+                  Colombia Canta y Encanta es una organización cultural dedicada
+                  a la formación musical de niños y jóvenes en música
+                  tradicional colombiana. Con sede en el Sector Estadio de
+                  Medellín, llevamos más de dos décadas preservando y
+                  difundiendo el patrimonio musical de nuestra nación.
+                </p>
+                <p className="nosotros-parrafo">
+                  Nuestra misión es conectar a las nuevas generaciones con las
+                  raíces del bambuco, el pasillo, la guabina, la cumbia y el
+                  currulao, llevando esa riqueza cultural a escenarios de todo
+                  el mundo.
+                </p>
+              </div>
+              <div className="nosotros-qs-stats">
+                {stats.map((s, i) => (
+                  <div key={s.label} className="nosotros-qs-stat">
+                    <div className="nosotros-stat-num">{s.num}</div>
+                    <div className="nosotros-stat-label">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="nosotros-qs-foto-col">
+              <img
+                src={`${import.meta.env.BASE_URL}foto_quienessomos.jpeg`}
+                alt="Colombia Canta y Encanta"
+                className="nosotros-qs-foto"
+              />
+            </div>
+          </div>
+        </div>
       </section>
 
-      {/* Noticias */}
-      <section id="noticias" style={{ scrollMarginTop: '80px', padding: '72px 0', background: 'var(--bg-body)' }}>
+      {/* ── Fundadora ──────────────────────────────────────────── */}
+      <section id="fundadora" className="nosotros-fundadora-section">
         <div className="container">
-          <span className="label-seccion label-rojo" style={{ display: 'block', marginBottom: '8px' }}>Noticias</span>
-          <h2 style={{ fontFamily: 'var(--font-titulo)', fontSize: '36px', marginBottom: '40px' }}>Novedades</h2>
-          <div className="grid-3col-gap-24">
-            {noticias.map(n => (
-              <div key={n.titulo} style={{
-                background: 'var(--bg-card)',
-                border: '1px solid var(--border-sutil)',
-                borderRadius: '16px',
-                padding: '28px',
-                transition: 'box-shadow 0.2s ease'
-              }}>
-                <div style={{ fontSize: '12px', color: 'var(--texto-secundario)', marginBottom: '10px', fontWeight: '600' }}>{n.fecha}</div>
-                <h3 style={{ fontFamily: 'var(--font-titulo)', fontSize: '20px', marginBottom: '12px' }}>{n.titulo}</h3>
-                <p style={{ fontSize: '14px', color: 'var(--texto-secundario)', lineHeight: '1.7' }}>{n.desc}</p>
+          <div className="nosotros-fundadora-grid">
+            <div className="nosotros-fundadora-foto-col">
+              <img
+                src={`${import.meta.env.BASE_URL}silvia-zapata_foto.jpg`}
+                alt="Silvia Zapata Durango, fundadora de Colombia Canta y Encanta"
+                className="nosotros-fundadora-foto"
+              />
+            </div>
+
+            <div className="nosotros-fundadora-contenido">
+              <span className="label-seccion label-amarillo">
+                Nuestra Fundadora
+              </span>
+              <h2 className="nosotros-fundadora-nombre">
+                Silvia Zapata
+                <br />
+                Durango
+              </h2>
+              <p className="nosotros-fundadora-rol">
+                Cantante · Directora · Visionaria
+              </p>
+
+              <blockquote className="nosotros-quote">
+                "Yo quería mantener vivo un legado que recibí y que me sirvió
+                para todas las áreas de mi vida. Quería sembrar esto en las
+                nuevas generaciones, para que pudieran conectar con sus talentos
+                al tiempo que abrazan el amor por Colombia y por las historias
+                que hay detrás de las músicas folclóricas."
+              </blockquote>
+
+              <p className="nosotros-parrafo">
+                Hace dos décadas, Silvia Zapata Durango buscó la manera de que
+                las nuevas generaciones conocieran el legado de la música
+                colombiana y fundó Colombia Canta y Encanta. Hoy, en su vigésimo
+                aniversario, la organización lleva los sonidos del bambuco, el
+                pasillo y la cumbia a Estados Unidos y Brasil, reconectando a
+                los colombianos en el exterior con sus raíces.
+              </p>
+
+              <div className="nosotros-reconocimientos">
+                <p className="nosotros-reconoc-titulo">Reconocida por</p>
+                <div className="nosotros-reconoc-pills">
+                  {reconocimientos.map((r) => (
+                    <span key={r} className="nosotros-reconoc-chip">
+                      {r}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              <div className="nosotros-bienal">
+                <span className="nosotros-bienal-icono">🏆</span>
+                <span>
+                  Seleccionada —{" "}
+                  <strong>
+                    Bienal de los 100 Proyectos Culturales de Interés Nacional
+                  </strong>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Pilares ────────────────────────────────────────────── */}
+      <section id="inspiracion" className="nosotros-pilares-section">
+        <div className="container">
+          <div className="nosotros-pilares-header">
+            <span className="label-seccion label-amarillo">
+              Inspiración y comunidad
+            </span>
+            <h2 className="nosotros-pilares-titulo">
+              La música como puente cultural
+            </h2>
+            <p className="nosotros-pilares-desc">
+              Cada bambuco, cada pasillo, cada tonada guarda la historia de un
+              pueblo y la identidad de una nación. Nuestra labor es asegurarnos
+              de que esa historia siga viva.
+            </p>
+          </div>
+
+          <div className="grid-3col">
+            {pilares.map((p) => (
+              <div key={p.titulo} className="nosotros-pilar">
+                <div className="nosotros-pilar-icono">{p.icono}</div>
+                <h3 className="nosotros-pilar-titulo">{p.titulo}</h3>
+                <p className="nosotros-pilar-desc">{p.desc}</p>
               </div>
             ))}
+          </div>
+
+          <div className="nosotros-pilares-cta">
+            <Link to="/elenco" className="btn btn-rojo">
+              Conocer el elenco →
+            </Link>
           </div>
         </div>
       </section>
