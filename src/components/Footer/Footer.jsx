@@ -71,10 +71,10 @@ const redes = [
 ];
 
 const aliados = [
-  { nombre: 'Co·Crea',           img: 'aliado-cocrea.webp' },
-  { nombre: 'Alcaldía Medellín', img: 'aliado-medellin.webp' },
-  { nombre: 'Medellín Bureau',   img: 'aliado-bureau.webp' },
-  { nombre: 'Teleantioquia',     img: 'aliado-teleantioquia.webp', bright: true },
+  { nombre: 'Co·Crea',               img: 'aliados/aliado-cocrea.webp' },
+  { nombre: 'Alcaldía de Medellín',  img: 'aliados/aliado-alcaldia.webp', adaptive: true },
+  { nombre: 'Comfama',               img: 'aliados/aliado-comfama.webp' },
+  { nombre: 'Ministerio de Cultura', img: 'aliados/aliado-mincultural.webp' },
 ];
 
 export default function Footer() {
@@ -100,7 +100,7 @@ export default function Footer() {
                 <img
                   src={`${import.meta.env.BASE_URL}${a.img}`}
                   alt={a.nombre}
-                  className={`aliado-logo-img${a.bright ? ' aliado-logo-bright' : ''}`}
+                  className={`aliado-logo-img${a.bright ? ' aliado-logo-bright' : ''}${a.adaptive ? ' aliado-logo-adaptive' : ''}`}
                 />
               </div>
             ))}

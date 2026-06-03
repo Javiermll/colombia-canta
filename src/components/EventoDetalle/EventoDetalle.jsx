@@ -27,8 +27,19 @@ export default function EventoDetalle({ evento }) {
   return (
     <>
       {/* BLOQUE 1 — HERO */}
-      <div className="evento-hero" style={{ background: evento.colorHero }}>
-        <div className="evento-hero-overlay" />
+      <div
+        className="evento-hero"
+        style={evento.img ? {
+          backgroundImage: `url(${evento.img})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        } : {
+          background: evento.colorHero,
+        }}
+      >
+        <div className="evento-hero-overlay" style={evento.img ? {
+          background: `linear-gradient(to bottom, ${evento.colorHero}55 0%, rgba(0,0,0,0.82) 100%)`,
+        } : undefined} />
         <div className="evento-hero-content">
           <div className="evento-hero-chip">
             <span className="chip-tipo-hero">{evento.tipo}</span>

@@ -1,6 +1,14 @@
 <!doctype html>
 <html lang="es">
   <head>
+    <!-- Tema: se aplica antes del primer render para evitar flash de modo claro -->
+    <script>
+      (function(){
+        var t = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', t);
+      })();
+    </script>
+
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
@@ -32,8 +40,64 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+
+    <!-- Splash screen -->
+    <style>
+      #splash {
+        position: fixed;
+        inset: 0;
+        background: #000000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        z-index: 99999;
+        animation: splash-fade-out 0.6s ease 1.6s forwards;
+      }
+      #splash-titulo {
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 28px;
+        font-weight: 800;
+        color: #f5c800;
+        letter-spacing: -0.01em;
+        line-height: 1;
+      }
+      #splash-sub {
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 11px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.38);
+        margin-top: 8px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+      #splash-linea {
+        width: 0;
+        height: 2px;
+        background: #f5c800;
+        border-radius: 2px;
+        margin-top: 28px;
+        animation: splash-linea-grow 1.4s ease forwards;
+      }
+      @keyframes splash-fade-out {
+        to { opacity: 0; pointer-events: none; }
+      }
+      @keyframes splash-linea-grow {
+        0%   { width: 0;    opacity: 1; }
+        60%  { width: 48px; opacity: 1; }
+        100% { width: 48px; opacity: 0.2; }
+      }
+    </style>
   </head>
   <body>
+    <!-- Splash -->
+    <div id="splash">
+      <span id="splash-titulo">Colombia Canta</span>
+      <span id="splash-sub">y Encanta &middot; Medellín</span>
+      <div id="splash-linea"></div>
+    </div>
+
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>

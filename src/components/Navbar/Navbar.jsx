@@ -2,14 +2,10 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
 import { useCarrito } from '../../context/CarritoContext';
+import { eventos } from '../../data/eventos';
 import './Navbar.css';
 
-const eventosDropdown = [
-  { titulo: "Bambucos en Disney Springs", fecha: "18 Abr", tipo: "Gira USA", ciudad: "Orlando, FL", id: 1, color: "#0F3A9E" },
-  { titulo: "Gira USA 2026 · Miami", fecha: "15 Abr", tipo: "Gira USA", ciudad: "Coral Gables, FL", id: 2, color: "#8B0000" },
-  { titulo: "Herencia Andina · Medellín", fecha: "28 Mar", tipo: "Sede", ciudad: "Medellín", id: 3, color: "#7A5C00" },
-  { titulo: "Festival Nacional", fecha: "Mayo 2026", tipo: "Festival", ciudad: "Medellín", id: 4, color: "#3B0764" },
-];
+const eventosDropdown = eventos.slice(0, 4);
 
 const tiendaDropdown = [
   { nombre: "Poleras", precio: "desde $45.000", emoji: "👕", bg: "linear-gradient(135deg, #1A56DB, #0F3A9E)" },
@@ -96,7 +92,16 @@ export default function Navbar() {
                 <div className="dropdown-eventos-grid">
                   {eventosDropdown.map(ev => (
                     <Link to={`/eventos/${ev.id}`} className="evento-mini-card" key={ev.id}>
-                      <div className="evento-mini-bg" style={{ background: `linear-gradient(135deg, ${ev.color}, rgba(0,0,0,0.6))` }}>
+                      <div
+                        className="evento-mini-bg"
+                        style={ev.img ? {
+                          backgroundImage: `linear-gradient(135deg, ${ev.colorHero}cc, rgba(0,0,0,0.55)), url(${ev.img})`,
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                        } : {
+                          background: `linear-gradient(135deg, ${ev.colorHero}, rgba(0,0,0,0.6))`,
+                        }}
+                      >
                         <span className="chip-fecha">{ev.fecha}</span>
                         <span className="chip-tipo">{ev.tipo}</span>
                       </div>

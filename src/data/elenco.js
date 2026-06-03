@@ -1,3 +1,5 @@
+const BASE = import.meta.env.BASE_URL;
+
 export const elenco = [
   {
     id: 1,
@@ -7,7 +9,7 @@ export const elenco = [
     categoria: 'Instrumental',
     gradiente: 'linear-gradient(135deg, #1A56DB 0%, #0F3A9E 100%)',
     emoji: '🎹',
-    img: null,
+    img: `${BASE}elenco-opt/elenco-leonardo.webp`,
     descripcion:
       'Leonardo lleva más de 15 años al frente de la dirección musical de Colombia Canta y Encanta. Pianista clásico de formación, encontró en el folclor colombiano el lenguaje que le permitió fusionar rigor académico y alma popular. Ha dirigido presentaciones en Colombia, Estados Unidos y Chile, adaptando los arreglos a cada escenario sin perder la esencia de los ritmos tradicionales.',
     especialidades: ['Bambuco', 'Pasillo', 'Porro', 'Torbellino'],
@@ -23,7 +25,7 @@ export const elenco = [
     categoria: 'Voces',
     gradiente: 'linear-gradient(135deg, #FF5C8D 0%, #e03d6f 100%)',
     emoji: '🎤',
-    img: null,
+    img: `${BASE}elenco-opt/elenco-luciana.webp`,
     descripcion:
       'Luciana es la voz que identifica a Colombia Canta y Encanta en los escenarios internacionales. Con una técnica vocal formada en el Conservatorio de Medellín, domina tanto el canto lírico como las inflexiones propias del bambuco y la guabina. Su interpretación de "Las Margaritas" en el Festival Iberoamericano de Teatro fue reconocida con mención especial del jurado.',
     especialidades: ['Bambuco', 'Guabina', 'Torbellino', 'Cumbia'],
@@ -39,7 +41,7 @@ export const elenco = [
     categoria: 'Instrumental',
     gradiente: 'linear-gradient(135deg, #B8960A 0%, #F5C800 100%)',
     emoji: '🪕',
-    img: null,
+    img: `${BASE}elenco-opt/elenco-trio.webp`,
     descripcion:
       'El Trío Tritono es el corazón instrumental de la agrupación. Conformado por tres músicos especializados en cuerdas andinas colombianas, su sonido define el carácter de las presentaciones más emblemáticas del grupo. Han desarrollado arreglos propios que recuperan la polifonía de la música andina y la proyectan a nuevas audiencias sin perder su identidad original.',
     especialidades: ['Música andina colombiana', 'Pasillo', 'Bambuco'],
@@ -55,7 +57,7 @@ export const elenco = [
     categoria: 'Voces',
     gradiente: 'linear-gradient(135deg, #E8341A 0%, #A8240E 100%)',
     emoji: '🎼',
-    img: null,
+    img: `${BASE}elenco-opt/elenco-senior.webp`,
     descripcion:
       'El elenco senior reúne a los artistas con mayor trayectoria de la organización, muchos de ellos formados directamente por Silvia Zapata desde los inicios. Son portadores de una memoria musical viva: conocen los matices de cada ritmo, las historias detrás de cada canción y la forma auténtica de interpretar el folclor que se transmite de generación en generación.',
     especialidades: ['Bambuco', 'Cumbia', 'Porro', 'Currulao', 'Mapalé'],
@@ -71,7 +73,7 @@ export const elenco = [
     categoria: 'Instrumental',
     gradiente: 'linear-gradient(135deg, #16A34A 0%, #0F5A2E 100%)',
     emoji: '🌱',
-    img: null,
+    img: `${BASE}elenco-opt/elenco-juvenil.webp`,
     descripcion:
       'El elenco juvenil representa el futuro de Colombia Canta y Encanta. Estudiantes entre 10 y 22 años que han pasado por la escuela de música de la organización y han alcanzado el nivel suficiente para presentarse en escenarios formales. Con cada actuación demuestran que la música tradicional colombiana no es solo historia: es un lenguaje vivo que las nuevas generaciones hacen propio.',
     especialidades: ['Bambuco', 'Pasillo', 'Torbellino'],
@@ -87,7 +89,7 @@ export const elenco = [
     categoria: 'Danza',
     gradiente: 'linear-gradient(135deg, #6B21A8 0%, #E8341A 100%)',
     emoji: '💃',
-    img: null,
+    img: `${BASE}elenco-opt/elenco-danza.webp`,
     descripcion:
       'El grupo de danza es el elemento visual que completa el espectáculo de Colombia Canta y Encanta. Sus bailarines interpretan las danzas más representativas del folclor colombiano con vestuarios auténticos y coreografías que capturan la esencia de cada región. Han llevado el mapalé, la cumbia y el currulao a escenarios en Miami, Orlando y Santiago de Chile.',
     especialidades: ['Cumbia', 'Mapalé', 'Currulao', 'Bambuco'],

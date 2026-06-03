@@ -1,3 +1,5 @@
+const BASE = import.meta.env.BASE_URL;
+
 export const noticias = [
   {
     id: 1,
@@ -13,6 +15,8 @@ export const noticias = [
       'El elenco estará conformado por músicos, cantantes y bailarines especializados en géneros como el bambuco, el pasillo, la cumbia y el torbellino. Esta gira representa no solo un logro artístico para la organización, sino también una oportunidad única para proyectar la identidad cultural colombiana en el escenario internacional.',
       'Los preparativos incluyen ensayos intensivos, diseño de vestuario de alta calidad y la producción de material audiovisual para documentar cada presentación. La organización también trabaja en alianzas con entidades colombianas en el exterior para asegurar la máxima difusión del evento.',
     ],
+    img: `${BASE}iconos-noticias/noticia-gira-usa.webp`,
+    banner: `${BASE}noticias-banners/noticia-banner-gira-usa.webp`,
     gradiente: 'linear-gradient(135deg, #1A56DB 0%, #0F3A9E 100%)',
     emoji: '✈️',
     destacada: true,
@@ -31,6 +35,8 @@ export const noticias = [
       'Las clases se dictan en nuestra sede del Sector Estadio en Medellín, con horarios flexibles para adaptarse a las necesidades de cada estudiante. Contamos con docentes certificados con amplia experiencia en música tradicional y formación pedagógica.',
       'Las inscripciones están abiertas desde febrero de 2026. Los cupos son limitados, por lo que se recomienda reservar con anticipación a través del formulario de contacto o comunicándose directamente con nuestra sede.',
     ],
+    img: `${BASE}iconos-noticias/noticia-escuela-temporada.webp`,
+    banner: `${BASE}noticias-banners/noticia-banner-escuela.webp`,
     gradiente: 'linear-gradient(135deg, #16A34A 0%, #0F5A2E 100%)',
     emoji: '🎵',
     destacada: false,
@@ -49,6 +55,8 @@ export const noticias = [
       'Este año el festival tiene como propósito central acercar la música tradicional a las nuevas generaciones, con una programación especial para público infantil y juvenil. También se llevarán a cabo conversatorios con músicos expertos sobre el estado actual y el futuro de la música folclórica en Colombia.',
       'Las fechas definitivas y la programación completa serán anunciadas próximamente. Sigue nuestras redes sociales y visita nuestra página web para estar al tanto de todas las novedades.',
     ],
+    img: `${BASE}iconos-noticias/noticia-festival-nacional.webp`,
+    banner: `${BASE}noticias-banners/noticia-banner-festival.webp`,
     gradiente: 'linear-gradient(135deg, #E8341A 0%, #A8240E 100%)',
     emoji: '🎭',
     destacada: false,
@@ -66,6 +74,8 @@ export const noticias = [
       'El acuerdo contempla el desarrollo conjunto de actividades pedagógicas en colegios públicos de Medellín, la producción de material educativo sobre folclor colombiano y el apoyo institucional para las giras nacionales e internacionales del grupo.',
       'Este reconocimiento por parte del Ministerio respalda más de una década de trabajo ininterrumpido de la organización en favor de la cultura colombiana y abre nuevas posibilidades de financiamiento para los proyectos artísticos del 2026.',
     ],
+    img: `${BASE}iconos-noticias/noticia-convenio-cultura.webp`,
+    banner: `${BASE}noticias-banners/noticia-banner-convenio.webp`,
     gradiente: 'linear-gradient(135deg, #B8960A 0%, #F5C800 100%)',
     emoji: '🏛️',
     destacada: false,
@@ -83,6 +93,8 @@ export const noticias = [
       'El reconocimiento fue entregado durante la ceremonia de clausura del festival y destacó el trabajo del grupo en la formación de jóvenes artistas y en la proyección internacional de la música folclórica colombiana como embajada cultural del país.',
       'Este galardón se suma a una trayectoria de más de una década de presentaciones en Colombia y el exterior, y motiva a la organización a continuar su labor de preservación y difusión del patrimonio musical de la nación.',
     ],
+    img: `${BASE}iconos-noticias/noticia-reconocimiento.webp`,
+    banner: `${BASE}noticias-banners/noticia-banner-reconocimiento.webp`,
     gradiente: 'linear-gradient(135deg, #6B21A8 0%, #1A56DB 100%)',
     emoji: '🏆',
     destacada: false,

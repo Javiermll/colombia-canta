@@ -139,6 +139,18 @@ h5 {
   line-height: 1.2;
 }
 
+/* --- Chip amarillo en títulos de sección --- */
+.titulo-chip {
+  display: inline-block;
+  background: var(--amarillo);
+  color: #000000;
+  padding: 2px 14px 4px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-weight: inherit;
+  font-size: inherit;
+}
+
 /* --- Utilidades --- */
 .container {
   max-width: 1200px;
@@ -152,6 +164,7 @@ h5 {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   margin-bottom: 12px;
+  align-self: center;
 }
 
 .label-rojo {
@@ -191,18 +204,27 @@ h5 {
   background: var(--coral);
   color: #0a0f1e;
   border: none;
+  justify-content: center;
 }
 
 .btn-amarillo {
   background: var(--coral);
   color: #0a0f1e;
   border: none;
+  justify-content: center;
 }
 
 .btn-rojo {
   background: var(--coral);
   color: #0a0f1e;
   border: none;
+  justify-content: center;
+}
+
+[data-theme="dark"] .btn-azul,
+[data-theme="dark"] .btn-amarillo,
+[data-theme="dark"] .btn-rojo {
+  color: #ffffff;
 }
 
 .btn-outline-oscuro {
@@ -273,17 +295,35 @@ h5 {
 }
 
 /* Hero con imagen de fondo (Inscripciones) — texto siempre blanco sobre overlay oscuro */
-.page-header--imagen .page-header-label { color: var(--amarillo); }
-.page-header--imagen h1 { color: #ffffff; }
-.page-header--imagen .page-header-divisor { background: rgba(255, 255, 255, 0.12); }
-.page-header--imagen .page-header-sub { color: rgba(255, 255, 255, 0.5); }
+.page-header--imagen .page-header-label {
+  color: var(--amarillo);
+}
+.page-header--imagen h1 {
+  color: #ffffff;
+}
+.page-header--imagen .page-header-divisor {
+  background: rgba(255, 255, 255, 0.12);
+}
+.page-header--imagen .page-header-sub {
+  color: rgba(255, 255, 255, 0.5);
+}
 
 /* Dark mode: fondo negro, texto blanco */
-[data-theme="dark"] .page-header { background: #000000; }
-[data-theme="dark"] .page-header-label { color: var(--amarillo); }
-[data-theme="dark"] .page-header h1 { color: #ffffff; }
-[data-theme="dark"] .page-header-divisor { background: rgba(255, 255, 255, 0.12); }
-[data-theme="dark"] .page-header-sub { color: rgba(255, 255, 255, 0.5); }
+[data-theme="dark"] .page-header {
+  background: #000000;
+}
+[data-theme="dark"] .page-header-label {
+  color: var(--amarillo);
+}
+[data-theme="dark"] .page-header h1 {
+  color: #ffffff;
+}
+[data-theme="dark"] .page-header-divisor {
+  background: rgba(255, 255, 255, 0.12);
+}
+[data-theme="dark"] .page-header-sub {
+  color: rgba(255, 255, 255, 0.5);
+}
 
 /* --- Sección invertida: negro en light, blanco en dark --- */
 .seccion-invertida {
@@ -503,7 +543,7 @@ h5 {
 }
 
 .aliado-logo-img {
-  max-height: 48px;
+  max-height: 95px;
   max-width: 100%;
   width: auto;
   object-fit: contain;
@@ -516,6 +556,10 @@ h5 {
 }
 
 .aliado-logo-bright {
+  filter: brightness(0) invert(1);
+}
+
+.aliado-logo-adaptive {
   filter: brightness(0) invert(1);
 }
 
@@ -580,7 +624,9 @@ h5 {
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
   cursor: pointer;
-  transition: color 0.15s ease, border-color 0.15s ease;
+  transition:
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .elenco-filtro-btn:hover {
@@ -603,7 +649,9 @@ h5 {
   border-radius: 16px;
   overflow: hidden;
   background: #111111;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
   cursor: pointer;
 }
 
@@ -855,7 +903,7 @@ h5 {
   width: 100%;
   aspect-ratio: 3 / 4;
   border-radius: 20px;
-  background: linear-gradient(155deg, #E8341A 0%, #6B21A8 60%, #0F3A9E 100%);
+  background: linear-gradient(155deg, #e8341a 0%, #6b21a8 60%, #0f3a9e 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1190,7 +1238,7 @@ h5 {
 
   /* Overlay negro puro — coincide con el footer-bandera */
   .contacto-section::before {
-    content: '';
+    content: "";
     position: absolute;
     inset: 0;
     background: rgba(0, 0, 0, 0.75);
@@ -1368,7 +1416,10 @@ h5 {
   background: transparent;
   color: var(--texto-secundario);
   cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
   font-family: var(--font-cuerpo);
 }
 
@@ -1399,7 +1450,10 @@ h5 {
   border: 1px solid var(--border-sutil);
   border-radius: 14px;
   overflow: hidden;
-  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
   position: relative;
 }
 
@@ -1423,6 +1477,16 @@ h5 {
   font-size: 40px;
   opacity: 0.5;
   user-select: none;
+}
+
+.noticias-page-card-banner {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
 }
 
 .noticias-page-card-cat {
@@ -1548,7 +1612,10 @@ h5 {
   font-weight: 600;
   cursor: pointer;
   font-family: var(--font-cuerpo);
-  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .eventos-filtro-btn:hover:not(.activo) {
@@ -1626,7 +1693,10 @@ h5 {
 .event-card-pasado {
   filter: grayscale(30%) brightness(0.8);
   opacity: 0.75;
-  transition: filter 0.25s ease, opacity 0.25s ease, transform 0.25s ease;
+  transition:
+    filter 0.25s ease,
+    opacity 0.25s ease,
+    transform 0.25s ease;
 }
 
 .event-card-pasado:hover {
@@ -1714,7 +1784,10 @@ h5 {
   overflow: hidden;
   background: var(--bg-card);
   cursor: pointer;
-  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  transition:
+    transform 0.22s ease,
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
 }
 
 .inscr-card:hover {
@@ -1782,7 +1855,7 @@ h5 {
 }
 
 .inscr-card-lista li::before {
-  content: '★';
+  content: "★";
   font-size: 9px;
   color: var(--amarillo);
   flex-shrink: 0;
@@ -1794,7 +1867,7 @@ h5 {
 }
 
 .inscr-card-mas::before {
-  content: '' !important;
+  content: "" !important;
 }
 
 .inscr-card-btn {

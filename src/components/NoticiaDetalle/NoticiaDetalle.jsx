@@ -77,7 +77,10 @@ export default function NoticiaDetalle({ noticia }) {
             {otras.map(n => (
               <Link to={`/noticias/${n.slug}`} key={n.id} className="noticia-mini-card">
                 <div className="noticia-mini-icono" style={{ background: n.gradiente }}>
-                  <span>{n.emoji}</span>
+                  {n.img
+                    ? <img src={n.img} alt={n.titulo} className="noticia-mini-img" loading="lazy" decoding="async" />
+                    : <span>{n.emoji}</span>
+                  }
                 </div>
                 <div className="noticia-mini-body">
                   <span className="noticia-mini-chip">{n.categoria}</span>

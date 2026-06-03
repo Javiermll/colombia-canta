@@ -1,24 +1,29 @@
 import { Link } from 'react-router-dom';
 import './Escuela.css';
 
-const cursos = ['Bandola', 'Tiple', 'Guitarra', 'Canto', 'Piano'];
+const cursos = ['Canto', 'Teatro', 'Piano', 'Guitarra', 'Danza'];
 
+const BASE = import.meta.env.BASE_URL;
 const imagenes = [
-  { bg: 'linear-gradient(135deg, #1A56DB 0%, #F5C800 100%)', label: '🎸' },
-  { bg: 'linear-gradient(135deg, #0F3A9E 0%, #1A56DB 100%)', label: '🎵' },
-  { bg: 'linear-gradient(135deg, #F5C800 0%, #B8960A 100%)', label: '🎤' },
+  { src: `${BASE}escuela-musica/img-quienessomos.webp`, alt: 'Estudiantes de Colombia Canta y Encanta' },
+  { src: `${BASE}escuela-musica/img_4177.webp`,         alt: 'Estudiantes aprendiendo instrumentos' },
+  { src: `${BASE}escuela-musica/img_3216.webp`,         alt: 'Formación musical colombiana' },
 ];
 
 export default function Escuela() {
   return (
     <section className="escuela-section">
+      <span className="escuela-seccion-label label-seccion label-amarillo">Escuela de Música</span>
+
+      {/* Quote header — full-width, centrado */}
+      <div className="escuela-header-quote">
+        <p className="escuela-header-quote-texto">Más que una escuela, un lugar donde la música colombiana vive y crece.</p>
+      </div>
+
       {/* Contenido izquierda */}
       <div className="escuela-contenido">
-        <span className="label-seccion label-amarillo">Escuela de Música</span>
         <h2>Aprende música tradicional colombiana</h2>
-        <p>
-          Nuestra escuela ofrece formación musical de calidad para niños, jóvenes y adultos. Desde principiantes hasta niveles avanzados, nuestros maestros te guiarán en el camino de la música tradicional colombiana.
-        </p>
+        <p>Nuestra escuela ofrece formación musical de calidad para niños, jóvenes y adultos. Desde principiantes hasta niveles avanzados, nuestros maestros te guiarán en el camino de la música tradicional colombiana.</p>
         <div className="escuela-pills">
           {cursos.map(c => (
             <span key={c} className="escuela-pill">{c}</span>
@@ -30,31 +35,13 @@ export default function Escuela() {
       {/* Mosaico de imágenes */}
       <div className="escuela-imagenes">
         <div className="escuela-img-grande">
-          <div style={{
-            background: imagenes[0].bg,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '64px', height: '100%'
-          }}>
-            {imagenes[0].label}
-          </div>
+          <img src={imagenes[0].src} alt={imagenes[0].alt} className="escuela-img" style={{ objectPosition: '25% center' }} loading="lazy" decoding="async" />
         </div>
         <div className="escuela-img-chica">
-          <div style={{
-            background: imagenes[1].bg,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '40px', height: '100%'
-          }}>
-            {imagenes[1].label}
-          </div>
+          <img src={imagenes[1].src} alt={imagenes[1].alt} className="escuela-img" loading="lazy" decoding="async" />
         </div>
         <div className="escuela-img-chica">
-          <div style={{
-            background: imagenes[2].bg,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '40px', height: '100%'
-          }}>
-            {imagenes[2].label}
-          </div>
+          <img src={imagenes[2].src} alt={imagenes[2].alt} className="escuela-img" style={{ objectPosition: '10% center' }} loading="lazy" decoding="async" />
         </div>
       </div>
     </section>

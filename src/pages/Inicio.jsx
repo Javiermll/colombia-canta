@@ -9,6 +9,7 @@ const PAGE_DESC = 'Asociación cultural colombiana en Medellín. Escuela de mús
 import CarruselEventos from '../components/CarruselEventos/CarruselEventos';
 import Historia from '../components/Historia/Historia';
 import Escuela from '../components/Escuela/Escuela';
+import Testimonios from '../components/Testimonios/Testimonios';
 import ContactoSection from '../components/Contacto/Contacto';
 import Noticias from '../components/Noticias/Noticias';
 import Footer from '../components/Footer/Footer';
@@ -44,6 +45,7 @@ export default function Inicio() {
       <Historia />
       <CarruselEventos />
       <Escuela />
+      <Testimonios />
       <Noticias />
       <ContactoSection />
       <Footer />

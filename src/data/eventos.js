@@ -1,7 +1,10 @@
+const BASE = import.meta.env.BASE_URL;
+
 export const eventos = [
   {
     id: 1,
     slug: "bambucos-disney-springs",
+    img: `${BASE}eventos-imagenes/evento-bambucos-disney.webp`,
     titulo: "Bambucos en Disney Springs",
     tipo: "Gira USA",
     fecha: "18 Abr 2026",
@@ -27,6 +30,7 @@ export const eventos = [
   {
     id: 2,
     slug: "gira-usa-miami",
+    img: `${BASE}eventos-imagenes/evento-gira-miami.webp`,
     titulo: "Gira USA 2026 · Miami",
     tipo: "Gira USA",
     fecha: "15 Abr 2026",
@@ -53,6 +57,7 @@ export const eventos = [
   {
     id: 3,
     slug: "herencia-andina-medellin",
+    img: `${BASE}eventos-imagenes/evento-herencia-andina.webp`,
     titulo: "Herencia Andina · Boleros y tertulias",
     tipo: "Sede",
     fecha: "28 Mar",
@@ -78,6 +83,7 @@ export const eventos = [
   {
     id: 4,
     slug: "festival-nacional",
+    img: `${BASE}eventos-imagenes/evento-festival-nacional.webp`,
     titulo: "Festival Nacional Colombia Canta",
     tipo: "Festival",
     fecha: "Jun 2026",
@@ -100,6 +106,7 @@ export const eventos = [
   {
     id: 5,
     slug: "melodias-piano",
+    img: `${BASE}eventos-imagenes/evento-melodias-piano.webp`,
     titulo: "Melodías al piano · Canta y Encanta",
     tipo: "Sede",
     fecha: "25 Mar",

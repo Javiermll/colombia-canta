@@ -8,7 +8,13 @@ export default function EventCard({ evento, pasado = false }) {
     <div className={`event-card${pasado ? ' event-card-pasado' : ''}`} onClick={() => navigate(`/eventos/${evento.id}`)}>
       <div
         className="event-card-img"
-        style={{ background: `linear-gradient(135deg, ${evento.colorHero}, rgba(0,0,0,0.5))` }}
+        style={evento.img ? {
+          backgroundImage: `linear-gradient(135deg, ${evento.colorHero}cc, rgba(0,0,0,0.45)), url(${evento.img})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        } : {
+          background: `linear-gradient(135deg, ${evento.colorHero}, rgba(0,0,0,0.5))`,
+        }}
       >
         <span className="chip-fecha">{evento.fecha}</span>
         <span className="chip-tipo">{evento.tipo}</span>

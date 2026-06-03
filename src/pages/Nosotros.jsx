@@ -117,7 +117,7 @@ export default function Nosotros() {
 
             <div className="nosotros-qs-foto-col">
               <img
-                src={`${import.meta.env.BASE_URL}foto_quienessomos.jpeg`}
+                src={`${import.meta.env.BASE_URL}escuela-musica/img_5966-3.webp`}
                 alt="Colombia Canta y Encanta"
                 className="nosotros-qs-foto"
               />

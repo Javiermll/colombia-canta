@@ -4,9 +4,48 @@
 
 .historia-section {
   display: grid;
-  grid-template-columns: 1.7fr 1fr;
-  margin: 32px 0;
+  grid-template-columns: 65fr 35fr;
+  min-height: 480px;
+  margin: 0 auto;
+  max-width: 1200px;
+  padding: 32px 24px 0;
+  border-top: 1px solid var(--border-sutil);
   overflow: hidden;
+}
+
+.historia-seccion-label {
+  grid-column: 1 / -1;
+  padding-bottom: 8px;
+  text-align: center;
+}
+
+.historia-header-quote {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 0 0 28px;
+}
+
+.historia-header-quote-texto {
+  font-family: var(--font-titulo);
+  font-style: italic;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--texto-secundario);
+  max-width: 680px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+.historia-header-quote-texto::after {
+  content: '\201D';
+  font-size: 38px;
+  font-family: Georgia, serif;
+  font-style: normal;
+  color: var(--coral);
+  line-height: 0;
+  vertical-align: -10px;
+  margin-left: 4px;
+  opacity: 0.75;
 }
 
 /* ── Contenido ──────────────────────────── */
@@ -17,6 +56,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
+  text-align: center;
 }
 
 .historia-contenido h2 {
@@ -25,6 +65,7 @@
   color: var(--texto-principal);
   margin-bottom: 12px;
   line-height: 1.1;
+  text-align: start;
 }
 
 .historia-contenido h2 span {
@@ -36,31 +77,98 @@
   font-size: 15px;
   line-height: 1.8;
   margin-bottom: 24px;
+  text-align: justify;
 }
 
 .historia-stats {
   display: flex;
-  gap: 28px;
-  margin-bottom: 28px;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
 }
 
 .stat-item {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 0;
+}
+
+.stat-item--banderas {
+  align-items: center;
+}
+
+.stat-titulo {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texto-principal);
+  white-space: nowrap;
+}
+
+.stat-titulo::after {
+  content: ':';
+  font-weight: 400;
+  color: var(--texto-secundario);
+  margin-right: 8px;
 }
 
 .stat-numero {
   font-family: var(--font-titulo);
-  font-size: 36px;
+  font-size: 20px;
   font-weight: 700;
-  color: var(--texto-principal);
+  color: var(--coral);
   line-height: 1;
+  margin-right: 6px;
 }
 
 .stat-label {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--texto-secundario);
-  margin-top: 4px;
+}
+
+/* ── Carrusel de banderas ── */
+
+.historia-banderas-wrap {
+  overflow: visible;
+}
+
+.historia-banderas-track {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.historia-bandera-circulo {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 1px solid var(--border-sutil);
+  cursor: default;
+  transition:
+    transform 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.historia-bandera-circulo:hover {
+  transform: translateY(-4px) scale(1.15);
+  border-color: var(--coral);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+}
+
+.historia-bandera-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+
+.historia-logro {
+  color: var(--coral);
+  font-weight: 700;
+  font-style: normal;
 }
 
 /* ── Carrusel ──────────────────────────── */
@@ -68,18 +176,17 @@
 .historia-carrusel {
   position: relative;
   overflow: hidden;
+  padding-left: 24px;
 }
 
 .historia-track {
   display: flex;
   gap: 8px;
-  height: 100%;
-  overflow-x: auto;
+  height: 95%;
+  overflow-x: hidden;
   scroll-snap-type: x mandatory;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 12px;
-  box-sizing: border-box;
 }
 
 .historia-track::-webkit-scrollbar {
@@ -88,7 +195,7 @@
 
 .historia-slide {
   flex-shrink: 0;
-  width: calc(50% - 8px);
+  width: calc(50% - 4px);
   scroll-snap-align: start;
   overflow: hidden;
   border-radius: 16px;
@@ -150,8 +257,12 @@
   cursor: default;
 }
 
-.historia-arrow--prev { left: 12px; }
-.historia-arrow--next { right: 12px; }
+.historia-arrow--prev {
+  left: 12px;
+}
+.historia-arrow--next {
+  right: 12px;
+}
 
 /* ── Dots ──────────────────────────────── */
 
@@ -171,7 +282,9 @@
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.3s ease;
+  transition:
+    background 0.3s ease,
+    transform 0.3s ease;
 }
 
 .historia-dot.activo {

@@ -13,9 +13,10 @@ export default function Noticias() {
     <section id="noticias" className="noticias-section">
       <div className="container">
         <div className="noticias-header">
-          <h2 className="noticias-titulo">
-            Últimas <span className="noticias-titulo-chip">noticias</span>
-          </h2>
+          <div className="noticias-intro">
+            <span className="label-seccion label-amarillo">Noticias</span>
+            <p className="noticias-quote">Las historias que nos mueven, desde Medellín y más allá.</p>
+          </div>
           <Link to="/noticias" className="noticias-ver-todas">
             VER TODAS <ArrowIcon />
           </Link>
@@ -30,7 +31,10 @@ export default function Noticias() {
               </div>
               <h3 className="noticias-fila-titulo">{n.titulo}</h3>
               <div className="noticias-fila-thumb" style={{ background: n.gradiente }}>
-                <span className="noticias-fila-emoji">{n.emoji}</span>
+                {n.img
+                  ? <img src={n.img} alt={n.titulo} className="noticias-fila-img" loading="lazy" decoding="async" />
+                  : <span className="noticias-fila-emoji">{n.emoji}</span>
+                }
               </div>
             </Link>
           ))}

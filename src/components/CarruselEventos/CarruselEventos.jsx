@@ -7,9 +7,9 @@ export default function CarruselEventos() {
     <section className="eventos-ac-section">
       <div className="container">
         <div className="eventos-ac-header">
-          <div>
-            <span className="label-seccion label-rojo">Agenda · 2026</span>
-            <h2 className="eventos-ac-titulo-seccion">Próximos Eventos</h2>
+          <div className="eventos-ac-intro">
+            <span className="label-seccion label-rojo">Eventos</span>
+            <p className="eventos-ac-subtitulo">Cada presentación es una ventana al alma de Colombia. Siente el folclor en vivo.</p>
           </div>
           <Link to="/eventos" className="eventos-ac-ver-todos">
             Ver todos <span className="eventos-ac-flecha">→</span>
@@ -22,8 +22,12 @@ export default function CarruselEventos() {
               to={`/eventos/${ev.id}`}
               key={ev.id}
               className="evento-ac-card"
-              style={{
-                background: `linear-gradient(160deg, ${ev.color} 0%, rgba(0,0,0,0.88) 100%)`
+              style={ev.img ? {
+                backgroundImage: `linear-gradient(160deg, ${ev.color}bb 0%, rgba(0,0,0,0.72) 100%), url(${ev.img})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+              } : {
+                background: `linear-gradient(160deg, ${ev.color} 0%, rgba(0,0,0,0.88) 100%)`,
               }}
             >
               {/* Estado colapsado */}

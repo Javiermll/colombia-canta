@@ -3,27 +3,62 @@
    ========================================== */
 
 .eventos-ac-section {
-  padding: 56px 0;
+  padding: 24px 0 56px;
+  border-top: 1px solid var(--border-sutil);
 }
 
 /* ── Header ── */
 .eventos-ac-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
+  position: relative;
   margin-bottom: 32px;
+  text-align: center;
+}
+
+.eventos-ac-intro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .eventos-ac-titulo-seccion {
   font-family: var(--font-titulo);
-  font-size: 36px;
+  font-size: 32px;
   font-weight: 700;
   color: var(--texto-principal);
   margin-top: 8px;
   line-height: 1.1;
 }
 
+.eventos-ac-subtitulo {
+  position: relative;
+  font-family: var(--font-titulo);
+  font-style: italic;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--texto-secundario);
+  margin-top: 20px;
+  max-width: 680px;
+  line-height: 1.65;
+  padding: 0;
+}
+
+.eventos-ac-subtitulo::after {
+  content: '\201D';
+  font-size: 38px;
+  font-family: Georgia, serif;
+  font-style: normal;
+  color: var(--coral);
+  line-height: 0;
+  vertical-align: -10px;
+  margin-left: 4px;
+  opacity: 0.75;
+}
+
+
 .eventos-ac-ver-todos {
+  position: absolute;
+  right: 0;
+  bottom: 0;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -31,7 +66,6 @@
   font-weight: 600;
   color: var(--coral);
   text-decoration: none;
-  padding-bottom: 6px;
   transition: gap 0.2s ease;
 }
 
@@ -51,7 +85,7 @@
 .eventos-ac-acordeon {
   display: flex;
   gap: 10px;
-  height: 400px;
+  height: 470px;
 }
 
 .evento-ac-card {
@@ -176,7 +210,9 @@
   font-weight: 700;
   padding: 10px 20px;
   border-radius: 100px;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
 }
 
 .evento-ac-cta:hover {
@@ -239,7 +275,9 @@
   border: 1px solid var(--border-sutil);
   background: var(--bg-card);
   box-shadow: 0 2px 12px var(--sombra-sutil);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
   flex-shrink: 0;
   cursor: pointer;
 }
@@ -311,7 +349,7 @@
 }
 
 .event-card-precio.libre {
-  color: #16A34A;
+  color: #16a34a;
 }
 
 .event-card-btn {

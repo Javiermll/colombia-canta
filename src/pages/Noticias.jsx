@@ -109,7 +109,10 @@ export default function NoticiasPage() {
               {filtradas.map(n => (
                 <Link to={`/noticias/${n.slug}`} key={n.id} className="noticias-page-card">
                   <div className="noticias-page-card-img" style={{ background: n.gradiente }}>
-                    <span className="noticias-page-card-emoji">{n.emoji}</span>
+                    {n.banner && (
+                      <img src={n.banner} alt={n.titulo} className="noticias-page-card-banner" loading="lazy" decoding="async" />
+                    )}
+                    {!n.banner && <span className="noticias-page-card-emoji">{n.emoji}</span>}
                     <span className="noticias-page-card-cat">{n.categoria}</span>
                   </div>
                   <div className="noticias-page-card-body">
