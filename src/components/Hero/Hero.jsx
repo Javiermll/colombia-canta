@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './Hero.css';
 
 const base = import.meta.env.BASE_URL;
+const CARDS_VISIBLE = 3;
 
 const slides = [
   {
@@ -30,7 +31,7 @@ const slides = [
     descripcion:
       'Desde Medellín llevamos la música y danza tradicional colombiana al mundo. Más de una década uniendo comunidades a través del arte y la cultura.',
     ctas: [
-      { label: 'Nuestra historia',   to: '/nosotros', primario: true  },
+      { label: 'Nuestra historia',  to: '/nosotros', primario: true  },
       { label: 'Conocer el elenco', to: '/elenco',   primario: false },
     ],
     imagen: 'hero-slides/quienes-somos.webp',
@@ -111,61 +112,103 @@ const slides = [
 export default function Hero() {
   const [active, setActive] = useState(0);
 
-  const prev = () => setActive((a) => (a - 1 + slides.length) % slides.length);
-  const next = () => setActive((a) => (a + 1) % slides.length);
+  const goTo  = (idx) => setActive(idx);
+  const prev  = () => setActive((a) => (a - 1 + slides.length) % slides.length);
+  const next  = () => setActive((a) => (a + 1) % slides.length);
+
+  const activeSlide = slides[active];
+
+  const previewCards = Array.from({ length: CARDS_VISIBLE }, (_, i) => ({
+    slideIdx: (active + 1 + i) % slides.length,
+    stackPos: i,
+  }));
 
   return (
     <section className="hero-carousel">
 
+      {/* ── Fondos full-bleed (crossfade) ── */}
       {slides.map((slide, i) => (
         <div
           key={slide.id}
-          className={`hero-slide${active === i ? ' hero-slide--activo' : ''}`}
-          aria-hidden={active !== i}
+          className={`hero-bg${active === i ? ' hero-bg--activo' : ''}`}
+          aria-hidden="true"
         >
-          {/* ── Contenido izquierdo ── */}
-          <div className="hero-slide-contenido">
-            <p className="hero-antetitulo">{slide.antetitulo}</p>
-            <h1 className="hero-titulo">{slide.titulo}</h1>
-            <p className="hero-desc">{slide.descripcion}</p>
-            <div className="hero-ctas">
-              {slide.ctas.map((cta) => (
-                <Link
-                  key={cta.label}
-                  to={cta.to}
-                  className={cta.primario ? 'hero-btn-primario' : 'hero-btn-secundario'}
-                >
-                  {cta.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-
-          {/* ── Imagen derecha con corte diagonal ── */}
-          <div className="hero-slide-imagen-wrap">
-            <img
-              src={`${base}${slide.imagen}`}
-              alt={slide.label}
-              className={`hero-slide-imagen hero-img--${slide.id}`}
-              loading={i === 0 ? 'eager' : 'lazy'}
-              decoding="async"
-            />
-          </div>
+          <img
+            src={`${base}${slide.imagen}`}
+            alt=""
+            className={`hero-bg-img hero-img--${slide.id}`}
+            loading={i === 0 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+          <div className="hero-overlay" />
         </div>
       ))}
 
-      {/* ── Flechas de navegación ── */}
-      <div className="hero-arrows">
-        <button className="hero-arrow hero-arrow--prev" onClick={prev} aria-label="Sección anterior">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="15 18 9 12 15 6" />
-          </svg>
-        </button>
-        <button className="hero-arrow hero-arrow--next" onClick={next} aria-label="Siguiente sección">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-            <polyline points="9 18 15 12 9 6" />
-          </svg>
-        </button>
+      {/* ── Contenido izquierdo — key=active fuerza remount y reactiva animaciones ── */}
+      <div key={active} className="hero-slide-contenido">
+        <p className="hero-antetitulo">{activeSlide.antetitulo}</p>
+        <h1 className="hero-titulo">{activeSlide.titulo}</h1>
+        <p className="hero-desc">{activeSlide.descripcion}</p>
+        <div className="hero-ctas">
+          {activeSlide.ctas.map((cta) => (
+            <Link
+              key={cta.label}
+              to={cta.to}
+              className={cta.primario ? 'hero-btn-primario' : 'hero-btn-secundario'}
+            >
+              {cta.label}
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Cards + navegación — derecha ── */}
+      <div className="hero-cards-area" aria-hidden="true">
+        <div className="hero-cards-stack">
+          {previewCards.map(({ slideIdx, stackPos }) => {
+            const slide = slides[slideIdx];
+            return (
+              <button
+                key={slideIdx}
+                className="hero-card"
+                data-pos={stackPos}
+                onClick={() => goTo(slideIdx)}
+                tabIndex={-1}
+              >
+                <img
+                  src={`${base}${slide.imagen}`}
+                  alt=""
+                  className={`hero-card-img hero-img--${slide.id}`}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <div className="hero-card-overlay" />
+                <div className="hero-card-info">
+                  <span className="hero-card-nombre">{slide.label}</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Flechas + contador */}
+        <div className="hero-cards-nav">
+          <button className="hero-arrow" onClick={prev} aria-label="Sección anterior">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="15 18 9 12 15 6" />
+            </svg>
+          </button>
+          <button className="hero-arrow" onClick={next} aria-label="Siguiente sección">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 18 15 12 9 6" />
+            </svg>
+          </button>
+          <div className="hero-numeric">
+            <span className="hero-numeric-current">{String(active + 1).padStart(2, '0')}</span>
+            <span className="hero-numeric-sep">/</span>
+            <span className="hero-numeric-total">{String(slides.length).padStart(2, '0')}</span>
+          </div>
+        </div>
       </div>
 
       {/* ── Tabs de navegación ── */}
@@ -174,7 +217,7 @@ export default function Hero() {
           <button
             key={slide.id}
             className={`hero-tab${active === i ? ' hero-tab--activo' : ''}`}
-            onClick={() => setActive(i)}
+            onClick={() => goTo(i)}
           >
             <span className="hero-tab-barra" aria-hidden="true" />
             <span className="hero-tab-label">{slide.label}</span>

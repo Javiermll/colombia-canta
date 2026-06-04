@@ -1,5 +1,5 @@
 /* ==========================================
-   HERO CAROUSEL v3
+   HERO CAROUSEL v4 — full-bleed + card stack
    ========================================== */
 
 .hero-carousel {
@@ -7,35 +7,72 @@
   height: 100svh;
   min-height: 580px;
   overflow: hidden;
-  background: transparent;
 }
 
-/* ── Slide individual ── */
+/* ── Fondos full-bleed ── */
 
-.hero-slide {
+.hero-bg {
   position: absolute;
   inset: 0;
-  display: grid;
-  grid-template-columns: 52% 48%;
   opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 0;
 }
 
-.hero-slide--activo {
+.hero-bg--activo {
   opacity: 1;
-  pointer-events: auto;
+}
+
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Posición individual por imagen */
+.hero-img--bienvenida    { object-position: center 20%; }
+.hero-img--quienes-somos { object-position: center 15%; }
+.hero-img--eventos       { object-position: center 10%; }
+.hero-img--escuela       { object-position: center 20%; }
+.hero-img--tienda        { object-position: center 20%; }
+.hero-img--noticias      { object-position: center 20%; }
+.hero-img--contacto      { object-position: center 30%; }
+
+/* Degradado oscuro mayor a la izquierda para legibilidad del texto */
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    rgba(0, 0, 0, 0.75) 0%,
+    rgba(0, 0, 0, 0.52) 35%,
+    rgba(0, 0, 0, 0.20) 62%,
+    rgba(0, 0, 0, 0.05) 100%
+  );
 }
 
 /* ── Contenido izquierdo ── */
 
 .hero-slide-contenido {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 52px;
+  width: 54%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 22px;
   padding: 110px 4vw 80px 6vw;
-  z-index: 1;
+  z-index: 2;
+  animation: heroContentIn 0.4s ease both;
+}
+
+@keyframes heroContentIn {
+  from { opacity: 0; }
 }
 
 /* ── Antetítulo / cita ── */
@@ -45,9 +82,10 @@
   font-style: italic;
   font-size: clamp(13px, 1vw, 15px);
   font-weight: 400;
-  color: var(--texto-secundario);
+  color: rgba(255, 255, 255, 0.65);
   letter-spacing: 0.01em;
   margin: 0;
+  animation: heroFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.06s both;
 }
 
 /* ── Título ── */
@@ -56,14 +94,11 @@
   font-family: var(--font-titulo);
   font-size: clamp(32px, 4vw, 60px);
   font-weight: 700;
-  color: var(--texto-principal);
+  color: #ffffff;
   line-height: 1.1;
   letter-spacing: -0.02em;
   margin: 0;
-}
-
-[data-theme="dark"] .hero-titulo {
-  color: #ffffff;
+  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.16s both;
 }
 
 .hero-titulo-acento {
@@ -78,10 +113,11 @@
 .hero-desc {
   font-family: var(--font-cuerpo);
   font-size: clamp(14px, 1.05vw, 16px);
-  color: var(--texto-secundario);
+  color: rgba(255, 255, 255, 0.78);
   line-height: 1.75;
   max-width: 420px;
   margin: 0;
+  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.26s both;
 }
 
 /* ── CTAs ── */
@@ -91,6 +127,7 @@
   gap: 12px;
   flex-wrap: wrap;
   margin-top: 4px;
+  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) 0.36s both;
 }
 
 .hero-btn-primario {
@@ -119,8 +156,8 @@
   align-items: center;
   padding: 13px 26px;
   background: transparent;
-  color: var(--texto-principal);
-  border: 1.5px solid var(--border-media);
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
   border-radius: 100px;
   font-family: var(--font-cuerpo);
   font-size: 13px;
@@ -128,37 +165,92 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease,
-    transform 0.2s ease;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
 }
 
 .hero-btn-secundario:hover {
-  border-color: var(--texto-principal);
-  background: var(--bg-hover);
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.12);
   transform: translateY(-2px);
 }
 
-[data-theme="dark"] .hero-btn-secundario {
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.4);
+/* ── Animación de entrada ── */
+
+@keyframes heroFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-[data-theme="dark"] .hero-btn-secundario:hover {
-  border-color: rgba(255, 255, 255, 0.85);
-  background: rgba(255, 255, 255, 0.07);
+/* ── Cards area ── */
+
+.hero-cards-area {
+  position: absolute;
+  right: 5vw;
+  top: 50%;
+  transform: translateY(-58%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
 }
 
-/* ── Imagen derecha con corte diagonal ── */
-
-.hero-slide-imagen-wrap {
+/* Contenedor del stack — tamaño de la carta frontal */
+.hero-cards-stack {
   position: relative;
-  height: 100%;
-  clip-path: polygon(clamp(80px, 10vw, 150px) 0, 100% 0, 100% 100%, 0 100%);
+  width: 180px;
+  height: 250px;
 }
 
-.hero-slide-imagen {
+/* Carta individual */
+.hero-card {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  overflow: hidden;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity   0.4s ease,
+    box-shadow 0.3s ease;
+  will-change: transform, opacity;
+}
+
+/* Posiciones en el stack */
+.hero-card[data-pos="0"] {
+  transform: translateX(0) translateY(0) rotate(0deg) scale(1);
+  z-index: 3;
+  opacity: 1;
+}
+
+.hero-card[data-pos="1"] {
+  transform: translateX(26px) translateY(-14px) rotate(5deg) scale(0.9);
+  z-index: 2;
+  opacity: 0.8;
+}
+
+.hero-card[data-pos="2"] {
+  transform: translateX(48px) translateY(-26px) rotate(10deg) scale(0.8);
+  z-index: 1;
+  opacity: 0.55;
+}
+
+/* Hover solo en la carta frontal */
+.hero-card[data-pos="0"]:hover {
+  transform: translateX(0) translateY(-5px) rotate(0deg) scale(1.03);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.45);
+}
+
+.hero-card-img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -167,70 +259,102 @@
   display: block;
 }
 
-/* ── Posición individual por slide — ajustar object-position según la imagen ── */
-.hero-img--bienvenida    { object-position: center 20%; }
-.hero-img--quienes-somos { object-position: center 15%; }
-.hero-img--eventos       { object-position: center 10%; }
-.hero-img--escuela       { object-position: center 20%; }
-.hero-img--tienda        { object-position: center 20%; }
-.hero-img--noticias      { object-position: center 20%; }
-.hero-img--contacto      { object-position: center 30%; }
-
-/* ── Flechas de navegación ── */
-
-.hero-arrows {
+.hero-card-overlay {
   position: absolute;
-  /* justo encima de los tabs (~52px) con un margen */
-  bottom: calc(52px + 20px);
-  left: 50%;
-  transform: translateX(-50%);
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.08) 55%,
+    transparent 100%
+  );
+}
+
+.hero-card-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 12px 12px 10px;
+}
+
+.hero-card-nombre {
+  display: block;
+  font-family: var(--font-cuerpo);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.92);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Navegación: flechas + contador ── */
+
+.hero-cards-nav {
   display: flex;
-  gap: 10px;
-  z-index: 10;
+  align-items: center;
+  gap: 8px;
 }
 
 .hero-arrow {
-  width: 44px;
-  height: 44px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  border: 1.5px solid var(--border-media);
-  background: rgba(255, 255, 255, 0.6);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.10);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  color: var(--texto-principal);
+  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+  flex-shrink: 0;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
 }
 
 .hero-arrow svg {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
   flex-shrink: 0;
 }
 
 .hero-arrow:hover {
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.13);
-  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.75);
+  transform: translateY(-1px);
 }
 
-[data-theme="dark"] .hero-arrow {
-  background: rgba(0, 0, 0, 0.45);
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
+/* Contador */
+.hero-numeric {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+  margin-left: 6px;
 }
 
-[data-theme="dark"] .hero-arrow:hover {
-  background: rgba(0, 0, 0, 0.75);
-  border-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+.hero-numeric-current {
+  font-family: var(--font-titulo);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--amarillo);
+  line-height: 1;
+}
+
+.hero-numeric-sep {
+  font-family: var(--font-titulo);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.35);
+  margin: 0 2px;
+}
+
+.hero-numeric-total {
+  font-family: var(--font-titulo);
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.45);
 }
 
 /* ── Tabs de navegación ── */
@@ -240,18 +364,14 @@
   bottom: 0;
   left: 0;
   right: 0;
+  height: 52px;
   display: flex;
   align-items: stretch;
-  border-top: 1px solid var(--border-sutil);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
   z-index: 10;
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-}
-
-[data-theme="dark"] .hero-tabs {
-  background: rgba(0, 0, 0, 0.65);
-  border-top-color: rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.48);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
 }
 
 .hero-tab {
@@ -260,19 +380,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0;
-  padding: 16px 10px 14px;
+  padding: 0 10px;
   background: transparent;
   border: none;
-  border-right: 1px solid var(--border-sutil);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
   cursor: pointer;
   position: relative;
   overflow: hidden;
   transition: background 0.2s ease;
-}
-
-[data-theme="dark"] .hero-tab {
-  border-right-color: rgba(255, 255, 255, 0.08);
 }
 
 .hero-tab:last-child {
@@ -280,7 +395,7 @@
 }
 
 .hero-tab:hover {
-  background: var(--bg-hover);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .hero-tab-label {
@@ -289,20 +404,15 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--texto-secundario);
+  color: rgba(255, 255, 255, 0.45);
   white-space: nowrap;
   transition: color 0.2s ease;
 }
 
 .hero-tab--activo .hero-tab-label {
-  color: var(--texto-principal);
-}
-
-[data-theme="dark"] .hero-tab--activo .hero-tab-label {
   color: #ffffff;
 }
 
-/* Barra indicadora superior de la tab activa */
 .hero-tab-barra {
   position: absolute;
   top: 0;
@@ -319,93 +429,71 @@
   transform: scaleX(1);
 }
 
-/* ── Animaciones de entrada del contenido al cambiar slide ── */
-
-@keyframes heroFadeUp {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.hero-slide--activo .hero-antetitulo {
-  animation: heroFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: 0.05s;
-}
-
-.hero-slide--activo .hero-titulo {
-  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: 0.15s;
-}
-
-.hero-slide--activo .hero-desc {
-  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: 0.25s;
-}
-
-.hero-slide--activo .hero-ctas {
-  animation: heroFadeUp 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
-  animation-delay: 0.35s;
-}
-
 /* ─────────────────────────────────────────
-   TABLET  (≤1024px)
+   TABLET  (769px – 1024px)
    ───────────────────────────────────────── */
 
+@media (max-width: 1024px) {
+  .hero-slide-contenido {
+    width: 58%;
+    padding: 100px 3vw 70px 5vw;
+  }
+
+  .hero-cards-area {
+    right: 3vw;
+    gap: 24px;
+  }
+
+  .hero-cards-stack {
+    width: 150px;
+    height: 210px;
+  }
+
+  .hero-card[data-pos="1"] {
+    transform: translateX(22px) translateY(-12px) rotate(5deg) scale(0.88);
+  }
+
+  .hero-card[data-pos="2"] {
+    transform: translateX(40px) translateY(-22px) rotate(10deg) scale(0.76);
+  }
+
+  .hero-card[data-pos="0"]:hover {
+    transform: translateX(0) translateY(-4px) rotate(0deg) scale(1.03);
+  }
+
+  .hero-numeric-current {
+    font-size: 22px;
+  }
+}
 
 /* ─────────────────────────────────────────
    MOBILE  (≤768px)
    ───────────────────────────────────────── */
 
 @media (max-width: 768px) {
-  .hero-carousel {
-    height: auto;
-    min-height: 100svh;
-  }
-
-  .hero-slide {
-    grid-template-columns: 1fr;
-    grid-template-rows: 42vmax auto;
-    position: relative;
-    opacity: 1;
-    pointer-events: auto;
+  /* Cards ocultas en mobile */
+  .hero-cards-area {
     display: none;
   }
 
-  .hero-slide--activo {
-    display: grid;
-  }
-
-  /* Imagen arriba, sin diagonal */
-  .hero-slide-imagen-wrap {
-    clip-path: none;
-    height: 42vmax;
-    min-height: 220px;
-    max-height: 360px;
-    order: -1;
-  }
-
+  /* Contenido ocupa todo el ancho, posicionado hacia el centro-bajo */
   .hero-slide-contenido {
-    align-items: center;
-    text-align: center;
-    padding: 28px 24px 100px;
-    gap: 18px;
+    width: 100%;
+    padding: 90px 24px 28px;
+    justify-content: flex-end;
+    bottom: 52px;
   }
 
   .hero-titulo {
-    font-size: 30px;
+    font-size: clamp(28px, 8vw, 38px);
   }
 
   .hero-desc {
     max-width: 100%;
+    font-size: 14px;
   }
 
   .hero-ctas {
-    justify-content: center;
     flex-direction: column;
     width: 100%;
   }
@@ -419,7 +507,6 @@
   /* Tabs: scroll horizontal */
   .hero-tabs {
     position: fixed;
-    bottom: 0;
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -430,8 +517,8 @@
 
   .hero-tab {
     flex: none;
-    min-width: 90px;
-    padding: 12px 14px 10px;
+    min-width: 88px;
+    padding: 0 14px;
   }
 
   .hero-tab-label {
