@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Hero.css';
 
@@ -9,7 +9,7 @@ const slides = [
   {
     id: 'bienvenida',
     label: 'Inicio',
-    antetitulo: '"La música es el latido de Colombia"',
+    antetitulo: '“La música es el latido de Colombia”',
     titulo: (
       <>Donde el talento<br />colombiano <span className="hero-titulo-acento">florece</span></>
     ),
@@ -24,7 +24,7 @@ const slides = [
   {
     id: 'quienes-somos',
     label: 'Quiénes somos',
-    antetitulo: '"Raíces profundas, vuelo alto"',
+    antetitulo: '“Raíces profundas, vuelo alto”',
     titulo: (
       <>Una fundación nacida<br />del <span className="hero-titulo-acento">corazón</span> andino</>
     ),
@@ -39,7 +39,7 @@ const slides = [
   {
     id: 'eventos',
     label: 'Eventos',
-    antetitulo: '"El escenario es nuestro hogar"',
+    antetitulo: '“El escenario es nuestro hogar”',
     titulo: (
       <>Vive la magia de<br />nuestros <span className="hero-titulo-acento">eventos</span></>
     ),
@@ -53,7 +53,7 @@ const slides = [
   {
     id: 'escuela',
     label: 'Escuela',
-    antetitulo: '"El ritmo vive en cada uno de nosotros"',
+    antetitulo: '“El ritmo vive en cada uno de nosotros”',
     titulo: (
       <>Aprende, crece y<br /><span className="hero-titulo-acento">transforma</span> tu vida</>
     ),
@@ -68,7 +68,7 @@ const slides = [
   {
     id: 'tienda',
     label: 'Tienda',
-    antetitulo: '"Lleva un pedazo de Colombia contigo"',
+    antetitulo: '“Lleva un pedazo de Colombia contigo”',
     titulo: (
       <>Nuestra cultura,<br />al alcance de tus <span className="hero-titulo-acento">manos</span></>
     ),
@@ -82,7 +82,7 @@ const slides = [
   {
     id: 'noticias',
     label: 'Noticias',
-    antetitulo: '"Cada logro, una historia que contar"',
+    antetitulo: '“Cada logro, una historia que contar”',
     titulo: (
       <>Mantente al día con<br />nuestra <span className="hero-titulo-acento">historia viva</span></>
     ),
@@ -96,7 +96,7 @@ const slides = [
   {
     id: 'contacto',
     label: 'Contacto',
-    antetitulo: '"Cada gran historia comienza con un hola"',
+    antetitulo: '“Cada gran historia comienza con un hola”',
     titulo: (
       <>Hagamos algo<br /><span className="hero-titulo-acento">grande</span> juntos</>
     ),
@@ -209,6 +209,16 @@ export default function Hero() {
             <span className="hero-numeric-total">{String(slides.length).padStart(2, '0')}</span>
           </div>
         </div>
+      </div>
+
+      {/* ── Franja próximo evento — siempre visible ── */}
+      <div className="hero-anuncio-evento">
+        <span className="hero-anuncio-label">Próximo gran evento</span>
+        <span className="hero-anuncio-diamante">◆</span>
+        <span className="hero-anuncio-nombre">Festival Colombia Canta y Encanta</span>
+        <span className="hero-anuncio-sep">·</span>
+        <span className="hero-anuncio-fecha">23-26 Jul 2026 · Medellín</span>
+        <Link to="/eventos/4" className="hero-anuncio-cta">Inscríbete →</Link>
       </div>
 
       {/* ── Tabs de navegación ── */}

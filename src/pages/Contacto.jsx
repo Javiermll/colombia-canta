@@ -78,7 +78,6 @@ export default function Contacto() {
             <h1>Contacto</h1>
           </div>
           <div className="page-header-divisor" />
-          <p className="page-header-sub">Estamos en Medellín, Colombia · Contáctanos</p>
         </div>
       </div>
 

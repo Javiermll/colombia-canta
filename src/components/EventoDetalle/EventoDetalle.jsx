@@ -16,13 +16,20 @@ export default function EventoDetalle({ evento }) {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const esEntradaLibre = evento.precio === 'Entrada libre';
   const esProximamente = evento.precio === 'Próximamente';
-  const ctaColor = 'var(--coral)';
+  const ctaColor = '#25D366';
+  const waLabel     = evento.ctaWa ?? (esProximamente ? 'Recibir información' : evento.cta);
+  const waLabelCorto = evento.ctaWa ?? (esProximamente ? 'Recibir info' : evento.cta);
 
-  const waLink = `https://wa.me/573015315119?text=Hola%2C+tengo+una+consulta+sobre+${encodeURIComponent(evento.titulo)}`;
+  const waLink = evento.waLink ?? `https://wa.me/573015315119?text=Hola%2C+quiero+informaci%C3%B3n+sobre+${encodeURIComponent(evento.titulo)}.`;
 
   const otrosEventos = eventos.filter(e => e.id !== evento.id).slice(0, 3);
+
+  const WaIcon = ({ size = 18 }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+  );
 
   return (
     <>
@@ -65,9 +72,9 @@ export default function EventoDetalle({ evento }) {
         <span className="sticky-titulo">{evento.titulo}</span>
         <span className="sticky-meta">{evento.fecha} · {evento.lugar}</span>
         <span className="sticky-precio">{evento.precio}</span>
-        <button className="sticky-btn" style={{ background: ctaColor }}>
-          {evento.cta}
-        </button>
+        <a href={waLink} target="_blank" rel="noopener noreferrer" className="sticky-btn" style={{ background: ctaColor }}>
+          <WaIcon size={15} /> {waLabelCorto}
+        </a>
       </div>
 
       {/* BLOQUE 3 — CUERPO */}
@@ -76,7 +83,9 @@ export default function EventoDetalle({ evento }) {
         <div className="evento-col-izq">
           <section>
             <h2>Sobre el evento</h2>
-            <p className="evento-descripcion">{evento.descripcionLarga}</p>
+            {String(evento.descripcionLarga).split('\n\n').map((p, i) => (
+              <p key={i} className="evento-descripcion">{p}</p>
+            ))}
           </section>
 
           <section>
@@ -125,17 +134,22 @@ export default function EventoDetalle({ evento }) {
             {evento.precioDetalle && (
               <div className="compra-precio-detalle">{evento.precioDetalle}</div>
             )}
-            <button className="compra-btn" style={{ background: ctaColor }}>
-              {evento.cta}
-            </button>
+            <a href={waLink} target="_blank" rel="noopener noreferrer" className="compra-btn" style={{ background: ctaColor }}>
+              <WaIcon /> {waLabel}
+            </a>
+            {evento.bases && (
+              <a href={evento.bases} target="_blank" rel="noopener noreferrer" className="compra-bases-btn">
+                📄 Conoce las bases del concurso
+              </a>
+            )}
             <div className="compra-garantias">
               <div className="compra-garantia">
                 <span className="compra-garantia-check">✓</span>
-                <span>Pago seguro</span>
+                <span>Respuesta inmediata</span>
               </div>
               <div className="compra-garantia">
                 <span className="compra-garantia-check">✓</span>
-                <span>Entradas digitales</span>
+                <span>Confirmación directa</span>
               </div>
               <div className="compra-garantia">
                 <span className="compra-garantia-check">✓</span>
@@ -146,7 +160,7 @@ export default function EventoDetalle({ evento }) {
           <div className="compra-card-footer">
             <p>¿Tienes preguntas?</p>
             <div className="compra-contacto-btns">
-              <a href={waLink} className="compra-contacto-btn">💬 WhatsApp</a>
+              <a href={waLink} className="compra-contacto-btn compra-contacto-btn--wa"><WaIcon size={14} /> WhatsApp</a>
               <a href="mailto:hola@colombiacanta.org" className="compra-contacto-btn">✉️ Email</a>
             </div>
           </div>
@@ -155,9 +169,9 @@ export default function EventoDetalle({ evento }) {
 
       {/* Mobile CTA fijo */}
       <div className="mobile-cta-fixed">
-        <button className="compra-btn" style={{ background: ctaColor }}>
-          {evento.cta} — {evento.precio}
-        </button>
+        <a href={waLink} target="_blank" rel="noopener noreferrer" className="compra-btn" style={{ background: ctaColor }}>
+          <WaIcon /> {waLabelCorto} · {evento.precio}
+        </a>
       </div>
 
       {/* BLOQUE 4 — PRUEBA SOCIAL */}
@@ -203,9 +217,8 @@ export default function EventoDetalle({ evento }) {
           <p className="evento-cierre-sub">
             {evento.titulo} · {evento.lugar} · {evento.fecha}
           </p>
-          <button className="evento-cierre-btn">{evento.cta}</button>
-          <a href={waLink} className="evento-cierre-link" target="_blank" rel="noopener noreferrer">
-            Tengo una pregunta →
+          <a href={waLink} target="_blank" rel="noopener noreferrer" className="evento-cierre-btn">
+            <WaIcon /> {waLabel}
           </a>
         </div>
       </section>

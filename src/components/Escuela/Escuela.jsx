@@ -17,7 +17,7 @@ export default function Escuela() {
 
       {/* Quote header — full-width, centrado */}
       <div className="escuela-header-quote">
-        <p className="escuela-header-quote-texto">Más que una escuela, un lugar donde la música colombiana vive y crece.</p>
+        <p className="escuela-header-quote-texto">Más que una escuela, un lugar donde la música colombiana vive y crece</p>
       </div>
 
       {/* Contenido izquierda */}

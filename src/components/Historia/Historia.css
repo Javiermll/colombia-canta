@@ -36,6 +36,18 @@
   line-height: 1.65;
 }
 
+.historia-header-quote-texto::before {
+  content: '\201C';
+  font-size: 38px;
+  font-family: Georgia, serif;
+  font-style: normal;
+  color: var(--coral);
+  line-height: 0;
+  vertical-align: -10px;
+  margin-right: 4px;
+  opacity: 0.75;
+}
+
 .historia-header-quote-texto::after {
   content: '\201D';
   font-size: 38px;

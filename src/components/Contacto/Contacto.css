@@ -7,3 +7,58 @@
   overflow: hidden;
 }
 
+/* ── Divider "Únete a nuestra comunidad" ── */
+.contacto-divider {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0 0 0;
+  padding: 0 48px;
+}
+
+.contacto-divider::before,
+.contacto-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+}
+
+.contacto-divider::before {
+  background: linear-gradient(to right, transparent, var(--texto-secundario));
+  opacity: 0.35;
+}
+
+.contacto-divider::after {
+  background: linear-gradient(to left, transparent, var(--texto-secundario));
+  opacity: 0.35;
+}
+
+.contacto-divider-titulo {
+  font-family: var(--font-titulo);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.contacto-divider-titulo::before,
+.contacto-divider-titulo::after {
+  content: '◆';
+  font-size: 7px;
+  vertical-align: middle;
+  color: var(--coral);
+  opacity: 0.75;
+}
+
+.contacto-divider-titulo::before { margin-right: 12px; }
+.contacto-divider-titulo::after  { margin-left:  12px; }
+
+@media (max-width: 768px) {
+  .contacto-divider {
+    padding: 0 24px;
+  }
+}
+

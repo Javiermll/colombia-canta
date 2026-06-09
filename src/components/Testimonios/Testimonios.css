@@ -6,6 +6,55 @@
   padding: 28px 0 36px;
 }
 
+/* ── Divider ornamental ── */
+
+.testimonios-divider {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0 0 32px;
+}
+
+.testimonios-divider::before,
+.testimonios-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+}
+
+.testimonios-divider::before {
+  background: linear-gradient(to right, transparent, var(--texto-secundario));
+  opacity: 0.35;
+}
+
+.testimonios-divider::after {
+  background: linear-gradient(to left, transparent, var(--texto-secundario));
+  opacity: 0.35;
+}
+
+.testimonios-divider-titulo {
+  font-family: var(--font-titulo);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.testimonios-divider-titulo::before,
+.testimonios-divider-titulo::after {
+  content: '◆';
+  font-size: 7px;
+  vertical-align: middle;
+  color: var(--amarillo);
+  opacity: 0.75;
+}
+
+.testimonios-divider-titulo::before { margin-right: 12px; }
+.testimonios-divider-titulo::after  { margin-left:  12px; }
+
 /* ── Header de sección ── */
 
 .testimonios-header {

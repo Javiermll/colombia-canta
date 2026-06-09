@@ -31,6 +31,18 @@
   line-height: 1.65;
 }
 
+.noticias-quote::before {
+  content: '\201C';
+  font-size: 38px;
+  font-family: Georgia, serif;
+  font-style: normal;
+  color: var(--coral);
+  line-height: 0;
+  vertical-align: -10px;
+  margin-right: 4px;
+  opacity: 0.75;
+}
+
 .noticias-quote::after {
   content: '\201D';
   font-size: 38px;
@@ -63,11 +75,32 @@
   color: var(--coral);
 }
 
+/* ── Layout lista + sidebar Instagram ── */
+.noticias-con-ig {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 32px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+.noticias-ig-sidebar {
+  position: sticky;
+  top: 100px;
+}
+
+/* El widget dentro del sidebar coincide visualmente con el top del primer item */
+.noticias-ig-sidebar .ig-widget {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top: 2px solid var(--coral);
+}
+
 /* ── Lista ── */
 .noticias-lista {
   display: flex;
   flex-direction: column;
-  margin-top: 16px;
+  gap: 2px;
 }
 
 /* ── Fila ── */
@@ -76,31 +109,19 @@
   display: flex;
   align-items: center;
   gap: 20px;
-  padding: 14px 0;
+  padding: 14px 12px;
   text-decoration: none;
-  border-bottom: 1px solid var(--border-sutil);
+  border-radius: 10px;
   overflow: hidden;
+  background-image: linear-gradient(to right, var(--bg-hover), var(--bg-hover));
+  background-size: 0% 100%;
+  background-repeat: no-repeat;
+  background-position: left center;
+  transition: background-size 0.38s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.noticias-fila:first-child {
-  border-top: 1px solid var(--border-sutil);
-}
-
-/* Línea animada en hover */
-.noticias-fila::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--coral);
-  transition: width 0.4s ease;
-  z-index: 1;
-}
-
-.noticias-fila:hover::after {
-  width: 100%;
+.noticias-fila:hover {
+  background-size: 100% 100%;
 }
 
 /* ── Meta: fecha + categoría ── */
@@ -182,6 +203,17 @@
 }
 
 /* ── Responsive ── */
+@media (max-width: 1024px) {
+  .noticias-con-ig {
+    grid-template-columns: 1fr;
+  }
+
+  .noticias-ig-sidebar {
+    position: static;
+    max-width: 420px;
+  }
+}
+
 @media (max-width: 640px) {
   .noticias-titulo {
     font-size: 28px;

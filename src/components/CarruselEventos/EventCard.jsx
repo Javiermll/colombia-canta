@@ -1,11 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 
-export default function EventCard({ evento, pasado = false }) {
+export default function EventCard({ evento, pasado = false, permanente = false }) {
   const navigate = useNavigate();
   const esPago = evento.precio && !['Entrada libre', 'Próximamente'].includes(evento.precio);
 
   return (
-    <div className={`event-card${pasado ? ' event-card-pasado' : ''}`} onClick={() => navigate(`/eventos/${evento.id}`)}>
+    <div
+      className={`event-card${pasado ? ' event-card-pasado' : ''}${permanente ? ' event-card--permanente' : ''}`}
+      style={permanente ? { borderTop: `3px solid ${evento.color}` } : undefined}
+      onClick={() => navigate(`/eventos/${evento.slug ?? evento.id}`)}
+    >
       <div
         className="event-card-img"
         style={evento.img ? {
@@ -16,7 +20,10 @@ export default function EventCard({ evento, pasado = false }) {
           background: `linear-gradient(135deg, ${evento.colorHero}, rgba(0,0,0,0.5))`,
         }}
       >
-        <span className="chip-fecha">{evento.fecha}</span>
+        {permanente
+          ? <span className="chip-permanente">Siempre en cartelera</span>
+          : <span className="chip-fecha">{evento.fecha}</span>
+        }
         <span className="chip-tipo">{evento.tipo}</span>
         {pasado && <span className="chip-finalizado">Finalizado</span>}
       </div>
@@ -26,7 +33,7 @@ export default function EventCard({ evento, pasado = false }) {
         <div className="event-card-meta">
           <span>📍</span>
           <span>{evento.ciudad}</span>
-          {evento.hora !== 'Por confirmar' && (
+          {evento.hora && evento.hora !== 'Por confirmar' && (
             <>
               <span>·</span>
               <span>{evento.hora}</span>

@@ -54,7 +54,7 @@ export default function Historia() {
       {/* Header full-width */}
       <span className="historia-seccion-label label-seccion label-rojo">Quiénes Somos</span>
       <div className="historia-header-quote">
-        <p className="historia-header-quote-texto">Un sueño nacido en Medellín que hoy late en escenarios de todo el mundo.</p>
+        <p className="historia-header-quote-texto">Un sueño nacido en Medellín que hoy late en escenarios de todo el mundo</p>
       </div>
 
       {/* Carrusel — izquierda en desktop, arriba en mobile */}

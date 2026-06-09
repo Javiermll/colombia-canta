@@ -1,39 +1,15 @@
-import { useState, useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Link } from 'react-router-dom';
-import { eventos } from '../data/eventos';
-import EventCard from '../components/CarruselEventos/EventCard';
+import AgendaCalendario from '../components/AgendaCalendario/AgendaCalendario';
+import EventosFijosHome from '../components/EventosFijos/EventosFijosHome';
 import ContactoSection from '../components/Contacto/Contacto';
 import Footer from '../components/Footer/Footer';
-import '../components/CarruselEventos/CarruselEventos.css';
+import './Eventos.css';
 import { BASE_URL, OG_IMAGE } from '../utils/seo';
 
 const PAGE_TITLE = 'Eventos | Colombia Canta y Encanta';
-const PAGE_DESC = 'Próximas presentaciones de Colombia Canta y Encanta en Medellín y gira USA 2026. Conciertos, festivales y eventos de música colombiana.';
-
-const CATEGORIAS = ['Todos', 'Gira USA', 'Sede', 'Festival'];
-const AHORA = new Date();
-
-function clasificar(lista) {
-  const proximos = lista
-    .filter(e => e.fechaISO && new Date(e.fechaISO) >= AHORA)
-    .sort((a, b) => new Date(a.fechaISO) - new Date(b.fechaISO));
-  const pasados = lista
-    .filter(e => !e.fechaISO || new Date(e.fechaISO) < AHORA)
-    .sort((a, b) => new Date(b.fechaISO) - new Date(a.fechaISO));
-  return { proximos, pasados };
-}
+const PAGE_DESC = 'Agenda de eventos de Colombia Canta y Encanta en Medellín y gira USA 2026. Conciertos, festivales y eventos de música colombiana.';
 
 export default function Eventos() {
-  const [filtro, setFiltro] = useState('Todos');
-
-  const filtrados = useMemo(() =>
-    filtro === 'Todos' ? eventos : eventos.filter(e => e.tipo === filtro),
-    [filtro]
-  );
-
-  const { proximos, pasados } = useMemo(() => clasificar(filtrados), [filtrados]);
-
   return (
     <main>
       <Helmet>
@@ -59,68 +35,27 @@ export default function Eventos() {
             <h1>Eventos</h1>
           </div>
           <div className="page-header-divisor" />
-          <p className="page-header-sub">Próximas presentaciones de Colombia Canta y Encanta</p>
         </div>
       </div>
 
+      {/* ── Programas permanentes ── */}
+      <section className="eventos-programas-section">
+        <div className="container">
+          <div className="ev-divider">
+            <h2 className="ev-divider-titulo">Programas</h2>
+          </div>
+          <p className="ev-sub">Experiencias que puedes vivir cualquier semana del año</p>
+        </div>
+        <EventosFijosHome />
+      </section>
+
+      {/* ── Agenda ── */}
       <section className="eventos-page-section">
         <div className="container">
-
-          {/* Filtros */}
-          <div className="eventos-filtros">
-            {CATEGORIAS.map(cat => (
-              <button
-                key={cat}
-                className={`eventos-filtro-btn${filtro === cat ? ' activo' : ''}`}
-                onClick={() => setFiltro(cat)}
-              >
-                {cat}
-              </button>
-            ))}
+          <div className="ev-divider ev-divider--agenda">
+            <h2 className="ev-divider-titulo">Próxima agenda</h2>
           </div>
-
-          {/* ── Próximos ── */}
-          <div className="eventos-bloque">
-            <div className="eventos-bloque-header">
-              <h2 className="eventos-bloque-titulo">Próximos eventos</h2>
-              {proximos.length > 0 && (
-                <span className="eventos-bloque-count">{proximos.length}</span>
-              )}
-            </div>
-
-            {proximos.length > 0 ? (
-              <div className="eventos-grid">
-                {proximos.map(ev => (
-                  <Link to={`/eventos/${ev.id}`} key={ev.id} className="eventos-card-link">
-                    <EventCard evento={ev} />
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              <div className="eventos-vacio">
-                <p>Pronto anunciaremos nuevas fechas.</p>
-                <p className="eventos-vacio-sub">Síguenos en redes para estar al tanto de la agenda.</p>
-              </div>
-            )}
-          </div>
-
-          {/* ── Pasados ── */}
-          {pasados.length > 0 && (
-            <div className="eventos-bloque eventos-bloque-pasados">
-              <div className="eventos-bloque-header">
-                <h2 className="eventos-bloque-titulo eventos-bloque-titulo-pasados">Ediciones anteriores</h2>
-                <span className="eventos-bloque-count eventos-bloque-count-pasados">{pasados.length}</span>
-              </div>
-              <div className="eventos-grid">
-                {pasados.map(ev => (
-                  <Link to={`/eventos/${ev.id}`} key={ev.id} className="eventos-card-link">
-                    <EventCard evento={ev} pasado />
-                  </Link>
-                ))}
-              </div>
-            </div>
-          )}
-
+          <AgendaCalendario />
         </div>
       </section>
 

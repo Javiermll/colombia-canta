@@ -395,14 +395,14 @@
   box-shadow: 0 8px 40px var(--sombra-fuerte);
   padding: 20px;
   padding-top: 8px;
-  width: 520px;
+  width: 380px;
   border-top: 2px solid var(--coral);
   left: 0;
-  transform: translateX(-20%) translateY(-8px);
+  transform: translateX(-30%) translateY(-8px);
 }
 
 .nav-group:hover .dropdown-eventos {
-  transform: translateX(-20%) translateY(0);
+  transform: translateX(-30%) translateY(0);
 }
 
 .dropdown-header {
@@ -430,6 +430,24 @@
   display: flex;
   align-items: center;
   gap: 4px;
+}
+
+.dropdown-eventos-btn-todos {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  padding: 9px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--coral);
+  border: 1.5px solid var(--coral);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.dropdown-eventos-btn-todos:hover {
+  background: var(--coral);
+  color: #fff;
 }
 
 .dropdown-eventos-grid {

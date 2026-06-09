@@ -37,6 +37,18 @@
   line-height: 1.65;
 }
 
+.escuela-header-quote-texto::before {
+  content: '\201C';
+  font-size: 38px;
+  font-family: Georgia, serif;
+  font-style: normal;
+  color: var(--coral);
+  line-height: 0;
+  vertical-align: -10px;
+  margin-right: 4px;
+  opacity: 0.75;
+}
+
 .escuela-header-quote-texto::after {
   content: '\201D';
   font-size: 38px;
@@ -50,30 +62,19 @@
 }
 
 .escuela-contenido {
-  background: transparent;
   padding: 40px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   min-height: 456px;
-}
-
-.escuela-contenido h2 {
-  font-size: 42px;
-  font-weight: 800;
-  color: var(--texto-principal);
-  margin-bottom: 12px;
-  line-height: 1.1;
-  text-align: center;
-  border-radius: 14px;
-  padding: 18px 20px;
+  border-radius: 16px;
   background: linear-gradient(
     135deg,
-    rgba(252, 209, 22, 0.18) 0%,
-    rgba(252, 209, 22, 0.06) 35%,
-    rgba(0,  56, 147, 0.12) 50%,
-    rgba(206, 17,  38, 0.06) 65%,
-    rgba(206, 17,  38, 0.16) 100%
+    rgba(252, 209, 22, 0.28) 0%,
+    rgba(252, 209, 22, 0.10) 35%,
+    rgba(0,   56, 147, 0.20) 50%,
+    rgba(206, 17,  38, 0.10) 65%,
+    rgba(206, 17,  38, 0.26) 100%
   );
   background-size: 250% 250%;
   animation: colombia-flow 7s ease-in-out infinite;
@@ -83,6 +84,15 @@
   0%   { background-position: 0%   50%; }
   50%  { background-position: 100% 50%; }
   100% { background-position: 0%   50%; }
+}
+
+.escuela-contenido h2 {
+  font-size: 42px;
+  font-weight: 800;
+  color: var(--texto-principal);
+  margin-bottom: 12px;
+  line-height: 1.1;
+  text-align: center;
 }
 
 .escuela-contenido p {

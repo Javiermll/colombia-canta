@@ -7,6 +7,7 @@ import Inicio from './pages/Inicio';
 import Nosotros from './pages/Nosotros';
 import Eventos from './pages/Eventos';
 import EventoDetallePage from './pages/EventoDetallePage';
+import EventoFijoDetallePage from './pages/EventoFijoDetallePage';
 import Tienda from './pages/Tienda';
 import Carrito from './pages/Carrito';
 import Inscripciones from './pages/Inscripciones';
@@ -28,6 +29,8 @@ export default function App() {
             <Route path="/" element={<Inicio />} />
             <Route path="/nosotros" element={<Nosotros />} />
             <Route path="/eventos" element={<Eventos />} />
+            <Route path="/eventos/salas-colombia-canta" element={<EventoFijoDetallePage />} />
+            <Route path="/eventos/colombia-me-enamoras" element={<EventoFijoDetallePage />} />
             <Route path="/eventos/:id" element={<EventoDetallePage />} />
             <Route path="/tienda" element={<Tienda />} />
             <Route path="/tienda/carrito" element={<Carrito />} />

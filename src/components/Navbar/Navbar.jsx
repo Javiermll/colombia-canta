@@ -2,10 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../hooks/useTheme';
 import { useCarrito } from '../../context/CarritoContext';
-import { eventos } from '../../data/eventos';
+import { eventosFijos } from '../../data/eventosFijos';
 import './Navbar.css';
-
-const eventosDropdown = eventos.slice(0, 4);
 
 const tiendaDropdown = [
   { nombre: "Poleras", precio: "desde $45.000", emoji: "👕", bg: "linear-gradient(135deg, #1A56DB, #0F3A9E)" },
@@ -86,12 +84,11 @@ export default function Navbar() {
               </Link>
               <div className="dropdown dropdown-eventos">
                 <div className="dropdown-header">
-                  <h4>Próximos eventos</h4>
-                  <Link to="/eventos" className="dropdown-ver-todos">Ver todos →</Link>
+                  <h4>Programas permanentes</h4>
                 </div>
                 <div className="dropdown-eventos-grid">
-                  {eventosDropdown.map(ev => (
-                    <Link to={`/eventos/${ev.id}`} className="evento-mini-card" key={ev.id}>
+                  {eventosFijos.map(ev => (
+                    <Link to={`/eventos/${ev.slug}`} className="evento-mini-card" key={ev.id}>
                       <div
                         className="evento-mini-bg"
                         style={ev.img ? {
@@ -99,10 +96,9 @@ export default function Navbar() {
                           backgroundSize: 'cover',
                           backgroundPosition: 'center',
                         } : {
-                          background: `linear-gradient(135deg, ${ev.colorHero}, rgba(0,0,0,0.6))`,
+                          background: `linear-gradient(135deg, ${ev.color}, ${ev.colorHero})`,
                         }}
                       >
-                        <span className="chip-fecha">{ev.fecha}</span>
                         <span className="chip-tipo">{ev.tipo}</span>
                       </div>
                       <div className="evento-mini-info">
@@ -112,6 +108,9 @@ export default function Navbar() {
                     </Link>
                   ))}
                 </div>
+                <Link to="/eventos" className="dropdown-eventos-btn-todos">
+                  Ver todos los eventos →
+                </Link>
               </div>
             </div>
 
@@ -201,8 +200,8 @@ export default function Navbar() {
         </button>
         {mobileExpanded === 'eventos' && (
           <div className="mobile-submenu">
-            {eventosDropdown.map(ev => (
-              <Link to={`/eventos/${ev.id}`} key={ev.id}>{ev.titulo}</Link>
+            {eventosFijos.map(ev => (
+              <Link to={`/eventos/${ev.slug}`} key={ev.id}>{ev.titulo}</Link>
             ))}
             <Link to="/eventos">Ver todos →</Link>
           </div>

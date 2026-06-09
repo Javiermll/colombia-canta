@@ -22,6 +22,7 @@ export const eventos = [
     cta: "Ver detalles",
     color: "#1A56DB",
     colorHero: "#0F3A9E",
+    waLink: "https://wa.me/573015315119?text=Hola%2C+quiero+reservar+para+Bambucos+en+Disney+Springs+el+18+de+abril.+Somos+X+personas.",
     testimonios: [
       { texto: "Una experiencia única. La energía del elenco es impresionante.", nombre: "Carlos M.", ciudad: "Miami" },
       { texto: "Ver la música colombiana en un escenario así fue emocionante.", nombre: "Andrea P.", ciudad: "Orlando" }
@@ -49,6 +50,7 @@ export const eventos = [
     cta: "Comprar entrada",
     color: "#E8341A",
     colorHero: "#8B0000",
+    waLink: "https://wa.me/573015315119?text=Hola%2C+quiero+reservar+para+Gira+USA+2026+Miami+el+15+de+abril.+Somos+X+personas.",
     testimonios: [
       { texto: "Una noche que no olvidaré. La energía del elenco es increíble.", nombre: "María G.", ciudad: "Miami" },
       { texto: "La música colombiana en vivo es otra experiencia. Volveré sin dudarlo.", nombre: "Carlos R.", ciudad: "Orlando" }
@@ -75,6 +77,7 @@ export const eventos = [
     cta: "Reservar mesa",
     color: "#B8960A",
     colorHero: "#7A5C00",
+    waLink: "https://wa.me/573015315119?text=Hola%2C+quiero+reservar+para+Herencia+Andina+el+28+de+marzo.+Somos+X+personas.",
     testimonios: [
       { texto: "La sede tiene una energía especial. Una noche muy emotiva.", nombre: "Lucía T.", ciudad: "Medellín" },
       { texto: "El Trío Tritono es excepcional. Una velada para recordar.", nombre: "Jorge A.", ciudad: "Medellín" }
@@ -84,23 +87,26 @@ export const eventos = [
     id: 4,
     slug: "festival-nacional",
     img: `${BASE}eventos-imagenes/evento-festival-nacional.webp`,
-    titulo: "Festival Nacional Colombia Canta",
+    titulo: "Festival Colombia Canta y Encanta",
     tipo: "Festival",
-    fecha: "Jun 2026",
-    fechaISO: "2026-06-15",
-    fechaCompleta: "Mayo 2026 — fecha por confirmar",
+    fecha: "23-26 Jul 2026",
+    fechaISO: "2026-07-23",
+    fechaCompleta: "Del 23 al 26 de julio de 2026",
     ciudad: "Medellín",
     lugar: "Por confirmar",
     hora: "Por confirmar",
     puertas: null,
     direccion: "Medellín, Colombia",
-    descripcion: "El festival que reúne lo mejor de la música tradicional colombiana. Artistas de todo el país.",
-    descripcionLarga: "El Festival Nacional Colombia Canta reúne lo mejor de la música tradicional colombiana en un evento de múltiples días en Medellín. Artistas de todas las regiones del país, talleres, conferencias y presentaciones en vivo que celebran la diversidad musical de Colombia.",
-    programa: ["Música de todas las regiones de Colombia", "Talleres musicales", "Conferencias culturales"],
+    descripcion: "El encuentro nacional de niños y jóvenes intérpretes de músicas andinas colombianas. Solistas vocales entre 9 y 16 años.",
+    descripcionLarga: "El Festival Colombia Canta y Encanta es un encuentro nacional que reúne a niños y jóvenes intérpretes de las músicas andinas colombianas en un espacio diseñado para aprender, compartir y celebrar nuestro patrimonio musical.\n\nEn su versión 2026, el Festival abre la convocatoria para solistas vocales entre los 9 y 16 años de edad, quienes tendrán la oportunidad de mostrar su talento, recibir acompañamiento artístico y vivir una experiencia formativa alrededor de la música colombiana.\n\nMás que un festival, es un espacio donde las nuevas generaciones fortalecen su identidad cultural, conocen otros artistas, participan en actividades académicas y artísticas, y hacen parte de una comunidad que cree en el poder de la música para transformar vidas.\n\nLos participantes podrán acceder a clases maestras, asesorías especializadas, encuentros culturales, actividades de integración y, para los finalistas, una experiencia presencial en Medellín junto al grupo base oficial del Festival.\n\nDel 23 al 26 de julio de 2026, Medellín volverá a convertirse en el escenario donde las voces jóvenes de Colombia se encuentran para cantar, aprender y brillar.",
+    programa: ["Solistas vocales 9-16 años", "Clases magistrales", "Asesorías especializadas", "Encuentros culturales", "Actividades de integración"],
     precio: "Próximamente",
-    cta: "Notificarme",
+    cta: "Inscríbete aquí",
+    ctaWa: "Inscribirme al festival",
+    bases: "https://drive.google.com/file/d/1aWOLqMxR5OPjEAub1CzRcQQhAVyhBZiE/view?usp=drive_link",
     color: "#6B21A8",
     colorHero: "#3B0764",
+    waLink: "https://wa.me/573015315119?text=Hola%2C+quiero+inscribirme+al+Festival+Colombia+Canta+y+Encanta+2026+(23-26+de+julio+en+Medell%C3%ADn).+Por+favor+env%C3%ADame+informaci%C3%B3n.",
     testimonios: []
   },
   {
@@ -124,6 +130,7 @@ export const eventos = [
     cta: "Reservar",
     color: "#1A56DB",
     colorHero: "#0F3A9E",
+    waLink: "https://wa.me/573015315119?text=Hola%2C+quiero+reservar+para+Melod%C3%ADas+al+piano+el+25+de+marzo.+Somos+X+personas.",
     testimonios: [
       { texto: "Leonardo y Luciana son extraordinarios. Una velada muy especial.", nombre: "Patricia V.", ciudad: "Medellín" }
     ]

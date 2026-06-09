@@ -5,9 +5,12 @@ export default function ContactoSection() {
   return (
     <div className="contacto-section">
       <div className="container">
+        <div className="contacto-divider">
+          <h2 className="contacto-divider-titulo">Únete a nuestra comunidad</h2>
+        </div>
+
         <div className="contacto-centrado">
           <div className="contacto-content">
-            <span className="label-seccion label-rojo">Únete a nuestra comunidad</span>
             <h2 className="frase-principal">
               La música colombiana que <span>mueve al mundo</span>
             </h2>

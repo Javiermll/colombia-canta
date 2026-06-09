@@ -40,7 +40,6 @@ export default function Carrito() {
             <h1>Carrito</h1>
           </div>
           <div className="page-header-divisor" />
-          <p className="page-header-sub">Revisa tu selección y lleva un pedacito de Colombia contigo</p>
         </div>
       </div>
 

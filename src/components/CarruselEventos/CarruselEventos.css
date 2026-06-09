@@ -42,6 +42,18 @@
   padding: 0;
 }
 
+.eventos-ac-subtitulo::before {
+  content: '\201C';
+  font-size: 38px;
+  font-family: Georgia, serif;
+  font-style: normal;
+  color: var(--coral);
+  line-height: 0;
+  vertical-align: -10px;
+  margin-right: 4px;
+  opacity: 0.75;
+}
+
 .eventos-ac-subtitulo::after {
   content: '\201D';
   font-size: 38px;
@@ -205,7 +217,7 @@
   align-items: center;
   gap: 6px;
   background: var(--coral);
-  color: #0a0f1e;
+  color: var(--texto-principal);
   font-size: 13px;
   font-weight: 700;
   padding: 10px 20px;
@@ -218,6 +230,90 @@
 .evento-ac-cta:hover {
   transform: translateY(-2px);
   opacity: 0.9;
+}
+
+/* ── Título "Eventos destacados" ── */
+.eventos-ac-destacados-header {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 12px 0 28px;
+}
+
+.eventos-ac-destacados-header::before,
+.eventos-ac-destacados-header::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+}
+
+.eventos-ac-destacados-header::before {
+  background: linear-gradient(to right, transparent, var(--texto-secundario));
+  opacity: 0.35;
+}
+
+.eventos-ac-destacados-header::after {
+  background: linear-gradient(to left, transparent, var(--texto-secundario));
+  opacity: 0.35;
+}
+
+.eventos-ac-destacados-titulo {
+  font-family: var(--font-titulo);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.eventos-ac-destacados-titulo::before,
+.eventos-ac-destacados-titulo::after {
+  content: '◆';
+  font-size: 7px;
+  vertical-align: middle;
+  color: var(--coral);
+  opacity: 0.75;
+}
+
+.eventos-ac-destacados-titulo::before {
+  margin-right: 12px;
+}
+
+.eventos-ac-destacados-titulo::after {
+  margin-left: 12px;
+}
+
+/* ── Card pasada ── */
+.evento-ac-card--pasado {
+  filter: saturate(0.55);
+  opacity: 0.80;
+}
+
+.evento-ac-card--pasado:hover {
+  filter: saturate(0.75);
+  opacity: 1;
+}
+
+/* ── Badge "Edición pasada" ── */
+.evento-ac-pasado-badge {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 4px 12px;
+  border-radius: 100px;
+  backdrop-filter: blur(8px);
+  white-space: nowrap;
 }
 
 /* ── Mobile: scroll horizontal ── */
@@ -384,4 +480,28 @@
     min-width: 260px;
     max-width: 260px;
   }
+}
+
+/* ── Cards de programas permanentes ── */
+.event-card--permanente {
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+}
+
+.event-card--permanente .event-card-img {
+  height: 200px;
+}
+
+.chip-permanente {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  padding: 4px 10px;
+  border-radius: 100px;
+  backdrop-filter: blur(6px);
 }

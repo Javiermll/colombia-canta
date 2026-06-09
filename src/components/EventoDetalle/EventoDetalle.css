@@ -124,6 +124,9 @@
   cursor: pointer;
   white-space: nowrap;
   transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .sticky-btn:hover { opacity: 0.88; }
@@ -295,7 +298,34 @@
   border: none;
   cursor: pointer;
   transition: opacity 0.2s ease, transform 0.2s ease;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.compra-bases-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texto-secundario);
+  border: 1.5px solid var(--border-media);
+  background: transparent;
+  text-decoration: none;
   margin-bottom: 16px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.compra-bases-btn:hover {
+  background: var(--bg-hover);
+  color: var(--texto-principal);
 }
 
 .compra-btn:hover {
@@ -359,6 +389,15 @@
 
 .compra-contacto-btn:hover {
   background: var(--bg-hover);
+}
+
+.compra-contacto-btn--wa {
+  color: #25D366;
+  border-color: rgba(37, 211, 102, 0.35);
+}
+
+.compra-contacto-btn--wa:hover {
+  background: rgba(37, 211, 102, 0.07);
 }
 
 /* BLOQUE 4 — PRUEBA SOCIAL */
@@ -458,7 +497,10 @@
 }
 
 .evento-cierre-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   width: 300px;
   padding: 16px 0;
   border-radius: 10px;

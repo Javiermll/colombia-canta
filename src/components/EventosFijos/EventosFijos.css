@@ -1,0 +1,431 @@
+/* ─────────────────────────────────────────
+   EVENTOS FIJOS — tarjetas permanentes
+   ───────────────────────────────────────── */
+
+.ef-section {
+  padding: 48px 0 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+
+/* ── Item (cada evento fijo) ── */
+.ef-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 24px;
+}
+
+.ef-item--reverse {
+  flex-direction: row-reverse;
+}
+
+/* ── Card column ── */
+.ef-card-col {
+  flex: 0 0 300px;
+  position: sticky;
+  top: 88px;
+}
+
+/* ── Card (estilo screenshot) ── */
+.ef-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--fondo-secundario);
+  border: 1px solid var(--border-sutil);
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.10);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ef-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.16);
+}
+
+/* Imagen */
+.ef-card-img-wrap {
+  height: 220px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.ef-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.ef-card:hover .ef-card-img {
+  transform: scale(1.05);
+}
+
+/* Body */
+.ef-card-body {
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.ef-card-top {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ef-card-titulo {
+  font-family: var(--font-titulo);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--texto-principal);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.ef-card-lugar {
+  font-size: 11px;
+  color: var(--texto-secundario);
+  margin: 0;
+}
+
+.ef-card-desc {
+  font-size: 13px;
+  color: var(--texto-secundario);
+  line-height: 1.55;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ef-card-bottom {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: auto;
+}
+
+/* Tags en la card */
+.ef-card-tags {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ef-card-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border-sutil);
+}
+
+.ef-card-tag:last-child {
+  border-bottom: none;
+}
+
+.ef-tag-ico {
+  font-size: 14px;
+  flex-shrink: 0;
+  width: 20px;
+  text-align: center;
+}
+
+.ef-tag-txt {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--texto-secundario);
+}
+
+/* Botón de la card */
+.ef-card-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 9px 20px;
+  background: var(--azul, #1A56DB);
+  color: #fff;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: opacity 0.2s ease;
+  align-self: flex-start;
+}
+
+.ef-card-btn:hover {
+  opacity: 0.85;
+}
+
+/* ── Placeholder card (Colombia me Enamoras) ── */
+.ef-card--dark {
+  border: none;
+}
+
+.ef-card-ph {
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.ef-card-ph-flag {
+  font-size: 52px;
+  opacity: 0.75;
+}
+
+.ef-card-ph-label {
+  font-family: var(--font-titulo);
+  font-size: 18px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  text-align: center;
+  padding: 0 20px;
+}
+
+.ef-card-ph-sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+/* Variantes blancas para card oscura */
+.ef-w   { color: #fff !important; }
+.ef-w50 { color: rgba(255, 255, 255, 0.55) !important; }
+.ef-w75 { color: rgba(255, 255, 255, 0.75) !important; }
+
+.ef-card-tag--w {
+  border-bottom-color: rgba(255, 255, 255, 0.12);
+}
+
+.ef-card-tag--w .ef-tag-txt {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.ef-card-btn--w {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.ef-card-btn--w:hover {
+  background: rgba(255, 255, 255, 0.25);
+  opacity: 1;
+}
+
+/* ── Content column ── */
+.ef-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.ef-titulo {
+  font-family: var(--font-titulo);
+  font-size: clamp(26px, 2.8vw, 40px);
+  font-weight: 700;
+  color: var(--texto-principal);
+  line-height: 1.1;
+  margin: 0;
+}
+
+.ef-desc {
+  font-family: var(--font-cuerpo);
+  font-size: 16px;
+  color: var(--texto-secundario);
+  line-height: 1.8;
+  margin: 0;
+  max-width: 520px;
+}
+
+/* Pills */
+.ef-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ef-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: var(--fondo-secundario);
+  color: var(--texto-secundario);
+  border: 1px solid var(--border-sutil);
+}
+
+/* ── Programación mini-lista ── */
+.ef-prog {
+  background: var(--fondo-secundario);
+  border: 1px solid var(--border-sutil);
+  border-radius: 14px;
+  padding: 16px 18px;
+  max-width: 500px;
+}
+
+.ef-prog-label {
+  display: block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-sutil);
+}
+
+.ef-prog-lista {
+  display: flex;
+  flex-direction: column;
+  max-height: 280px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.ef-prog-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-sutil);
+}
+
+.ef-prog-row:last-child {
+  border-bottom: none;
+}
+
+.ef-prog-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 58px;
+  padding: 5px 8px;
+  border-radius: 8px;
+  background: var(--coral);
+  flex-shrink: 0;
+  gap: 1px;
+}
+
+.ef-prog-chip b {
+  font-size: 10px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ef-prog-chip span {
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ef-prog-nombre {
+  font-size: 13px;
+  color: var(--texto-principal);
+  line-height: 1.4;
+}
+
+/* ── Fases de experiencia (Colombia me Enamoras) ── */
+.ef-fases {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 500px;
+}
+
+.ef-fase {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.ef-fase-ico {
+  font-size: 20px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background: var(--fondo-secundario);
+  border: 1px solid var(--border-sutil);
+  flex-shrink: 0;
+}
+
+.ef-fase-titulo {
+  display: block;
+  font-family: var(--font-titulo);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--texto-principal);
+  margin-bottom: 3px;
+}
+
+.ef-fase-desc {
+  font-size: 13px;
+  color: var(--texto-secundario);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+   ───────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .ef-item {
+    gap: 32px;
+  }
+
+  .ef-card-col {
+    flex: 0 0 260px;
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .ef-section {
+    padding: 32px 0 40px;
+    gap: 48px;
+  }
+
+  .ef-item,
+  .ef-item--reverse {
+    flex-direction: column;
+    padding: 0 20px;
+  }
+
+  .ef-card-col {
+    flex: none;
+    width: 100%;
+    max-width: 380px;
+    align-self: center;
+  }
+
+  .ef-desc,
+  .ef-prog,
+  .ef-fases {
+    max-width: 100%;
+  }
+}

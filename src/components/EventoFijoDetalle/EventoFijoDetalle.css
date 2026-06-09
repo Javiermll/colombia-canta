@@ -1,0 +1,462 @@
+/* ─────────────────────────────────────────
+   EVENTO FIJO — Detalle
+   ───────────────────────────────────────── */
+
+/* Back link */
+.efd-volver {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  margin-bottom: 20px;
+  transition: color 0.15s ease;
+}
+
+.efd-volver:hover {
+  color: #fff;
+}
+
+/* Hero */
+.efd-hero {
+  position: relative;
+  min-height: 480px;
+  display: flex;
+  align-items: flex-end;
+  margin-top: 68px;
+}
+
+.efd-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.75) 100%);
+}
+
+.efd-hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 56px 6vw 72px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 800px;
+}
+
+.efd-hero-content h1 {
+  font-family: var(--font-titulo);
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.efd-hero-sub {
+  font-family: var(--font-titulo);
+  font-style: italic;
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+}
+
+.efd-hero-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.efd-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  backdrop-filter: blur(8px);
+}
+
+/* Cuerpo */
+.efd-cuerpo {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 48px;
+  padding-top: 48px;
+  padding-bottom: 64px;
+  align-items: flex-start;
+}
+
+.efd-col-izq {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.efd-seccion h2 {
+  font-family: var(--font-titulo);
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--texto-principal);
+  margin: 0 0 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-sutil);
+}
+
+.efd-parrafo {
+  font-size: 16px;
+  color: var(--texto-secundario);
+  line-height: 1.8;
+  margin: 0 0 16px;
+}
+
+.efd-parrafo:last-child {
+  margin-bottom: 0;
+}
+
+/* Programación grid (Salas) */
+.efd-prog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.efd-prog-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 12px;
+  background: var(--fondo-secundario);
+  border: 1px solid var(--border-sutil);
+}
+
+.efd-prog-fecha {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 60px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--coral);
+  flex-shrink: 0;
+  gap: 2px;
+}
+
+.efd-prog-fecha b {
+  font-size: 11px;
+  font-weight: 800;
+  color: #fff;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.efd-prog-fecha span {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.efd-prog-nombre {
+  font-size: 13px;
+  color: var(--texto-principal);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Fases (Colombia me Enamoras) */
+.efd-fases {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.efd-fase {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--border-sutil);
+}
+
+.efd-fase:last-child {
+  border-bottom: none;
+}
+
+.efd-fase-num {
+  font-family: var(--font-titulo);
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--border-sutil);
+  line-height: 1;
+  min-width: 44px;
+  flex-shrink: 0;
+}
+
+.efd-fase-ico {
+  font-size: 24px;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: var(--fondo-secundario);
+  border: 1px solid var(--border-sutil);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.efd-fase-titulo {
+  font-family: var(--font-titulo);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--texto-principal);
+  margin: 0 0 8px;
+}
+
+.efd-fase-desc {
+  font-size: 15px;
+  color: var(--texto-secundario);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.efd-visitantes {
+  margin-top: 24px;
+  font-family: var(--font-titulo);
+  font-style: italic;
+  font-size: 16px;
+  color: var(--texto-secundario);
+  padding: 16px 20px;
+  border-left: 3px solid var(--coral);
+  background: var(--fondo-secundario);
+  border-radius: 0 10px 10px 0;
+}
+
+/* Lugar */
+.efd-lugar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--fondo-secundario);
+  border: 1px solid var(--border-sutil);
+  font-size: 15px;
+  color: var(--texto-principal);
+}
+
+/* Sidebar */
+.efd-sidebar {
+  position: sticky;
+  top: 88px;
+}
+
+/* Stats */
+.efd-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  padding: 28px 24px;
+  background: var(--fondo-secundario);
+  border-radius: 12px;
+  border: 1px solid var(--border-sutil);
+  text-align: center;
+}
+
+.efd-stat-num {
+  font-family: var(--font-titulo);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--coral);
+  display: block;
+  line-height: 1.1;
+  margin-bottom: 4px;
+}
+
+.efd-stat-label {
+  font-size: 12px;
+  color: var(--texto-secundario);
+  line-height: 1.4;
+}
+
+/* Sticky bar */
+.efd-sticky-bar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--bg-card);
+  box-shadow: 0 2px 16px var(--sombra-media);
+  padding: 0 32px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.efd-sticky-bar.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.efd-sticky-titulo {
+  font-weight: 700;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 280px;
+}
+
+.efd-sticky-meta {
+  font-size: 13px;
+  color: var(--texto-secundario);
+  white-space: nowrap;
+  flex: 1;
+}
+
+.efd-sticky-btn {
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  transition: opacity 0.2s ease;
+}
+
+.efd-sticky-btn:hover {
+  opacity: 0.88;
+}
+
+/* Cierre CTA */
+.efd-cierre {
+  background: var(--coral-oscuro);
+  padding: 80px 0;
+  position: relative;
+  text-align: center;
+}
+
+.efd-cierre-franja {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.efd-cierre-titulo {
+  font-family: var(--font-titulo);
+  font-size: clamp(24px, 3vw, 36px);
+  color: #fff;
+  margin-bottom: 12px;
+}
+
+.efd-cierre-desc {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.65);
+  max-width: 560px;
+  margin: 0 auto 32px;
+  line-height: 1.65;
+}
+
+.efd-cierre-btn {
+  display: inline-block;
+  padding: 16px 40px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.efd-cierre-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-2px);
+}
+
+/* Otros programas */
+.efd-otros {
+  padding: 64px 0;
+}
+
+.efd-otros-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+}
+
+.efd-otros-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 340px));
+  gap: 24px;
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE
+   ───────────────────────────────────────── */
+
+@media (max-width: 1024px) {
+  .efd-cuerpo {
+    grid-template-columns: 1fr 300px;
+    gap: 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .efd-hero {
+    min-height: 380px;
+  }
+
+  .efd-hero-content {
+    padding: 40px 24px 56px;
+  }
+
+  .efd-sticky-bar {
+    display: none;
+  }
+
+  .efd-cuerpo {
+    grid-template-columns: 1fr;
+    padding-top: 32px;
+    padding-bottom: 40px;
+  }
+
+  .efd-sidebar {
+    position: static;
+    order: -1;
+  }
+
+  .efd-prog-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .efd-stats {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .efd-cierre {
+    padding: 56px 0;
+  }
+
+  .efd-otros-grid {
+    grid-template-columns: 1fr;
+  }
+}

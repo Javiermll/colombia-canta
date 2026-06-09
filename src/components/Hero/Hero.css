@@ -4,8 +4,9 @@
 
 .hero-carousel {
   position: relative;
-  height: 100svh;
-  min-height: 580px;
+  margin-top: 68px;
+  height: calc(100svh - 68px);
+  min-height: 512px;
   overflow: hidden;
 }
 
@@ -33,13 +34,27 @@
 }
 
 /* Posición individual por imagen */
-.hero-img--bienvenida    { object-position: center 20%; }
-.hero-img--quienes-somos { object-position: center 15%; }
-.hero-img--eventos       { object-position: center 10%; }
-.hero-img--escuela       { object-position: center 20%; }
-.hero-img--tienda        { object-position: center 20%; }
-.hero-img--noticias      { object-position: center 20%; }
-.hero-img--contacto      { object-position: center 30%; }
+.hero-img--bienvenida {
+  object-position: center 20%;
+}
+.hero-img--quienes-somos {
+  object-position: center 15%;
+}
+.hero-img--eventos {
+  object-position: center 10%;
+}
+.hero-img--escuela {
+  object-position: center 20%;
+}
+.hero-img--tienda {
+  object-position: center 20%;
+}
+.hero-img--noticias {
+  object-position: center 20%;
+}
+.hero-img--contacto {
+  object-position: center 30%;
+}
 
 /* Degradado oscuro mayor a la izquierda para legibilidad del texto */
 .hero-overlay {
@@ -49,7 +64,7 @@
     105deg,
     rgba(0, 0, 0, 0.75) 0%,
     rgba(0, 0, 0, 0.52) 35%,
-    rgba(0, 0, 0, 0.20) 62%,
+    rgba(0, 0, 0, 0.2) 62%,
     rgba(0, 0, 0, 0.05) 100%
   );
 }
@@ -60,19 +75,21 @@
   position: absolute;
   left: 0;
   top: 0;
-  bottom: 52px;
+  bottom: 96px;
   width: 54%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   gap: 22px;
-  padding: 110px 4vw 80px 6vw;
+  padding: 48px 4vw 40px 6vw;
   z-index: 2;
   animation: heroContentIn 0.4s ease both;
 }
 
 @keyframes heroContentIn {
-  from { opacity: 0; }
+  from {
+    opacity: 0;
+  }
 }
 
 /* ── Antetítulo / cita ── */
@@ -143,7 +160,9 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
 .hero-btn-primario:hover {
@@ -165,7 +184,10 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   text-decoration: none;
-  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .hero-btn-secundario:hover {
@@ -220,7 +242,7 @@
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
   transition:
     transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    opacity   0.4s ease,
+    opacity 0.4s ease,
     box-shadow 0.3s ease;
   will-change: transform, opacity;
 }
@@ -304,7 +326,7 @@
   height: 40px;
   border-radius: 50%;
   border: 1.5px solid rgba(255, 255, 255, 0.4);
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.1);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   color: #fff;
@@ -313,7 +335,10 @@
   justify-content: center;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
 }
 
 .hero-arrow svg {
@@ -355,6 +380,92 @@
   font-family: var(--font-titulo);
   font-size: 13px;
   color: rgba(255, 255, 255, 0.45);
+}
+
+/* ── Franja próximo evento ── */
+
+.hero-anuncio-evento {
+  position: absolute;
+  bottom: 52px;
+  left: 0;
+  right: 0;
+  height: 44px;
+  z-index: 9;
+  background: rgba(0, 0, 0, 0.58);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 0 24px;
+  overflow: hidden;
+}
+
+.hero-anuncio-label {
+  font-family: var(--font-cuerpo);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--amarillo);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.hero-anuncio-diamante {
+  font-size: 6px;
+  color: rgba(255, 255, 255, 0.28);
+  flex-shrink: 0;
+}
+
+.hero-anuncio-nombre {
+  font-family: var(--font-titulo);
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+  min-width: 0;
+}
+
+.hero-anuncio-sep {
+  color: rgba(255, 255, 255, 0.28);
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+.hero-anuncio-fecha {
+  font-family: var(--font-cuerpo);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.52);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.hero-anuncio-cta {
+  padding: 5px 14px;
+  border-radius: 100px;
+  background: var(--coral);
+  color: #fff;
+  font-family: var(--font-cuerpo);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  text-decoration: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  flex-shrink: 0;
+}
+
+.hero-anuncio-cta:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
 }
 
 /* ── Tabs de navegación ── */
@@ -436,7 +547,7 @@
 @media (max-width: 1024px) {
   .hero-slide-contenido {
     width: 58%;
-    padding: 100px 3vw 70px 5vw;
+    padding: 100px 3vw 40px 5vw;
   }
 
   .hero-cards-area {
@@ -479,9 +590,31 @@
   /* Contenido ocupa todo el ancho, posicionado hacia el centro-bajo */
   .hero-slide-contenido {
     width: 100%;
-    padding: 90px 24px 28px;
+    padding: 32px 24px 20px;
     justify-content: flex-end;
-    bottom: 52px;
+    bottom: 96px;
+  }
+
+  /* Franja próximo evento — compacta en mobile */
+  .hero-anuncio-evento {
+    gap: 8px;
+    padding: 0 12px;
+  }
+
+  .hero-anuncio-label,
+  .hero-anuncio-diamante,
+  .hero-anuncio-sep,
+  .hero-anuncio-fecha {
+    display: none;
+  }
+
+  .hero-anuncio-nombre {
+    font-size: 12px;
+  }
+
+  .hero-anuncio-cta {
+    font-size: 10px;
+    padding: 5px 12px;
   }
 
   .hero-titulo {

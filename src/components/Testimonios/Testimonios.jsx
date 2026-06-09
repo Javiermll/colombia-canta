@@ -51,6 +51,10 @@ export default function Testimonios() {
     <section className="testimonios-section">
       <div className="container">
 
+        <div className="testimonios-divider">
+          <h2 className="testimonios-divider-titulo">Testimonios</h2>
+        </div>
+
         <div style={gridStyle}>
           {testimonios.map((t, i) => (
             <div key={i} style={cardStyle}>

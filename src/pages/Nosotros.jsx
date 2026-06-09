@@ -69,9 +69,6 @@ export default function Nosotros() {
             <h1>Nosotros</h1>
           </div>
           <div className="page-header-divisor" />
-          <p className="page-header-sub">
-            Centro cultural y escuela de música tradicional colombiana
-          </p>
         </div>
       </div>
 

@@ -1,0 +1,66 @@
+/* ==========================================
+   EVENTOS PAGE
+   ========================================== */
+
+/* ── Divider ornamental de sección ── */
+.ev-divider {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 0 0 8px;
+}
+
+.ev-divider--agenda {
+  margin-bottom: 28px;
+}
+
+.ev-divider::before,
+.ev-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+}
+
+.ev-divider::before {
+  background: linear-gradient(to right, transparent, var(--texto-secundario));
+  opacity: 0.35;
+}
+
+.ev-divider::after {
+  background: linear-gradient(to left, transparent, var(--texto-secundario));
+  opacity: 0.35;
+}
+
+.ev-divider-titulo {
+  font-family: var(--font-titulo);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+  margin: 0;
+  white-space: nowrap;
+}
+
+.ev-divider-titulo::before,
+.ev-divider-titulo::after {
+  content: '◆';
+  font-size: 7px;
+  vertical-align: middle;
+  color: var(--coral);
+  opacity: 0.75;
+}
+
+.ev-divider-titulo::before { margin-right: 12px; }
+.ev-divider-titulo::after  { margin-left:  12px; }
+
+/* ── Subtítulo centrado bajo "Programas" ── */
+.ev-sub {
+  font-family: var(--font-titulo);
+  font-style: italic;
+  font-size: 15px;
+  color: var(--texto-secundario);
+  text-align: center;
+  margin: 0 0 32px;
+  line-height: 1.5;
+}
