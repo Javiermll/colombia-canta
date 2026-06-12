@@ -218,7 +218,7 @@ export default function Hero() {
         <span className="hero-anuncio-nombre">Festival Colombia Canta y Encanta</span>
         <span className="hero-anuncio-sep">·</span>
         <span className="hero-anuncio-fecha">23-26 Jul 2026 · Medellín</span>
-        <Link to="/eventos/4" className="hero-anuncio-cta">Inscríbete →</Link>
+        <Link to="/eventos/festival-nacional" className="hero-anuncio-cta">Inscríbete →</Link>
       </div>
 
       {/* ── Tabs de navegación ── */}

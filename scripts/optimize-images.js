@@ -84,6 +84,40 @@ const FOLDERS = [
       'MinCul_logo.png':                                                   'aliado-mincultural.webp',
     },
   },
+  {
+    input: 'public/pestaña_nosotros/nuestra_historia_seccion',
+    output: 'public/nosotros-historia',
+    maxWidth: 1400,
+    quality: 82,
+    fit: 'inside',
+    rename: {
+      'IMG_3775.JPG.jpeg': 'nosotros-historia-disney.webp',
+      'img_5966-3.webp':   'nosotros-historia-festival.webp',
+      'IMG_2945.JPG':      'nosotros-historia-quienes-somos.webp',
+    },
+  },
+  {
+    input: 'public/pestaña_nosotros/fundadora_img',
+    output: 'public/nosotros-fundadora',
+    maxWidth: 1000,
+    quality: 85,
+    fit: 'inside',
+    rename: {
+      'DSC_5059-2 (1).jpg':              'fundadora-retrato.webp',
+      'silvia-zapata_foto.jpg':          'fundadora-guitarra.webp',
+      'Sra Silvia Zapata . Fundadora.jpg': 'fundadora-escenario.webp',
+    },
+  },
+  {
+    input: 'public/pestaña_contacto',
+    output: 'public/contacto',
+    maxWidth: 280,
+    quality: 90,
+    fit: 'inside',
+    rename: {
+      'Copia de FOTO PERFIL-04 (1).png': 'contacto-corazon-estrella.webp',
+    },
+  },
 ];
 const MAX_WIDTH = 1400;
 const WEBP_QUALITY = 82;

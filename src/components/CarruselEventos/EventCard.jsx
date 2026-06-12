@@ -8,7 +8,7 @@ export default function EventCard({ evento, pasado = false, permanente = false }
     <div
       className={`event-card${pasado ? ' event-card-pasado' : ''}${permanente ? ' event-card--permanente' : ''}`}
       style={permanente ? { borderTop: `3px solid ${evento.color}` } : undefined}
-      onClick={() => navigate(`/eventos/${evento.slug ?? evento.id}`)}
+      onClick={() => navigate(`/eventos/${evento.slug}`)}
     >
       <div
         className="event-card-img"

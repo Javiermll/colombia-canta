@@ -64,7 +64,7 @@ export default function CarruselEventos() {
         <div className="eventos-ac-acordeon">
           {ventana.map(ev => (
             <Link
-              to={`/eventos/${ev.id}`}
+              to={`/eventos/${ev.slug}`}
               key={ev.id}
               className={`evento-ac-card${ev.pasado ? ' evento-ac-card--pasado' : ''}`}
               style={ev.img ? {

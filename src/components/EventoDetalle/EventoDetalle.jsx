@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { eventos } from '../../data/eventos';
+import { eventosFijos } from '../../data/eventosFijos';
 import EventCard from '../CarruselEventos/EventCard';
 import ContactoSection from '../Contacto/Contacto';
 import Footer from '../Footer/Footer';
@@ -18,12 +19,22 @@ export default function EventoDetalle({ evento }) {
 
   const esProximamente = evento.precio === 'Próximamente';
   const ctaColor = '#25D366';
+  const pillLibre = evento.pills?.find(p => p.texto.toLowerCase().includes('libre'));
+
   const waLabel     = evento.ctaWa ?? (esProximamente ? 'Recibir información' : evento.cta);
   const waLabelCorto = evento.ctaWa ?? (esProximamente ? 'Recibir info' : evento.cta);
 
   const waLink = evento.waLink ?? `https://wa.me/573015315119?text=Hola%2C+quiero+informaci%C3%B3n+sobre+${encodeURIComponent(evento.titulo)}.`;
 
-  const otrosEventos = eventos.filter(e => e.id !== evento.id).slice(0, 3);
+  const otrosEventos = [
+    ...eventos.map(e => ({ ...e, _permanente: false })),
+    ...eventosFijos.map(e => ({
+      ...e,
+      _permanente: true,
+      descripcion: e.descripcionCorta,
+      precio: e.pills.find(p => p.texto.toLowerCase().includes('libre'))?.texto ?? 'Consultar',
+    })),
+  ].filter(e => e.slug !== evento.slug).slice(0, 3);
 
   const WaIcon = ({ size = 18 }) => (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
@@ -48,30 +59,36 @@ export default function EventoDetalle({ evento }) {
           background: `linear-gradient(to bottom, ${evento.colorHero}55 0%, rgba(0,0,0,0.82) 100%)`,
         } : undefined} />
         <div className="evento-hero-content">
+          <Link to="/eventos" className="evento-volver">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M19 12H5M12 19l-7-7 7-7" />
+            </svg>
+            Volver a eventos
+          </Link>
           <div className="evento-hero-chip">
             <span className="chip-tipo-hero">{evento.tipo}</span>
           </div>
           <h1>{evento.titulo}</h1>
-          <div className="evento-hero-meta">
-            <span>{evento.fechaCompleta}</span>
-            <span>·</span>
-            <span>{evento.hora}</span>
-            <span>·</span>
-            <span>{evento.ciudad}</span>
-          </div>
-          <div className="evento-hero-lugar">
-            <span>📍</span>
-            <span>{evento.lugar}</span>
-          </div>
+          {evento.subtitulo && (
+            <p className="evento-hero-sub">{evento.subtitulo}</p>
+          )}
+          {evento.pills?.length > 0 && (
+            <div className="evento-hero-pills">
+              {evento.pills.map(p => (
+                <span key={p.texto} className="evento-hero-pill">{p.icono} {p.texto}</span>
+              ))}
+            </div>
+          )}
         </div>
-        <div className="franja-bandera" />
       </div>
 
       {/* BLOQUE 2 — STICKY BAR */}
       <div className={`sticky-cta-bar${stickyVisible ? ' visible' : ''}`}>
         <span className="sticky-titulo">{evento.titulo}</span>
-        <span className="sticky-meta">{evento.fecha} · {evento.lugar}</span>
-        <span className="sticky-precio">{evento.precio}</span>
+        <span className="sticky-meta">
+          {evento.fecha ? `${evento.fecha} · ${evento.lugar}` : evento.ciudad}
+        </span>
+        {evento.precio && <span className="sticky-precio">{evento.precio}</span>}
         <a href={waLink} target="_blank" rel="noopener noreferrer" className="sticky-btn" style={{ background: ctaColor }}>
           <WaIcon size={15} /> {waLabelCorto}
         </a>
@@ -88,21 +105,72 @@ export default function EventoDetalle({ evento }) {
             ))}
           </section>
 
-          <section>
-            <h2>Programa</h2>
-            <div className="programa-pills">
-              {evento.programa.map(item => (
-                <span key={item} className="programa-pill">🎵 {item}</span>
-              ))}
-            </div>
-          </section>
+          {evento.galeria?.length > 0 && (
+            <section>
+              <h2>Galería</h2>
+              <div className="evento-galeria-grid">
+                {evento.galeria.map((img, i) => (
+                  <img key={i} src={img} alt={`${evento.titulo} ${i + 1}`} className="evento-galeria-img" loading="lazy" />
+                ))}
+              </div>
+            </section>
+          )}
+
+          {evento.programa?.length > 0 && (
+            <section>
+              <h2>Programa</h2>
+              <div className="programa-pills">
+                {evento.programa.map(item => (
+                  <span key={item} className="programa-pill">🎵 {item}</span>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {evento.programacion?.length > 0 && (
+            <section>
+              <h2>Programación{evento.mes ? ` · ${evento.mes}` : ''}</h2>
+              <div className="evento-prog-grid">
+                {evento.programacion.map((ev, i) => (
+                  <div key={i} className="evento-prog-card">
+                    <div className="evento-prog-fecha">
+                      <b>{ev.dia}</b>
+                      <span>{ev.hora}</span>
+                    </div>
+                    <p className="evento-prog-nombre">{ev.nombre}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {evento.fases?.length > 0 && (
+            <section>
+              <h2>¿Cómo es la experiencia?</h2>
+              <div className="evento-fases">
+                {evento.fases.map((f, i) => (
+                  <div key={i} className="evento-fase">
+                    <div className="evento-fase-num">{String(i + 1).padStart(2, '0')}</div>
+                    <div className="evento-fase-ico">{f.icono}</div>
+                    <div>
+                      <h3 className="evento-fase-titulo">{f.titulo}</h3>
+                      <p className="evento-fase-desc">{f.descripcion}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <p className="evento-visitantes">
+                Haz parte del 100% de invitados que llegan de Colombia o del mundo y quedan enamorados con nuestra experiencia cultural.
+              </p>
+            </section>
+          )}
 
           <section>
             <h2>El lugar</h2>
             <div className="lugar-grid">
               <div className="lugar-datos">
                 <h3>{evento.lugar}</h3>
-                <p><span>📍</span> {evento.direccion}</p>
+                <p><span>📍</span> {evento.direccion ?? evento.ciudad}</p>
               </div>
               <div className="lugar-mapa-placeholder">
                 <span>🗺️</span>
@@ -119,18 +187,24 @@ export default function EventoDetalle({ evento }) {
               <span className="chip-tipo-hero">{evento.tipo}</span>
             </div>
             <div className="compra-card-titulo">{evento.titulo}</div>
-            <div className="compra-card-meta">
-              <span>📅</span><span>{evento.fechaCompleta}</span>
-            </div>
-            <div className="compra-card-meta">
-              <span>🕐</span><span>{evento.hora}</span>
-            </div>
+            {evento.fechaCompleta && (
+              <div className="compra-card-meta">
+                <span>📅</span><span>{evento.fechaCompleta}</span>
+              </div>
+            )}
+            {evento.hora && (
+              <div className="compra-card-meta">
+                <span>🕐</span><span>{evento.hora}</span>
+              </div>
+            )}
             <div className="compra-card-meta">
               <span>📍</span><span>{evento.lugar}</span>
             </div>
           </div>
           <div className="compra-card-body">
-            <div className="compra-precio">{evento.precio}</div>
+            <div className="compra-precio">
+              {evento.precio ?? (pillLibre ? 'Entrada libre' : 'Reserva tu lugar')}
+            </div>
             {evento.precioDetalle && (
               <div className="compra-precio-detalle">{evento.precioDetalle}</div>
             )}
@@ -170,60 +244,11 @@ export default function EventoDetalle({ evento }) {
       {/* Mobile CTA fijo */}
       <div className="mobile-cta-fixed">
         <a href={waLink} target="_blank" rel="noopener noreferrer" className="compra-btn" style={{ background: ctaColor }}>
-          <WaIcon /> {waLabelCorto} · {evento.precio}
+          <WaIcon /> {waLabelCorto}{evento.precio ? ` · ${evento.precio}` : ''}
         </a>
       </div>
 
-      {/* BLOQUE 4 — PRUEBA SOCIAL */}
-      <section className="prueba-social">
-        <div className="container">
-          {evento.testimonios.length > 0 && (
-            <>
-              <span className="label-seccion label-rojo" style={{ marginBottom: '32px', display: 'block' }}>
-                Lo que dicen nuestros asistentes
-              </span>
-              <div className="testimonios-grid">
-                {evento.testimonios.map((t, i) => (
-                  <div className="testimonio-card" key={i}>
-                    <div className="testimonio-comillas">"</div>
-                    <p className="testimonio-texto">{t.texto}</p>
-                    <span className="testimonio-autor">{t.nombre} · {t.ciudad}</span>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-          <div className="stats-grid">
-            <div>
-              <span className="stats-numero">+10</span>
-              <div className="stats-label">años de historia</div>
-            </div>
-            <div>
-              <span className="stats-numero">+200</span>
-              <div className="stats-label">estudiantes formados</div>
-            </div>
-            <div>
-              <span className="stats-numero">5</span>
-              <div className="stats-label">países visitados</div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* BLOQUE 5 — CIERRE CTA */}
-      <section className="evento-cierre">
-        <div className="container" style={{ position: 'relative', paddingTop: '5px' }}>
-          <h2>No te quedes sin tu entrada</h2>
-          <p className="evento-cierre-sub">
-            {evento.titulo} · {evento.lugar} · {evento.fecha}
-          </p>
-          <a href={waLink} target="_blank" rel="noopener noreferrer" className="evento-cierre-btn">
-            <WaIcon /> {waLabel}
-          </a>
-        </div>
-      </section>
-
-      {/* BLOQUE 6 — OTROS EVENTOS */}
+      {/* BLOQUE 4 — OTROS EVENTOS */}
       <section className="otros-eventos">
         <div className="container">
           <div className="otros-eventos-header">
@@ -234,7 +259,7 @@ export default function EventoDetalle({ evento }) {
           </div>
           <div className="otros-eventos-grid">
             {otrosEventos.map(ev => (
-              <EventCard key={ev.id} evento={ev} />
+              <EventCard key={ev.slug} evento={ev} permanente={ev._permanente} />
             ))}
           </div>
         </div>

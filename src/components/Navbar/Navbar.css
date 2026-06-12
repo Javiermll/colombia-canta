@@ -13,9 +13,10 @@
     left    0.45s cubic-bezier(0.4, 0, 0.2, 1),
     right   0.45s cubic-bezier(0.4, 0, 0.2, 1),
     border-radius 0.45s cubic-bezier(0.4, 0, 0.2, 1),
-    background    0.45s cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow    0.45s cubic-bezier(0.4, 0, 0.2, 1),
-    backdrop-filter 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+    background    0.3s ease,
+    border-color  0.3s ease,
+    box-shadow    0.3s ease;
 }
 
 .navbar--transparent {
@@ -317,7 +318,7 @@
   height: 22px;
   object-fit: contain;
   display: block;
-  transition: opacity 0.2s ease, filter 0.2s ease;
+  transition: opacity 0.2s ease, filter 0.3s ease;
 }
 
 [data-theme="dark"] .carrito-icono-img {

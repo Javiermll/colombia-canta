@@ -5,13 +5,21 @@ export const eventosFijos = [
     id: 'salas-colombia-canta',
     slug: 'salas-colombia-canta',
     img: `${BASE}salas_de_colombia/salas-colombia-canta.webp`,
+    galeria: [
+      `${BASE}salas_de_colombia/salas-colombia-canta-1.webp`,
+      `${BASE}salas_de_colombia/salas-colombia-canta-2.webp`,
+      `${BASE}salas_de_colombia/salas-colombia-canta-3.webp`,
+      `${BASE}salas_de_colombia/salas-colombia-canta-4.webp`,
+      `${BASE}salas_de_colombia/salas-colombia-canta-5.webp`,
+    ],
     titulo: 'Salas Colombia Canta',
     subtitulo: 'Música en vivo · Medellín',
     tipo: 'Programación mensual',
+    tipoIcono: '🎶',
     color: '#E8341A',
     colorHero: '#8B1A00',
     descripcionCorta:
-      'Un espacio para encontrarnos alrededor de la música, las historias y la cultura. Conciertos, tertulias y encuentros culturales cada semana.',
+      'Un espacio para encontrarnos alrededor de la música, las historias y la cultura. Cada semana abrimos nuestras puertas para vivir conciertos, tertulias y encuentros culturales en un ambiente cercano, acompañados de un buen café. Desde los sonidos de nuestra tradición hasta nuevas propuestas musicales que enriquecen la escena cultural de Medellín.',
     descripcionLarga:
       'Un espacio para encontrarnos alrededor de la música, las historias y la cultura. Un lugar para venir con tu mejor compañía, disfrutar de un buen café y descubrir artistas que nos inspiran, desde los sonidos de nuestra tradición hasta nuevas propuestas musicales que enriquecen nuestra escena cultural.\n\nCreemos en el poder de los espacios que reúnen a las comunidades, que generan conversaciones y que nos permiten compartir lo que somos a través del arte. Cada semana te esperamos para vivir conciertos, tertulias y encuentros culturales en un ambiente cercano y acogedor.',
     pills: [
@@ -40,9 +48,18 @@ export const eventosFijos = [
     id: 'colombia-me-enamoras',
     slug: 'colombia-me-enamoras',
     img: `${BASE}colombia-enamoras/colombia-me-enamoras-principal.webp`,
+    galeria: [
+      `${BASE}colombia-enamoras/colombia-me-enamoras-1.webp`,
+      `${BASE}colombia-enamoras/colombia-me-enamoras-2.webp`,
+      `${BASE}colombia-enamoras/colombia-me-enamoras-3.webp`,
+      `${BASE}colombia-enamoras/colombia-me-enamoras-4.webp`,
+      `${BASE}colombia-enamoras/colombia-me-enamoras-5.webp`,
+    ],
     titulo: 'Colombia me Enamoras',
     subtitulo: 'Turismo cultural · Medellín',
+    invertido: true,
     tipo: 'Turismo Cultural',
+    tipoIcono: '🌍',
     color: '#1A56DB',
     colorHero: '#0F3A9E',
     descripcionCorta:

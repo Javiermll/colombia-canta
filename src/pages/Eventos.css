@@ -2,6 +2,10 @@
    EVENTOS PAGE
    ========================================== */
 
+#agenda {
+  scroll-margin-top: 90px;
+}
+
 /* ── Divider ornamental de sección ── */
 .ev-divider {
   display: flex;
@@ -53,6 +57,16 @@
 
 .ev-divider-titulo::before { margin-right: 12px; }
 .ev-divider-titulo::after  { margin-left:  12px; }
+
+/* ── Modificador: sin líneas laterales (solo diamantes) ── */
+.ev-divider--sin-lineas {
+  justify-content: center;
+}
+
+.ev-divider--sin-lineas::before,
+.ev-divider--sin-lineas::after {
+  content: none;
+}
 
 /* ── Subtítulo centrado bajo "Programas" ── */
 .ev-sub {

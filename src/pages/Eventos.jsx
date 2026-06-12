@@ -41,16 +41,16 @@ export default function Eventos() {
       {/* ── Programas permanentes ── */}
       <section className="eventos-programas-section">
         <div className="container">
-          <div className="ev-divider">
+          <div className="ev-divider ev-divider--sin-lineas">
             <h2 className="ev-divider-titulo">Programas</h2>
           </div>
           <p className="ev-sub">Experiencias que puedes vivir cualquier semana del año</p>
         </div>
-        <EventosFijosHome />
+        <EventosFijosHome variant="zigzag" />
       </section>
 
       {/* ── Agenda ── */}
-      <section className="eventos-page-section">
+      <section id="agenda" className="eventos-page-section">
         <div className="container">
           <div className="ev-divider ev-divider--agenda">
             <h2 className="ev-divider-titulo">Próxima agenda</h2>

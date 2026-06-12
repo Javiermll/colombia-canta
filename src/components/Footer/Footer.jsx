@@ -33,9 +33,9 @@ const cols = [
     titulo: "Eventos",
     links: [
       { label: "Todos los eventos", to: "/eventos" },
-      { label: "Gira USA 2026", to: "/eventos/2" },
-      { label: "Sede Medellín", to: "/eventos/3" },
-      { label: "Festival Nacional", to: "/eventos/4" },
+      { label: "Gira USA 2026", to: "/eventos/gira-usa-miami" },
+      { label: "Sede Medellín", to: "/eventos/herencia-andina-medellin" },
+      { label: "Festival Nacional", to: "/eventos/festival-nacional" },
     ],
   },
   {
