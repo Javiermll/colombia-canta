@@ -2,15 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import "./Historia.css";
 
-const banderas = [
-  { code: 'at', pais: 'Austria' },
-  { code: 'si', pais: 'Eslovenia' },
-  { code: 'it', pais: 'Italia' },
-  { code: 'mx', pais: 'México' },
-  { code: 'br', pais: 'Brasil' },
-  { code: 'us', pais: 'EEUU' },
-];
-
 const imagenes = [
   {
     src: "nuestra-historia/dsc03185-6.webp",
@@ -53,9 +44,6 @@ export default function Historia() {
     <section className="historia-section">
       {/* Header full-width */}
       <span className="historia-seccion-label label-seccion label-rojo">Quiénes Somos</span>
-      <div className="historia-header-quote">
-        <p className="historia-header-quote-texto">Un sueño nacido en Medellín que hoy late en escenarios de todo el mundo</p>
-      </div>
 
       {/* Carrusel — izquierda en desktop, arriba en mobile */}
       <div className="historia-carrusel">
@@ -84,46 +72,41 @@ export default function Historia() {
       {/* Texto — derecha en desktop, abajo en mobile */}
       <div className="historia-contenido">
         <h2>
-          Desde Medellín para el <span>mundo</span>
+          De Medellín para los escenarios del <span>mundo</span>
         </h2>
         <p>
-          Colombia Canta y Encanta nació en Medellín con un sueño: preservar y
-          difundir la riqueza de la música tradicional colombiana. Reconocidos
-          por el Ministerio de Cultura como{' '}
-          <strong className="historia-logro">Mejor Escuela de Música Privada de Colombia</strong>
-          , hoy formamos a niños, jóvenes y adultos llevando el bambuco, el
-          pasillo y la cumbia a escenarios de todo el mundo.
+          Nacimos con la misión de preservar y proyectar la riqueza del
+          folclor colombiano. Hoy, somos una comunidad artística reconocida
+          por formar talentos que llevan nuestra música y nuestras
+          tradiciones a escenarios nacionales e internacionales.
         </p>
+        <div className="historia-reconocimiento">
+          <span className="historia-reconocimiento-icono">🏆</span>
+          <span>
+            Reconocidos por el Ministerio de Cultura como una de las
+            escuelas de música más destacadas de Colombia.
+          </span>
+        </div>
         <div className="historia-stats">
-          <div className="stat-item">
-            <span className="stat-titulo">Historia</span>
-            <span className="stat-numero">+20</span>
-            <span className="stat-label">años de trayectoria</span>
+          <div className="stat-item stat-item--coral">
+            <span className="stat-numero">20+</span>
+            <span className="stat-label">Años preservando el folclor colombiano</span>
           </div>
-          <div className="stat-item">
-            <span className="stat-titulo">Alumnos</span>
-            <span className="stat-numero">+200</span>
-            <span className="stat-label">estudiantes formados</span>
+          <div className="stat-item stat-item--azul">
+            <span className="stat-numero">1000+</span>
+            <span className="stat-label">Artistas formados</span>
           </div>
-          <div className="stat-item stat-item--banderas">
-            <span className="stat-titulo">Países</span>
-            <div className="historia-banderas-wrap">
-              <div className="historia-banderas-track">
-                {banderas.map((b, i) => (
-                  <div key={i} className="historia-bandera-circulo" title={b.pais}>
-                    <img
-                      src={`https://flagcdn.com/w40/${b.code}.png`}
-                      alt={b.pais}
-                      className="historia-bandera-img"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="stat-item stat-item--amarillo">
+            <span className="stat-numero">6</span>
+            <span className="stat-label">Países impactados</span>
+          </div>
+          <div className="stat-item stat-item--rojo">
+            <span className="stat-numero">Miles</span>
+            <span className="stat-label">de espectadores alcanzados</span>
           </div>
         </div>
         <Link to="/nosotros" className="btn btn-azul">
-          Saber más →
+          Conoce nuestra historia →
         </Link>
       </div>
     </section>

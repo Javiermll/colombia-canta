@@ -1,9 +1,8 @@
-﻿import { useState } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Hero.css';
 
 const base = import.meta.env.BASE_URL;
-const CARDS_VISIBLE = 3;
 
 const slides = [
   {
@@ -11,10 +10,10 @@ const slides = [
     label: 'Inicio',
     antetitulo: '“La música es el latido de Colombia”',
     titulo: (
-      <>Donde el talento<br />colombiano <span className="hero-titulo-acento">florece</span></>
+      <>Donde Colombia<br />canta, baila y <span className="hero-titulo-acento">encanta</span></>
     ),
     descripcion:
-      'En Medellín, transformamos vidas a través de la música tradicional. Una comunidad que celebra nuestra identidad, nuestro ritmo y nuestra alegría.',
+      'Somos una comunidad artística que preserva y proyecta el folclor colombiano a través de la formación, los escenarios y experiencias que conectan generaciones alrededor del mundo.',
     ctas: [
       { label: 'Contáctanos',   to: '/contacto', primario: true  },
       { label: 'Descubrir más', to: '/nosotros',  primario: false },
@@ -112,37 +111,37 @@ const slides = [
 export default function Hero() {
   const [active, setActive] = useState(0);
 
-  const goTo  = (idx) => setActive(idx);
-  const prev  = () => setActive((a) => (a - 1 + slides.length) % slides.length);
-  const next  = () => setActive((a) => (a + 1) % slides.length);
+  const goTo = (idx) => setActive(idx);
+  const next = () => setActive((a) => (a + 1) % slides.length);
+  const prev = () => setActive((a) => (a - 1 + slides.length) % slides.length);
+
+  useEffect(() => {
+    const id = setInterval(next, 4000);
+    return () => clearInterval(id);
+  }, [active]);
 
   const activeSlide = slides[active];
-
-  const previewCards = Array.from({ length: CARDS_VISIBLE }, (_, i) => ({
-    slideIdx: (active + 1 + i) % slides.length,
-    stackPos: i,
-  }));
 
   return (
     <section className="hero-carousel">
 
-      {/* ── Fondos full-bleed (crossfade) ── */}
-      {slides.map((slide, i) => (
-        <div
-          key={slide.id}
-          className={`hero-bg${active === i ? ' hero-bg--activo' : ''}`}
-          aria-hidden="true"
-        >
-          <img
-            src={`${base}${slide.imagen}`}
-            alt=""
-            className={`hero-bg-img hero-img--${slide.id}`}
-            loading={i === 0 ? 'eager' : 'lazy'}
-            decoding="async"
-          />
-          <div className="hero-overlay" />
-        </div>
-      ))}
+      {/* ── Imagen — derecha, difuminada hacia el fondo (crossfade) ── */}
+      <div className="hero-imagen-area" aria-hidden="true">
+        {slides.map((slide, i) => (
+          <div
+            key={slide.id}
+            className={`hero-bg${active === i ? ' hero-bg--activo' : ''}`}
+          >
+            <img
+              src={`${base}${slide.imagen}`}
+              alt=""
+              className={`hero-bg-img hero-img--${slide.id}`}
+              loading={i === 0 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+          </div>
+        ))}
+      </div>
 
       {/* ── Contenido izquierdo — key=active fuerza remount y reactiva animaciones ── */}
       <div key={active} className="hero-slide-contenido">
@@ -162,53 +161,30 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* ── Cards + navegación — derecha ── */}
-      <div className="hero-cards-area" aria-hidden="true">
-        <div className="hero-cards-stack">
-          {previewCards.map(({ slideIdx, stackPos }) => {
-            const slide = slides[slideIdx];
-            return (
-              <button
-                key={slideIdx}
-                className="hero-card"
-                data-pos={stackPos}
-                onClick={() => goTo(slideIdx)}
-                tabIndex={-1}
-              >
-                <img
-                  src={`${base}${slide.imagen}`}
-                  alt=""
-                  className={`hero-card-img hero-img--${slide.id}`}
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div className="hero-card-overlay" />
-                <div className="hero-card-info">
-                  <span className="hero-card-nombre">{slide.label}</span>
-                </div>
-              </button>
-            );
-          })}
+      {/* ── Dots + flechas — navegación del carrusel ── */}
+      <div className="hero-dots-nav">
+        <button className="hero-nav-arrow" onClick={prev} aria-label="Slide anterior">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="18 15 12 9 6 15" />
+          </svg>
+        </button>
+        <div className="hero-dots" role="tablist" aria-label="Secciones del carrusel">
+          {slides.map((slide, i) => (
+            <button
+              key={slide.id}
+              className={`hero-dot${active === i ? ' hero-dot--activo' : ''}`}
+              onClick={() => goTo(i)}
+              role="tab"
+              aria-selected={active === i}
+              aria-label={slide.label}
+            />
+          ))}
         </div>
-
-        {/* Flechas + contador */}
-        <div className="hero-cards-nav">
-          <button className="hero-arrow" onClick={prev} aria-label="Sección anterior">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </button>
-          <button className="hero-arrow" onClick={next} aria-label="Siguiente sección">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
-          <div className="hero-numeric">
-            <span className="hero-numeric-current">{String(active + 1).padStart(2, '0')}</span>
-            <span className="hero-numeric-sep">/</span>
-            <span className="hero-numeric-total">{String(slides.length).padStart(2, '0')}</span>
-          </div>
-        </div>
+        <button className="hero-nav-arrow" onClick={next} aria-label="Slide siguiente">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 12 15 18 9" />
+          </svg>
+        </button>
       </div>
 
       {/* ── Franja próximo evento — siempre visible ── */}
@@ -220,20 +196,6 @@ export default function Hero() {
         <span className="hero-anuncio-fecha">23-26 Jul 2026 · Medellín</span>
         <Link to="/eventos/festival-nacional" className="hero-anuncio-cta">Inscríbete →</Link>
       </div>
-
-      {/* ── Tabs de navegación ── */}
-      <nav className="hero-tabs" aria-label="Secciones del carrusel">
-        {slides.map((slide, i) => (
-          <button
-            key={slide.id}
-            className={`hero-tab${active === i ? ' hero-tab--activo' : ''}`}
-            onClick={() => goTo(i)}
-          >
-            <span className="hero-tab-barra" aria-hidden="true" />
-            <span className="hero-tab-label">{slide.label}</span>
-          </button>
-        ))}
-      </nav>
 
     </section>
   );

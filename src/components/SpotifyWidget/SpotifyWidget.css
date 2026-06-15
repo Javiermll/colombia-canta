@@ -1,0 +1,85 @@
+/* ─────────────────────────────────────────
+   SPOTIFY WIDGET
+   ───────────────────────────────────────── */
+
+.spotify-widget {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-sutil);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.09);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ── Header ── */
+.spotify-widget-header {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid var(--border-sutil);
+}
+
+.spotify-widget-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.spotify-por {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--texto-secundario);
+  text-transform: uppercase;
+}
+
+.spotify-logo-text {
+  font-size: 17px;
+  font-style: italic;
+  font-weight: 800;
+  color: #1ED760;
+  line-height: 1;
+}
+
+.spotify-handle-link {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--texto-principal);
+  text-decoration: none;
+  line-height: 1;
+}
+
+.spotify-handle-link:hover {
+  color: #1ED760;
+}
+
+/* ── Reproductor (espacio reservado para el reproductor global) ── */
+.spotify-embed-placeholder {
+  display: block;
+  width: 100%;
+  flex: 1;
+  min-height: 232px;
+}
+
+/* ── Footer ── */
+.spotify-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 14px 10px;
+}
+
+.spotify-ver-link {
+  font-size: 12px;
+  color: var(--texto-secundario);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease;
+}
+
+.spotify-ver-link:hover {
+  color: #1ED760;
+}

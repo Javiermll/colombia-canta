@@ -118,6 +118,21 @@ const FOLDERS = [
       'Copia de FOTO PERFIL-04 (1).png': 'contacto-corazon-estrella.webp',
     },
   },
+  {
+    input: 'public/fotos_tripadvisor_widget',
+    output: 'public/tripadvisor',
+    maxWidth: 400,
+    quality: 80,
+    fit: 'cover',
+    rename: {
+      'Col_enam5.jpg':  'tripadvisor-1.webp',
+      'Col_enam6.jpg':  'tripadvisor-2.webp',
+      'Col_enam7.jpg':  'tripadvisor-3.webp',
+      'Col_enam8.jpg':  'tripadvisor-4.webp',
+      'Col_enam9.jpg':  'tripadvisor-5.webp',
+      'Col_enam10.jpg': 'tripadvisor-6.webp',
+    },
+  },
 ];
 const MAX_WIDTH = 1400;
 const WEBP_QUALITY = 82;

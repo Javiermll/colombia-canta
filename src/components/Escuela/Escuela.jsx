@@ -15,21 +15,16 @@ export default function Escuela() {
     <section className="escuela-section">
       <span className="escuela-seccion-label label-seccion label-amarillo">Escuela de Música</span>
 
-      {/* Quote header — full-width, centrado */}
-      <div className="escuela-header-quote">
-        <p className="escuela-header-quote-texto">Más que una escuela, un lugar donde la música colombiana vive y crece</p>
-      </div>
-
       {/* Contenido izquierda */}
       <div className="escuela-contenido">
-        <h2>Aprende música tradicional colombiana</h2>
-        <p>Nuestra escuela ofrece formación musical de calidad para niños, jóvenes y adultos. Desde principiantes hasta niveles avanzados, nuestros maestros te guiarán en el camino de la música tradicional colombiana.</p>
+        <h2>Aprende el arte que representa a Colombia</h2>
+        <p>Aprende música, danza y expresión artística de la mano de maestros especializados en folclor colombiano. Desde tus primeros pasos hasta niveles avanzados, te acompañamos en un proceso que fortalece tu talento y conecta con nuestras raíces.</p>
         <div className="escuela-pills">
           {cursos.map(c => (
             <span key={c} className="escuela-pill">{c}</span>
           ))}
         </div>
-        <Link to="/inscripciones" className="btn btn-amarillo">Ver cursos disponibles →</Link>
+        <Link to="/inscripciones" className="btn btn-amarillo">Explora nuestros programas →</Link>
       </div>
 
       {/* Mosaico de imágenes */}

@@ -29,43 +29,6 @@
   line-height: 1.1;
 }
 
-.eventos-ac-subtitulo {
-  position: relative;
-  font-family: var(--font-titulo);
-  font-style: italic;
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--texto-secundario);
-  margin-top: 20px;
-  max-width: 680px;
-  line-height: 1.65;
-  padding: 0;
-}
-
-.eventos-ac-subtitulo::before {
-  content: '\201C';
-  font-size: 38px;
-  font-family: Georgia, serif;
-  font-style: normal;
-  color: var(--coral);
-  line-height: 0;
-  vertical-align: -10px;
-  margin-right: 4px;
-  opacity: 0.75;
-}
-
-.eventos-ac-subtitulo::after {
-  content: '\201D';
-  font-size: 38px;
-  font-family: Georgia, serif;
-  font-style: normal;
-  color: var(--coral);
-  line-height: 0;
-  vertical-align: -10px;
-  margin-left: 4px;
-  opacity: 0.75;
-}
-
 
 .eventos-ac-ver-todos {
   position: absolute;

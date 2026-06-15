@@ -2,6 +2,9 @@ import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import ContactoSection from "../components/Contacto/Contacto";
 import Footer from "../components/Footer/Footer";
+import InstagramWidget from "../components/InstagramWidget/InstagramWidget";
+import SpotifyWidget from "../components/SpotifyWidget/SpotifyWidget";
+import TripAdvisorWidget from "../components/TripAdvisorWidget/TripAdvisorWidget";
 import "../styles/main.css";
 import { BASE_URL, OG_IMAGE } from "../utils/seo";
 
@@ -33,24 +36,6 @@ const fundadoraFotoGuitarra = {
   src: `${BASE}nosotros-fundadora/fundadora-guitarra.webp`,
   alt: "Silvia Zapata Durango tocando guitarra",
 };
-
-const pilares = [
-  {
-    icono: "🎵",
-    titulo: "Formación Musical",
-    desc: "Formamos músicos desde la infancia cultivando el talento y el amor por el bambuco, el pasillo, la guabina, la cumbia y el currulao.",
-  },
-  {
-    icono: "🏛️",
-    titulo: "Patrimonio Vivo",
-    desc: "Preservamos los ritmos que definen la identidad cultural de Colombia y los transmitimos a las nuevas generaciones como un legado vivo.",
-  },
-  {
-    icono: "🌍",
-    titulo: "Colombia al Mundo",
-    desc: "Reconectamos a los colombianos en el exterior con sus raíces y llevamos nuestra riqueza musical a escenarios de Estados Unidos, Chile y más allá.",
-  },
-];
 
 export default function Nosotros() {
   return (
@@ -310,13 +295,9 @@ export default function Nosotros() {
           </div>
 
           <div className="grid-3col">
-            {pilares.map((p) => (
-              <div key={p.titulo} className="nosotros-pilar">
-                <div className="nosotros-pilar-icono">{p.icono}</div>
-                <h3 className="nosotros-pilar-titulo">{p.titulo}</h3>
-                <p className="nosotros-pilar-desc">{p.desc}</p>
-              </div>
-            ))}
+            <SpotifyWidget />
+            <InstagramWidget />
+            <TripAdvisorWidget />
           </div>
 
           <div className="nosotros-pilares-cta">

@@ -1,0 +1,101 @@
+/* ─────────────────────────────────────────
+   REPRODUCTOR GLOBAL DE SPOTIFY
+   Un único embed persistente (nunca se desmonta):
+   se posiciona sobre el widget en "Inspiración y
+   comunidad" mientras está en pantalla, y se
+   reubica como una barra flotante (debajo del
+   navbar) al navegar a otra página, sin
+   interrumpir la reproducción.
+   ───────────────────────────────────────── */
+
+.global-spotify-player {
+  position: fixed;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--bg-card);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+/* Anclado sobre el widget: por debajo del navbar para que,
+   al hacer scroll, el navbar lo cubra con normalidad */
+.global-spotify-player.is-docked {
+  z-index: 1;
+}
+
+/* Flotante (otras páginas): esquina superior derecha, debajo del navbar.
+   El embed se renderiza más alto que el contenedor y se recorta con
+   overflow para no mostrar el espacio blanco interno bajo la tarjeta */
+.global-spotify-player.is-floating {
+  z-index: 1500;
+  top: 84px;
+  right: 16px;
+  width: min(300px, calc(100vw - 24px));
+  height: 82px;
+  border: 1px solid var(--border-sutil);
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+}
+
+/* Oculto: el embed permanece montado (sin recrearse) pero fuera de
+   pantalla y sin opacidad, hasta que el usuario inicie la reproducción */
+.global-spotify-player.is-hidden {
+  top: 0;
+  left: -9999px;
+  width: min(300px, calc(100vw - 24px));
+  height: 82px;
+  pointer-events: none;
+}
+
+.global-spotify-embed {
+  width: 100%;
+  height: 100%;
+}
+
+.global-spotify-embed iframe {
+  display: block;
+  border: none;
+}
+
+/* El embed renderiza su contenido en un lienzo de ~152px; se mantiene a
+   ese tamaño y se recorta con el contenedor para no dejar espacio blanco */
+.global-spotify-player.is-floating .global-spotify-embed,
+.global-spotify-player.is-hidden .global-spotify-embed {
+  height: 152px;
+}
+
+/* Barra para cerrar el reproductor flotante, justo debajo de la tarjeta
+   (donde antes quedaba el espacio blanco recortado del embed).
+   Se renderiza siempre (nunca se monta/desmonta) y solo se muestra en
+   modo flotante, para que React nunca tenga que insertar/quitar nodos
+   junto al div del embed (que la API de Spotify manipula directamente). */
+.global-spotify-close {
+  display: none;
+  position: fixed;
+  z-index: 1500;
+  top: calc(84px + 82px);
+  right: 16px;
+  width: min(300px, calc(100vw - 24px));
+  padding: 5px 0;
+  border: 1px solid var(--border-sutil);
+  border-top: none;
+  border-radius: 12px;
+  background: var(--bg-card);
+  color: var(--texto-secundario);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-align: center;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.global-spotify-close.is-floating {
+  display: block;
+}
+
+.global-spotify-close:hover {
+  background: var(--bg-hover);
+  color: var(--texto-principal);
+}

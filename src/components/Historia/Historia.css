@@ -5,66 +5,25 @@
 .historia-section {
   display: grid;
   grid-template-columns: 65fr 35fr;
-  min-height: 480px;
+  min-height: 380px;
   margin: 0 auto;
   max-width: 1200px;
-  padding: 32px 24px 0;
+  padding: 24px 24px 0;
   border-top: 1px solid var(--border-sutil);
   overflow: hidden;
 }
 
 .historia-seccion-label {
   grid-column: 1 / -1;
-  padding-bottom: 8px;
+  padding-bottom: 16px;
   text-align: center;
-}
-
-.historia-header-quote {
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: 0 0 28px;
-}
-
-.historia-header-quote-texto {
-  font-family: var(--font-titulo);
-  font-style: italic;
-  font-size: 20px;
-  font-weight: 400;
-  color: var(--texto-secundario);
-  max-width: 680px;
-  margin: 0 auto;
-  line-height: 1.65;
-}
-
-.historia-header-quote-texto::before {
-  content: '\201C';
-  font-size: 38px;
-  font-family: Georgia, serif;
-  font-style: normal;
-  color: var(--coral);
-  line-height: 0;
-  vertical-align: -10px;
-  margin-right: 4px;
-  opacity: 0.75;
-}
-
-.historia-header-quote-texto::after {
-  content: '\201D';
-  font-size: 38px;
-  font-family: Georgia, serif;
-  font-style: normal;
-  color: var(--coral);
-  line-height: 0;
-  vertical-align: -10px;
-  margin-left: 4px;
-  opacity: 0.75;
 }
 
 /* ── Contenido ──────────────────────────── */
 
 .historia-contenido {
   background: transparent;
-  padding: 40px;
+  padding: 24px 32px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -72,11 +31,11 @@
 }
 
 .historia-contenido h2 {
-  font-size: 42px;
+  font-size: 30px;
   font-weight: 800;
   color: var(--texto-principal);
-  margin-bottom: 12px;
-  line-height: 1.1;
+  margin-bottom: 8px;
+  line-height: 1.15;
   text-align: start;
 }
 
@@ -86,102 +45,123 @@
 
 .historia-contenido p {
   color: var(--texto-secundario);
-  font-size: 15px;
-  line-height: 1.8;
-  margin-bottom: 24px;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 16px;
   text-align: justify;
 }
 
-.historia-stats {
+/* ── Reconocimiento destacado ── */
+
+.historia-reconocimiento {
+  position: relative;
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: var(--bg-chip);
+  border: 1px solid var(--border-sutil);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--texto-principal);
+  line-height: 1.45;
+  text-align: left;
+  margin-bottom: 16px;
+  overflow: hidden;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.historia-reconocimiento::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(245, 200, 0, 0.12), rgba(255, 92, 141, 0.12));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.historia-reconocimiento:hover {
+  transform: translateY(-2px);
+  border-color: var(--amarillo);
+  box-shadow: 0 8px 20px rgba(245, 200, 0, 0.18);
+}
+
+.historia-reconocimiento:hover::before {
+  opacity: 1;
+}
+
+.historia-reconocimiento-icono {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  font-size: 17px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--amarillo), var(--coral));
+  box-shadow: 0 4px 12px rgba(245, 200, 0, 0.3);
+}
+
+.historia-reconocimiento span:last-child {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Cifras ── */
+
+.historia-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 8px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 }
 
 .stat-item {
   display: flex;
-  align-items: center;
-  gap: 0;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--bg-chip);
+  border: 1px solid var(--border-sutil);
+  text-align: left;
+  cursor: default;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
-.stat-item--banderas {
-  align-items: center;
-}
-
-.stat-titulo {
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--texto-principal);
-  white-space: nowrap;
-}
-
-.stat-titulo::after {
-  content: ':';
-  font-weight: 400;
-  color: var(--texto-secundario);
-  margin-right: 8px;
+.stat-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 18px var(--sombra-media);
 }
 
 .stat-numero {
   font-family: var(--font-titulo);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--coral);
+  font-size: 19px;
+  font-weight: 800;
   line-height: 1;
-  margin-right: 6px;
 }
 
 .stat-label {
-  font-size: 13px;
+  font-size: 11.5px;
   color: var(--texto-secundario);
+  line-height: 1.35;
 }
 
-/* ── Carrusel de banderas ── */
+.stat-item--coral .stat-numero { color: var(--coral); }
+.stat-item--coral:hover { border-color: var(--coral); }
 
-.historia-banderas-wrap {
-  overflow: visible;
-}
+.stat-item--azul .stat-numero { color: var(--azul); }
+.stat-item--azul:hover { border-color: var(--azul); }
 
-.historia-banderas-track {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
+.stat-item--amarillo .stat-numero { color: var(--amarillo-oscuro); }
+.stat-item--amarillo:hover { border-color: var(--amarillo); }
 
-.historia-bandera-circulo {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 1px solid var(--border-sutil);
-  cursor: default;
-  transition:
-    transform 0.25s ease,
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
-}
-
-.historia-bandera-circulo:hover {
-  transform: translateY(-4px) scale(1.15);
-  border-color: var(--coral);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-}
-
-.historia-bandera-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-
-.historia-logro {
-  color: var(--coral);
-  font-weight: 700;
-  font-style: normal;
-}
+.stat-item--rojo .stat-numero { color: var(--rojo); }
+.stat-item--rojo:hover { border-color: var(--rojo); }
 
 /* ── Carrusel ──────────────────────────── */
 
@@ -322,10 +302,6 @@
 
   .historia-contenido {
     padding: 32px 24px;
-  }
-
-  .historia-contenido h2 {
-    font-size: 30px;
   }
 
   .historia-stats {

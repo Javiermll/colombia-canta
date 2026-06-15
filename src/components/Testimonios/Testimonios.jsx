@@ -52,7 +52,7 @@ export default function Testimonios() {
       <div className="container">
 
         <div className="testimonios-divider">
-          <h2 className="testimonios-divider-titulo">Testimonios</h2>
+          <h2 className="testimonios-divider-titulo">Nuestra Comunidad</h2>
         </div>
 
         <div style={gridStyle}>

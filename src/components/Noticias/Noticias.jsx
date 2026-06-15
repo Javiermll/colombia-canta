@@ -16,7 +16,6 @@ export default function Noticias() {
         <div className="noticias-header">
           <div className="noticias-intro">
             <span className="label-seccion label-amarillo">Noticias</span>
-            <p className="noticias-quote">Las historias que nos mueven, desde Medellín y más allá</p>
           </div>
           <Link to="/noticias" className="noticias-ver-todas">
             VER TODAS <ArrowIcon />

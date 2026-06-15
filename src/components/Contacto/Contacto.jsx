@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { redesSociales } from '../../data/redesSociales';
 import './Contacto.css';
 
 export default function ContactoSection() {
@@ -29,6 +30,21 @@ export default function ContactoSection() {
               alt="Bailarina de folclor colombiano"
               className="contacto-foto"
             />
+            <div className="contacto-redes-verticales">
+              {redesSociales.map((red) => (
+                <a
+                  key={red.label}
+                  href={red.href}
+                  className="contacto-red-icono"
+                  style={{ '--red-color': red.color }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={red.label}
+                >
+                  {red.svg}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </div>

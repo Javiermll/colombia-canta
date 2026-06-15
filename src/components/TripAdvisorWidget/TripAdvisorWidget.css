@@ -1,0 +1,154 @@
+/* ─────────────────────────────────────────
+   TRIPADVISOR WIDGET
+   ───────────────────────────────────────── */
+
+.ta-widget {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-sutil);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.09);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ── Header ── */
+.ta-widget-header {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border-sutil);
+}
+
+.ta-widget-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ta-por {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: var(--texto-secundario);
+  text-transform: uppercase;
+}
+
+.ta-logo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  font-weight: 800;
+  color: #00AF87;
+}
+
+.ta-rating {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ta-rating-num {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--texto-principal);
+}
+
+.ta-bubbles {
+  display: flex;
+  gap: 3px;
+}
+
+.ta-bubble {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #00AF87;
+}
+
+.ta-rating-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--texto-secundario);
+}
+
+/* ── Fotos ── */
+.ta-fotos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 8px 14px 0;
+}
+
+.ta-foto {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border-radius: 6px;
+  display: block;
+}
+
+/* ── Reseña ── */
+.ta-review {
+  flex: 1;
+  padding: 12px 14px;
+}
+
+.ta-review-titulo {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--texto-principal);
+  margin: 0 0 6px;
+}
+
+.ta-review-texto {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--texto-secundario);
+  margin: 0 0 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ta-review-autor {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.ta-review-nombre {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--texto-principal);
+}
+
+.ta-review-fecha {
+  font-size: 12px;
+  color: var(--texto-secundario);
+}
+
+/* ── Footer ── */
+.ta-footer {
+  display: flex;
+  justify-content: flex-end;
+  padding: 8px 14px 10px;
+  border-top: 1px solid var(--border-sutil);
+}
+
+.ta-ver-link {
+  font-size: 12px;
+  color: var(--texto-secundario);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  transition: color 0.15s ease;
+}
+
+.ta-ver-link:hover {
+  color: #00AF87;
+}

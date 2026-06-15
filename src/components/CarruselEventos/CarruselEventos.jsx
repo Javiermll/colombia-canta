@@ -46,7 +46,6 @@ export default function CarruselEventos() {
         <div className="eventos-ac-header">
           <div className="eventos-ac-intro">
             <span className="label-seccion label-rojo">Eventos</span>
-            <p className="eventos-ac-subtitulo">Cada presentación es una ventana al alma de Colombia. Siente el folclor en vivo</p>
           </div>
           <Link to="/eventos" className="eventos-ac-ver-todos">
             Ver todos <span className="eventos-ac-flecha">→</span>
