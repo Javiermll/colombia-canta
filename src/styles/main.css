@@ -1946,6 +1946,650 @@ h5 {
   line-height: 1.7;
 }
 
+/* ==========================================================================
+   ── SECCIÓN INCRIPCIÓNES: DISEÑO GENERAL Y COMPONENTES ──
+   ========================================================================== */
+
+.inscr-seccion {
+  padding: 60px 0;
+  position: relative;
+}
+
+.inscr-titulo {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #111111;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+
+.inscr-subtitulo {
+  font-size: 1.1rem;
+  color: #4b5563;
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+.inscr-subtitulo-claro {
+  color: #e4e4e7;
+}
+
+/* Etiquetas de Sección (Badge adaptado al nuevo Rosado/Magenta) */
+.label-rosado {
+  background-color: #ffe4ee; /* Fondo Magenta muy sutil */
+  color: #e91e63; /* El rosado de tu botón de la captura */
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+
+/* ==========================================================================
+   ── TARJETAS DE CURSOS (SIEMPRE BLANCAS) ──
+   ========================================================================== */
+
+.inscr-cursos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 30px;
+  align-items: stretch;
+}
+
+.inscr-card {
+  background: #ffffff !important;
+  border: 1px solid #e5e7eb;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+  cursor: pointer;
+  height: 100%;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.inscr-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.inscr-card-header {
+  background: #ffffff !important;
+  padding: 24px 24px 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.inscr-card-emoji {
+  font-size: 1.5rem;
+}
+
+.inscr-card-tagline {
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.inscr-card-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.inscr-card-nombre {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #111111 !important;
+  margin-bottom: 15px;
+}
+
+.inscr-card-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 25px 0;
+}
+
+.inscr-card-lista li {
+  font-size: 0.95rem;
+  color: #4b5563 !important;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.inscr-card-lista li::before {
+  content: "★";
+  color: #f59e0b; /* Mostaza para las estrellas */
+  font-size: 0.85rem;
+}
+
+.inscr-card-mas {
+  font-weight: 600;
+  color: #e91e63 !important; /* Rosado/Magenta */
+}
+
+.inscr-card-mas::before {
+  display: none !important;
+}
+
+.inscr-card-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: auto;
+}
+
+/* Botones Fijos de las tarjetas (Siempre Negros) */
+.inscr-card-btn-secundario {
+  background: transparent !important;
+  border: 1px solid #111111 !important;
+  color: #111111 !important;
+  padding: 11px 16px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.inscr-card-btn-secundario:hover {
+  background: #f3f4f6 !important;
+}
+
+.inscr-card-btn-principal {
+  background: #111111 !important;
+  color: #ffffff !important;
+  border: none !important;
+  padding: 11px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  flex: 1;
+  font-size: 0.85rem;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.inscr-card-btn-principal:hover {
+  background: #222222 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+/* ==========================================================================
+   ── SECCIÓN PASOS PASIVOS ("CÓMO INSCRIBIRSE") ──
+   ========================================================================== */
+
+.inscr-seccion-foto {
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+.inscr-pasos {
+  margin-top: 40px;
+}
+
+.inscr-paso {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 30px;
+  border-radius: 16px;
+  backdrop-filter: blur(4px);
+}
+
+.inscr-paso-num {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #e91e63; /* Rosado/Magenta */
+  background: rgba(233, 30, 99, 0.15);
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-bottom: 20px;
+}
+
+.inscr-paso-titulo {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.inscr-paso-desc {
+  font-size: 0.9rem;
+  color: #d1d5db;
+  line-height: 1.5;
+}
+
+
+/* ==========================================================================
+   ── FORMULARIO INTERACTIVO MULTI-PASO ──
+   ========================================================================== */
+
+.inscr-form-container {
+  background: rgba(255, 255, 255, 0.98);
+  color: #1f2937;
+  padding: 35px;
+  border-radius: 20px;
+  max-width: 620px;
+  margin: 30px auto 0 auto;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  animation: formFadeIn 0.4s ease-out;
+}
+
+@keyframes formFadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.inscr-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  padding-bottom: 18px;
+  margin-bottom: 25px;
+}
+
+.inscr-form-badge {
+  background: #111111;
+  color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 30px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.inscr-form-cancelar {
+  background: transparent;
+  border: none;
+  color: #6b7280;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.inscr-form-cancelar:hover {
+  color: #e91e63; /* Hover Rosado/Magenta */
+}
+
+/* Indicadores de Pasos (Pills) */
+.stepper-progress {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 30px;
+}
+
+.step-pill {
+  flex: 1;
+  background: #f3f4f6;
+  padding: 8px 4px;
+  text-align: center;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #9ca3af;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+
+.step-pill.activo {
+  background: #e91e63; /* Rosado/Magenta */
+  color: #ffffff;
+  border-color: #e91e63;
+  box-shadow: 0 4px 12px rgba(233, 30, 99, 0.2);
+}
+
+/* Inputs internos */
+.form-step-pane h3 {
+  font-size: 1.25rem;
+  color: #111111;
+  margin-bottom: 20px;
+  font-weight: 700;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="tel"],
+.form-group select {
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  background: #ffffff;
+  color: #1f2937;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: #e91e63; /* Enfoque Magenta */
+  box-shadow: 0 0 0 3px rgba(233, 30, 99, 0.15);
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+/* Alerta dinámica menor de edad */
+.step-info-txt {
+  font-size: 0.85rem;
+  color: #4b5563;
+  background: #ffe4ee; /* Fondo sutil magenta */
+  border-left: 4px solid #e91e63;
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 20px;
+}
+
+.checkbox-group {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 10px;
+  margin-top: 25px;
+}
+
+.checkbox-label {
+  font-size: 0.85rem;
+  color: #4b5563;
+  line-height: 1.4;
+  display: flex;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+  margin-top: 3px;
+  accent-color: #e91e63; /* Checkbox Magenta */
+  width: 16px;
+  height: 16px;
+}
+
+/* Botonera de navegación */
+.form-actions-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 30px;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 20px;
+}
+
+.btn-atras {
+  background: #f3f4f6;
+  color: #4b5563;
+  border: 1px solid #d1d5db;
+  padding: 12px 24px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-atras:hover {
+  background: #e5e7eb;
+}
+
+.btn-sgte {
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-sgte:hover:not(:disabled) {
+  background: #222222;
+}
+
+.btn-sgte:disabled, .btn-enviar-final:disabled {
+  background: #e5e7eb;
+  color: #9ca3af;
+  cursor: not-allowed;
+  border: none;
+  box-shadow: none;
+}
+
+.btn-enviar-final {
+  background: #111111;
+  color: #ffffff;
+  border: none;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.btn-enviar-final:hover:not(:disabled) {
+  background: #e91e63; /* Cambia al tono magenta de tu botón al validarse */
+}
+
+
+/* ── PANTALLA DE ÉXITO POST-ENVÍO ── */
+.form-success-pane {
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.success-icon {
+  font-size: 4rem;
+  margin-bottom: 15px;
+  animation: successPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes successPop {
+  0% { transform: scale(0.5); }
+  100% { transform: scale(1); }
+}
+
+.form-success-pane h2 {
+  font-size: 1.6rem;
+  color: #111111;
+  margin-bottom: 12px;
+}
+
+.form-success-pane p {
+  color: #4b5563;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.success-subtext {
+  font-size: 0.9rem !important;
+  color: #6b7280 !important;
+  margin-top: 10px;
+  margin-bottom: 30px !important;
+}
+
+.success-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+.btn-success-wa {
+  background: #25D366;
+  color: #ffffff;
+  padding: 14px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-success-wa:hover {
+  background: #20ba5a;
+  transform: translateY(-2px);
+}
+
+.btn-success-limpiar {
+  background: transparent;
+  border: 1px solid #d1d5db;
+  color: #4b5563;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-success-limpiar:hover {
+  background: #f9fafb;
+  border-color: #111111;
+  color: #111111;
+}
+
+
+/* ==========================================================================
+   ── SOPORTE ADAPTATIVO PARA DARK MODE (MEDIA QUERY) ──
+   ========================================================================== */
+
+@media (prefers-color-scheme: dark) {
+  .inscr-titulo {
+    color: #ffffff;
+  }
+  .inscr-subtitulo {
+    color: #a1a1aa;
+  }
+
+  /* Tarjetas siempre blancas y botones negros por requerimiento visual */
+
+  /* Estilos del Formulario adaptados a modo Oscuro */
+  .inscr-form-container {
+    background: rgba(24, 24, 27, 0.98);
+    color: #f4f4f5;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+  }
+  .inscr-form-header {
+    border-color: #27272a;
+  }
+  .inscr-form-badge {
+    background: #e91e63; /* Seteado a tu magenta */
+    color: #ffffff;
+  }
+  .inscr-form-cancelar {
+    color: #9ca3af;
+  }
+  .inscr-form-cancelar:hover {
+    color: #ff4081; /* Variación un poco más clara del magenta en hover */
+  }
+  .step-pill {
+    background: #27272a;
+    border-color: #3f3f46;
+    color: #71717a;
+  }
+  .step-pill.activo {
+    background: #e91e63;
+    border-color: #e91e63;
+  }
+  .form-step-pane h3, .form-success-pane h2 {
+    color: #ffffff;
+  }
+  .form-group label, .checkbox-label, .form-success-pane p {
+    color: #d4d4d8;
+  }
+
+  .form-group input[type="text"],
+  .form-group input[type="number"],
+  .form-group input[type="tel"],
+  .form-group select {
+    background: #18181b;
+    border-color: #3f3f46;
+    color: #ffffff;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: #e91e63;
+  }
+  .step-info-txt {
+    background: rgba(233, 30, 99, 0.1);
+    color: #f43f5e;
+  }
+
+  .btn-atras {
+    background: #27272a;
+    color: #e4e4e7;
+    border-color: #3f3f46;
+  }
+  .btn-atras:hover {
+    background: #3f3f46;
+  }
+  
+  /* Botones interactivos del form pasan a tu fucsia/magenta en Dark Mode */
+  .btn-sgte, .btn-enviar-final {
+    background: #e91e63;
+    color: #ffffff;
+  }
+  .btn-sgte:hover:not(:disabled), .btn-enviar-final:hover:not(:disabled) {
+    background: #ff4081;
+  }
+  .btn-sgte:disabled, .btn-enviar-final:disabled {
+    background: #27272a;
+    color: #52525b;
+  }
+  .success-subtext {
+    color: #a1a1aa !important;
+  }
+  .btn-success-limpiar {
+    border-color: #3f3f46;
+    color: #a1a1aa;
+  }
+  .btn-success-limpiar:hover {
+    background: #27272a;
+    color: #ffffff;
+  }
+}
+
+
+
 /* ── Responsive ── */
 @media (max-width: 1024px) {
   .inscr-cursos-grid {

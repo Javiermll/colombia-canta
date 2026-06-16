@@ -1,240 +1,152 @@
-﻿import { useState } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Hero.css';
 
 const base = import.meta.env.BASE_URL;
-const CARDS_VISIBLE = 3;
 
 const slides = [
   {
     id: 'bienvenida',
-    label: 'Inicio',
-    antetitulo: '“La música es el latido de Colombia”',
-    titulo: (
-      <>Donde el talento<br />colombiano <span className="hero-titulo-acento">florece</span></>
-    ),
-    descripcion:
-      'En Medellín, transformamos vidas a través de la música tradicional. Una comunidad que celebra nuestra identidad, nuestro ritmo y nuestra alegría.',
+    titulo: (<>Donde Colombia <br />canta, baila y <span className="hero-accent">encanta</span></>),
+    descripcion: 'Somos una comunidad artística que preserva y proyecta el folclor colombiano a través de la formación, los escenarios y experiencias que conectan generaciones.',
     ctas: [
-      { label: 'Contáctanos',   to: '/contacto', primario: true  },
-      { label: 'Descubrir más', to: '/nosotros',  primario: false },
+      { label: 'Descúbrenos', to: '/nosotros', primario: true },
+      { label: 'Contáctanos', to: '/contacto', primario: false },
     ],
     imagen: 'hero-slides/bienvenida.webp',
+    badge: 'Comunidad'
   },
   {
     id: 'quienes-somos',
-    label: 'Quiénes somos',
-    antetitulo: '“Raíces profundas, vuelo alto”',
-    titulo: (
-      <>Una fundación nacida<br />del <span className="hero-titulo-acento">corazón</span> andino</>
-    ),
-    descripcion:
-      'Desde Medellín llevamos la música y danza tradicional colombiana al mundo. Más de una década uniendo comunidades a través del arte y la cultura.',
-    ctas: [
-      { label: 'Nuestra historia',  to: '/nosotros', primario: true  },
-      { label: 'Conocer el elenco', to: '/elenco',   primario: false },
-    ],
+    titulo: (<>Raíces que nos <br />unen al <span className="hero-accent">mundo</span></>),
+    descripcion: 'Desde Medellín llevamos la música y danza tradicional colombiana a los escenarios más importantes del mundo, celebrando nuestra identidad.',
+    ctas: [{ label: 'Nuestra historia', to: '/nosotros', primario: true }],
     imagen: 'hero-slides/quienes-somos.webp',
+    badge: 'Raíces'
   },
   {
     id: 'eventos',
-    label: 'Eventos',
-    antetitulo: '“El escenario es nuestro hogar”',
-    titulo: (
-      <>Vive la magia de<br />nuestros <span className="hero-titulo-acento">eventos</span></>
-    ),
-    descripcion:
-      'Festivales, galas y presentaciones que llevan la esencia de Colombia a los escenarios más importantes del país y el mundo.',
-    ctas: [
-      { label: 'Ver eventos', to: '/eventos', primario: true },
-    ],
+    titulo: (<>Vive la magia de <br />nuestros <span className="hero-accent">eventos</span></>),
+    descripcion: 'Festivales, galas y presentaciones que llevan la esencia de Colombia a los escenarios más importantes del país y el mundo.',
+    ctas: [{ label: 'Ver cartelera', to: '/eventos', primario: true }],
     imagen: 'hero-slides/eventos.webp',
+    badge: 'Magia'
   },
   {
     id: 'escuela',
-    label: 'Escuela',
-    antetitulo: '“El ritmo vive en cada uno de nosotros”',
-    titulo: (
-      <>Aprende, crece y<br /><span className="hero-titulo-acento">transforma</span> tu vida</>
-    ),
-    descripcion:
-      'Nuestra escuela de música y danza abre las puertas a todas las edades. Guitarra, bandola, tiple, danza folclórica y mucho más.',
-    ctas: [
-      { label: 'Inscribirse ahora', to: '/inscripciones', primario: true  },
-      { label: 'Ver programas',     to: '/inscripciones', primario: false },
-    ],
+    titulo: (<>Aprende, crece y <br />transforma tu <span className="hero-accent">vida</span></>),
+    descripcion: 'Nuestra escuela de música y danza abre las puertas a todas las edades: guitarra, bandola, tiple y danza folclórica.',
+    ctas: [{ label: 'Ver programas', to: '/inscripciones', primario: true }],
     imagen: 'hero-slides/escuela.webp',
+    badge: 'Escuela'
   },
   {
     id: 'tienda',
-    label: 'Tienda',
-    antetitulo: '“Lleva un pedazo de Colombia contigo”',
-    titulo: (
-      <>Nuestra cultura,<br />al alcance de tus <span className="hero-titulo-acento">manos</span></>
-    ),
-    descripcion:
-      'Discos, artesanías, indumentaria típica y mucho más. Cada producto lleva el alma de Colombia Canta y Encanta — apoya el arte y la cultura con cada compra.',
-    ctas: [
-      { label: 'Visitar tienda', to: '/tienda', primario: true },
-    ],
+    titulo: (<>Nuestra cultura <br />en tus <span className="hero-accent">manos</span></>),
+    descripcion: 'Discos, artesanías e indumentaria típica. Cada producto apoya directamente a nuestros artistas y la difusión de la cultura.',
+    ctas: [{ label: 'Visitar tienda', to: '/tienda', primario: true }],
     imagen: 'hero-slides/tienda.webp',
+    badge: 'Cultura'
   },
   {
     id: 'noticias',
-    label: 'Noticias',
-    antetitulo: '“Cada logro, una historia que contar”',
-    titulo: (
-      <>Mantente al día con<br />nuestra <span className="hero-titulo-acento">historia viva</span></>
-    ),
-    descripcion:
-      'Reconocimientos internacionales, giras, nuevos proyectos y la vida detrás del telón. Sigue de cerca todo lo que vibra en Colombia Canta y Encanta.',
-    ctas: [
-      { label: 'Ver noticias', to: '/noticias', primario: true },
-    ],
+    titulo: (<>Mantente al día con <br />nuestra <span className="hero-accent">historia</span></>),
+    descripcion: 'Giras internacionales, nuevos proyectos y la vida detrás del telón. Sigue de cerca todo lo que vibra en Colombia Canta y Encanta.',
+    ctas: [{ label: 'Ver noticias', to: '/noticias', primario: true }],
     imagen: 'hero-slides/noticias.webp',
+    badge: 'Historia'
   },
   {
     id: 'contacto',
-    label: 'Contacto',
-    antetitulo: '“Cada gran historia comienza con un hola”',
-    titulo: (
-      <>Hagamos algo<br /><span className="hero-titulo-acento">grande</span> juntos</>
-    ),
-    descripcion:
-      'Alianzas, patrocinios, presentaciones privadas o simplemente para conocernos — estamos listos para colaborar contigo.',
-    ctas: [
-      { label: 'Escríbenos', to: '/contacto', primario: true },
-    ],
+    titulo: (<>Hagamos algo <br />grande <span className="hero-accent">juntos</span></>),
+    descripcion: 'Alianzas, patrocinios o presentaciones privadas. Estamos ready para colaborar y llevar el arte colombiano a nuevos espacios.',
+    ctas: [{ label: 'Escríbenos', to: '/contacto', primario: true }],
     imagen: 'hero-slides/contacto.webp',
+    badge: 'Unión'
   },
 ];
 
 export default function Hero() {
   const [active, setActive] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
 
-  const goTo  = (idx) => setActive(idx);
-  const prev  = () => setActive((a) => (a - 1 + slides.length) % slides.length);
-  const next  = () => setActive((a) => (a + 1) % slides.length);
+  const next = () => setActive((a) => (a + 1) % slides.length);
+  const prev = () => setActive((a) => (a - 1 + slides.length) % slides.length);
+  const goTo = (idx) => setActive(idx);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const autoPlay = setInterval(() => {
+      next();
+    }, 6000);
+    return () => clearInterval(autoPlay);
+  }, [active, isPaused]);
 
   const activeSlide = slides[active];
 
-  const previewCards = Array.from({ length: CARDS_VISIBLE }, (_, i) => ({
-    slideIdx: (active + 1 + i) % slides.length,
-    stackPos: i,
-  }));
-
   return (
-    <section className="hero-carousel">
-
-      {/* ── Fondos full-bleed (crossfade) ── */}
-      {slides.map((slide, i) => (
-        <div
-          key={slide.id}
-          className={`hero-bg${active === i ? ' hero-bg--activo' : ''}`}
-          aria-hidden="true"
-        >
-          <img
-            src={`${base}${slide.imagen}`}
-            alt=""
-            className={`hero-bg-img hero-img--${slide.id}`}
-            loading={i === 0 ? 'eager' : 'lazy'}
-            decoding="async"
-          />
-          <div className="hero-overlay" />
-        </div>
-      ))}
-
-      {/* ── Contenido izquierdo — key=active fuerza remount y reactiva animaciones ── */}
-      <div key={active} className="hero-slide-contenido">
-        <p className="hero-antetitulo">{activeSlide.antetitulo}</p>
-        <h1 className="hero-titulo">{activeSlide.titulo}</h1>
-        <p className="hero-desc">{activeSlide.descripcion}</p>
-        <div className="hero-ctas">
-          {activeSlide.ctas.map((cta) => (
-            <Link
-              key={cta.label}
-              to={cta.to}
-              className={cta.primario ? 'hero-btn-primario' : 'hero-btn-secundario'}
-            >
-              {cta.label}
-            </Link>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Cards + navegación — derecha ── */}
-      <div className="hero-cards-area" aria-hidden="true">
-        <div className="hero-cards-stack">
-          {previewCards.map(({ slideIdx, stackPos }) => {
-            const slide = slides[slideIdx];
-            return (
-              <button
-                key={slideIdx}
-                className="hero-card"
-                data-pos={stackPos}
-                onClick={() => goTo(slideIdx)}
-                tabIndex={-1}
+    <section 
+      className="hero-fade-magazine-section"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
+      {/* CONTENEDOR FLUIDO EN DOS COLUMNAS */}
+      <div className="hero-magazine-container">
+        
+        {/* COLUMNA IZQUIERDA: INFORMACIÓN */}
+        <div className="hero-magazine-text-side">
+          <span className="hero-brand-subtitle">Colombia Canta y Encanta — {activeSlide.badge}</span>
+          <h1 className="hero-magazine-title">{activeSlide.titulo}</h1>
+          <p className="hero-magazine-description">{activeSlide.descripcion}</p>
+          
+          <div className="hero-magazine-actions">
+            {activeSlide.ctas.map((cta) => (
+              <Link
+                key={cta.label}
+                to={cta.to}
+                className={cta.primario ? 'hero-btn-pink-flat' : 'hero-btn-text-only'}
               >
-                <img
-                  src={`${base}${slide.imagen}`}
-                  alt=""
-                  className={`hero-card-img hero-img--${slide.id}`}
-                  loading="lazy"
-                  decoding="async"
-                />
-                <div className="hero-card-overlay" />
-                <div className="hero-card-info">
-                  <span className="hero-card-nombre">{slide.label}</span>
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Flechas + contador */}
-        <div className="hero-cards-nav">
-          <button className="hero-arrow" onClick={prev} aria-label="Sección anterior">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="15 18 9 12 15 6" />
-            </svg>
-          </button>
-          <button className="hero-arrow" onClick={next} aria-label="Siguiente sección">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="9 18 15 12 9 6" />
-            </svg>
-          </button>
-          <div className="hero-numeric">
-            <span className="hero-numeric-current">{String(active + 1).padStart(2, '0')}</span>
-            <span className="hero-numeric-sep">/</span>
-            <span className="hero-numeric-total">{String(slides.length).padStart(2, '0')}</span>
+                {cta.label}
+                {!cta.primario && <span className="hero-heart-icon"> ♥</span>}
+              </Link>
+            ))}
           </div>
         </div>
-      </div>
 
-      {/* ── Franja próximo evento — siempre visible ── */}
-      <div className="hero-anuncio-evento">
-        <span className="hero-anuncio-label">Próximo gran evento</span>
-        <span className="hero-anuncio-diamante">◆</span>
-        <span className="hero-anuncio-nombre">Festival Colombia Canta y Encanta</span>
-        <span className="hero-anuncio-sep">·</span>
-        <span className="hero-anuncio-fecha">23-26 Jul 2026 · Medellín</span>
-        <Link to="/eventos/4" className="hero-anuncio-cta">Inscríbete →</Link>
-      </div>
+        {/* COLUMNA DERECHA: IMAGEN DEGRADADA DIFUMINADA HACIA LOS BORDES */}
+        <div className="hero-magazine-visual-side">
+          {slides.map((slide, i) => (
+            <img
+              key={slide.id}
+              src={`${base}${slide.imagen}`}
+              alt=""
+              className={`hero-magazine-fade-img ${active === i ? 'is-visible' : ''}`}
+              loading={i === 0 ? 'eager' : 'lazy'}
+            />
+          ))}
 
-      {/* ── Tabs de navegación ── */}
-      <nav className="hero-tabs" aria-label="Secciones del carrusel">
-        {slides.map((slide, i) => (
-          <button
-            key={slide.id}
-            className={`hero-tab${active === i ? ' hero-tab--activo' : ''}`}
-            onClick={() => goTo(i)}
-          >
-            <span className="hero-tab-barra" aria-hidden="true" />
-            <span className="hero-tab-label">{slide.label}</span>
+          {/* Flechas minimalistas flotantes sobre la imagen */}
+          <button className="hero-nav-arrow arrow-left" onClick={prev} aria-label="Anterior">
+            ‹
           </button>
-        ))}
-      </nav>
+          <button className="hero-nav-arrow arrow-right" onClick={next} aria-label="Siguiente">
+            ›
+          </button>
+        </div>
 
+      </div>
+
+      {/* COMPONENTES DE CONTROL DE DESPLAZAMIENTO INFERIOR */}
+      <div className="hero-magazine-dots">
+        {slides.map((_, idx) => (
+          <button
+            key={idx}
+            className={`hero-magazine-dot ${active === idx ? 'is-active' : ''}`}
+            onClick={() => goTo(idx)}
+            aria-label={`Ir al slide ${idx + 1}`}
+          />
+        ))}
+      </div>
     </section>
   );
 }
