@@ -222,7 +222,7 @@
 }
 
 /* ── Mobile: drawer desde abajo ── */
-@media (max-width: 640px) {
+@media (max-width: 599px) {
   .artista-overlay {
     padding: 0;
     align-items: flex-end;

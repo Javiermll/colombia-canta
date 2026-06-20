@@ -151,16 +151,20 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .tienda-hero-titulo {
     font-size: 52px;
   }
 
   .tienda-hero-controls {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
     gap: 12px;
     padding: 16px 0;
+  }
+
+  .tienda-filtros {
+    justify-content: center;
   }
 
   .tienda-busqueda input {
@@ -168,7 +172,7 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 599px) {
   .tienda-hero-titulo {
     font-size: 40px;
   }

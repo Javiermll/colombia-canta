@@ -308,7 +308,7 @@
 }
 
 /* ---- Responsive: drawer desde abajo en mobile ---- */
-@media (max-width: 640px) {
+@media (max-width: 599px) {
   .modal-overlay {
     padding: 0;
     align-items: flex-end;

@@ -286,15 +286,39 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
+  .noticia-hero-content {
+    text-align: center;
+  }
+
+  .noticia-volver {
+    margin: 0 auto 24px;
+  }
+
+  .noticia-hero-titulo {
+    max-width: 100%;
+  }
+
+  .noticia-hero-meta {
+    justify-content: center;
+  }
+
   .noticia-cuerpo {
     grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .noticia-articulo {
+    width: 100%;
+    text-align: center;
   }
 
   .noticia-aside {
     position: static;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
   }
 
   .noticia-aside-card {
@@ -315,7 +339,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 599px) {
   .noticia-hero-titulo {
     font-size: 28px;
   }

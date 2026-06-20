@@ -256,11 +256,16 @@ a.footer-contact-item:hover {
     padding: 44px 0 36px;
   }
 
-  /* Nav bar apila links y contacto */
+  /* Nav bar apila links y contacto, todo centrado */
   .footer-nav-bar {
     flex-direction: column;
     gap: 14px;
     padding: 20px 0;
+  }
+
+  .footer-nav-links {
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
   .footer-nav-bar-sep {
@@ -272,10 +277,10 @@ a.footer-contact-item:hover {
 }
 
 /* ─────────────────────────────────────────
-   MOBILE  (≤640px)
+   MOBILE  (≤599px)
    ───────────────────────────────────────── */
 
-@media (max-width: 640px) {
+@media (max-width: 599px) {
   .footer {
     padding: 48px 0 0;
   }

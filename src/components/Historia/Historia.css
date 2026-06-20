@@ -275,22 +275,29 @@
 
 /* ── Responsive ─────────────────────────── */
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .historia-section {
     grid-template-columns: 1fr;
     margin: 32px 0;
+    justify-items: center;
   }
 
   .historia-carrusel {
     min-height: 280px;
-  }
-
-  .historia-slide {
-    width: calc(60% - 2px);
+    width: 100%;
+    max-width: 480px;
   }
 
   .historia-contenido {
     padding: 32px 24px;
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .historia-contenido h2,
+  .historia-contenido p {
+    text-align: center;
   }
 
   .historia-stats {
@@ -299,9 +306,9 @@
   }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 599px) {
   .historia-slide {
-    width: calc(80% - 2px);
+    width: 100%;
   }
 
   .historia-carrusel {

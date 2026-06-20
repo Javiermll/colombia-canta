@@ -18,17 +18,20 @@
   top: 100px;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .carrito-grid {
     grid-template-columns: 1fr;
   }
 
   .carrito-resumen {
     position: static;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
   }
 }
 
-@media (max-width: 520px) {
+@media (max-width: 599px) {
   .carrito-item {
     grid-template-columns: 64px 1fr;
     gap: 12px;

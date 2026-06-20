@@ -56,7 +56,7 @@
 .contacto-divider-titulo::before { margin-right: 12px; }
 .contacto-divider-titulo::after  { margin-left:  12px; }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .contacto-divider {
     padding: 0 24px;
   }
@@ -94,7 +94,7 @@
   color: #ffffff;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .contacto-redes-verticales {
     display: none;
   }

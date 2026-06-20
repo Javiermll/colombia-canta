@@ -122,7 +122,7 @@
   display: block;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .escuela-section {
     grid-template-columns: 1fr;
     margin: 0 0 40px;
@@ -131,6 +131,10 @@
   .escuela-contenido {
     padding: 32px 24px;
     order: 1;
+  }
+
+  .escuela-contenido p {
+    text-align: center;
   }
 
   .escuela-imagenes {

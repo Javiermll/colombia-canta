@@ -48,8 +48,8 @@
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.60);
 }
 
-/* ── Estado flotante (desktop ≥769px) ───────────── */
-@media (min-width: 769px) {
+/* ── Estado flotante (desktop ≥1025px) ───────────── */
+@media (min-width: 1025px) {
   .navbar--flotante {
     top: 12px;
     left: 24px;
@@ -709,7 +709,7 @@
   flex-shrink: 0;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .navbar-links {
     display: none;
   }

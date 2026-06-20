@@ -24,10 +24,20 @@ const imagenes = [
 export default function Historia() {
   const [activo, setActivo] = useState(0);
   const trackRef = useRef(null);
+  const esMobileRef = useRef(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 599px)");
+    esMobileRef.current = mq.matches;
+    const onChange = (e) => { esMobileRef.current = e.matches; };
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setActivo((i) => (i + 2) % imagenes.length);
+      const paso = esMobileRef.current ? 1 : 2;
+      setActivo((i) => (i + paso) % imagenes.length);
     }, 3500);
     return () => clearInterval(timer);
   }, []);

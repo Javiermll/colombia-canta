@@ -394,17 +394,6 @@
    ───────────────────────────────────────── */
 
 @media (max-width: 1024px) {
-  .ef-item {
-    gap: 32px;
-  }
-
-  .ef-card-col {
-    flex: 0 0 260px;
-    position: static;
-  }
-}
-
-@media (max-width: 768px) {
   .ef-section {
     padding: 32px 0 40px;
     gap: 48px;
@@ -413,7 +402,10 @@
   .ef-item,
   .ef-item--reverse {
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     padding: 0 20px;
+    gap: 32px;
   }
 
   .ef-card-col {
@@ -421,11 +413,21 @@
     width: 100%;
     max-width: 380px;
     align-self: center;
+    position: static;
+  }
+
+  .ef-content {
+    align-items: center;
   }
 
   .ef-desc,
   .ef-prog,
   .ef-fases {
     max-width: 100%;
+    margin: 0 auto;
+  }
+
+  .ef-pills {
+    justify-content: center;
   }
 }

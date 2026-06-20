@@ -186,21 +186,25 @@
 @media (max-width: 1024px) {
   .noticias-con-ig {
     grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .noticias-lista {
     max-height: none;
     overflow-y: visible;
     padding-right: 0;
+    width: 100%;
   }
 
   .noticias-ig-sidebar {
     position: static;
+    width: 100%;
     max-width: 420px;
+    margin: 0 auto;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 599px) {
   .noticias-titulo {
     font-size: 28px;
   }

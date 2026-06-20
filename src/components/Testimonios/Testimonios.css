@@ -155,8 +155,13 @@
 
 /* ── Responsive ── */
 
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .testimonio-card {
     width: 100%;
+  }
+
+  .testimonios-header {
+    align-items: center;
+    text-align: center;
   }
 }

@@ -251,7 +251,7 @@
 }
 
 /* ── Responsive ── */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .efh-grid {
     gap: 14px;
     padding: 24px 16px 36px;
@@ -262,7 +262,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 599px) {
   .efh-grid {
     grid-template-columns: 1fr;
     gap: 16px;
@@ -605,14 +605,14 @@
 }
 
 /* Tablet: mismo layout lado a lado, más compacto */
-@media (max-width: 900px) {
+@media (max-width: 1024px) {
   .efh-zigzag-body {
     padding: 24px 28px;
   }
 }
 
-/* Móvil: imagen/carrusel apilado bajo el contenido */
-@media (max-width: 640px) {
+/* Móvil: imagen/carrusel apilado bajo el contenido, todo centrado */
+@media (max-width: 599px) {
   .efh-card--zigzag,
   .efh-card--zigzag-reverse {
     flex-direction: column;
@@ -622,22 +622,23 @@
   .efh-zigzag-media {
     flex: none;
     min-height: 0;
-    height: 240px;
-  }
-
-  .efh-zigzag-body {
-    padding: 28px;
-  }
-}
-
-@media (max-width: 600px) {
-  .efh-zigzag-media {
     height: 200px;
   }
 
   .efh-zigzag-body {
     padding: 22px;
     gap: 12px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .efh-zigzag-desc {
+    text-align: center;
+  }
+
+  .efh-zigzag-num,
+  .efh-zigzag-eyebrow {
+    align-self: center;
   }
 
   .efh-zigzag-pills,
@@ -648,6 +649,10 @@
 
   .efh-zigzag-footer {
     flex-direction: column;
-    align-items: flex-start;
+    align-items: center;
+  }
+
+  .efh-zigzag-cta {
+    align-self: center;
   }
 }
