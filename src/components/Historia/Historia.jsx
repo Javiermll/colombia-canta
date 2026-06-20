@@ -81,26 +81,32 @@ export default function Historia() {
           tradiciones a escenarios nacionales e internacionales.
         </p>
         <div className="historia-reconocimiento">
-          <span className="historia-reconocimiento-icono">🏆</span>
+          <span className="historia-reconocimiento-icono">
+            <img
+              src={`${import.meta.env.BASE_URL}nuestra-historia/icono-trofeo.webp`}
+              alt=""
+              className="reconocimiento-icono-img"
+            />
+          </span>
           <span>
             Reconocidos por el Ministerio de Cultura como una de las
             escuelas de música más destacadas de Colombia.
           </span>
         </div>
         <div className="historia-stats">
-          <div className="stat-item stat-item--coral">
+          <div className="stat-item">
             <span className="stat-numero">20+</span>
             <span className="stat-label">Años preservando el folclor colombiano</span>
           </div>
-          <div className="stat-item stat-item--azul">
+          <div className="stat-item">
             <span className="stat-numero">1000+</span>
             <span className="stat-label">Artistas formados</span>
           </div>
-          <div className="stat-item stat-item--amarillo">
+          <div className="stat-item">
             <span className="stat-numero">6</span>
             <span className="stat-label">Países impactados</span>
           </div>
-          <div className="stat-item stat-item--rojo">
+          <div className="stat-item">
             <span className="stat-numero">Miles</span>
             <span className="stat-label">de espectadores alcanzados</span>
           </div>

@@ -61,11 +61,26 @@
   border-top: 2px solid var(--coral);
 }
 
-/* ── Lista ── */
+/* ── Lista ──
+   Alto limitado para ocupar el mismo espacio que el widget de Instagram
+   (a la derecha); con más noticias de las que entran, se hace scroll. */
 .noticias-lista {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  max-height: 460px;
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+}
+
+.noticias-lista::-webkit-scrollbar {
+  width: 6px;
+}
+
+.noticias-lista::-webkit-scrollbar-thumb {
+  background: var(--border-sutil);
+  border-radius: 3px;
 }
 
 /* ── Fila ── */
@@ -171,6 +186,12 @@
 @media (max-width: 1024px) {
   .noticias-con-ig {
     grid-template-columns: 1fr;
+  }
+
+  .noticias-lista {
+    max-height: none;
+    overflow-y: visible;
+    padding-right: 0;
   }
 
   .noticias-ig-sidebar {

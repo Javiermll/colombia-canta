@@ -17,9 +17,13 @@
   transition: opacity 0.18s ease;
 }
 
-/* Anclado sobre el widget: por debajo del navbar para que,
-   al hacer scroll, el navbar lo cubra con normalidad */
+/* Anclado sobre el widget: position absolute (relativo al documento,
+   no al viewport) para que se desplace de forma nativa junto con la
+   página al hacer scroll, sin depender de recalcular en cada evento
+   de scroll (eso era lo que causaba el desfase/jitter visible).
+   Por debajo del navbar para que, al hacer scroll, lo cubra con normalidad. */
 .global-spotify-player.is-docked {
+  position: absolute;
   z-index: 1;
 }
 

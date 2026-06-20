@@ -45,19 +45,8 @@ export default function EventoDetalle({ evento }) {
   return (
     <>
       {/* BLOQUE 1 — HERO */}
-      <div
-        className="evento-hero"
-        style={evento.img ? {
-          backgroundImage: `url(${evento.img})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-        } : {
-          background: evento.colorHero,
-        }}
-      >
-        <div className="evento-hero-overlay" style={evento.img ? {
-          background: `linear-gradient(to bottom, ${evento.colorHero}55 0%, rgba(0,0,0,0.82) 100%)`,
-        } : undefined} />
+      <div className="evento-hero" style={{ background: evento.colorHero }}>
+        <div className="evento-hero-overlay" />
         <div className="evento-hero-content">
           <Link to="/eventos" className="evento-volver">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -65,9 +54,6 @@ export default function EventoDetalle({ evento }) {
             </svg>
             Volver a eventos
           </Link>
-          <div className="evento-hero-chip">
-            <span className="chip-tipo-hero">{evento.tipo}</span>
-          </div>
           <h1>{evento.titulo}</h1>
           {evento.subtitulo && (
             <p className="evento-hero-sub">{evento.subtitulo}</p>
@@ -127,23 +113,6 @@ export default function EventoDetalle({ evento }) {
             </section>
           )}
 
-          {evento.programacion?.length > 0 && (
-            <section>
-              <h2>Programación{evento.mes ? ` · ${evento.mes}` : ''}</h2>
-              <div className="evento-prog-grid">
-                {evento.programacion.map((ev, i) => (
-                  <div key={i} className="evento-prog-card">
-                    <div className="evento-prog-fecha">
-                      <b>{ev.dia}</b>
-                      <span>{ev.hora}</span>
-                    </div>
-                    <p className="evento-prog-nombre">{ev.nombre}</p>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
           {evento.fases?.length > 0 && (
             <section>
               <h2>¿Cómo es la experiencia?</h2>
@@ -172,10 +141,13 @@ export default function EventoDetalle({ evento }) {
                 <h3>{evento.lugar}</h3>
                 <p><span>📍</span> {evento.direccion ?? evento.ciudad}</p>
               </div>
-              <div className="lugar-mapa-placeholder">
-                <span>🗺️</span>
-                <span>Ver en el mapa</span>
-              </div>
+              <iframe
+                className="lugar-mapa"
+                title={`Mapa de ${evento.lugar}`}
+                src={`https://www.google.com/maps?q=${encodeURIComponent(`${evento.lugar}, ${evento.direccion ?? evento.ciudad}`)}&output=embed`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
           </section>
         </div>
@@ -183,9 +155,6 @@ export default function EventoDetalle({ evento }) {
         {/* Columna derecha — card de compra */}
         <div className="compra-card">
           <div className="compra-card-header">
-            <div className="compra-card-chip">
-              <span className="chip-tipo-hero">{evento.tipo}</span>
-            </div>
             <div className="compra-card-titulo">{evento.titulo}</div>
             {evento.fechaCompleta && (
               <div className="compra-card-meta">

@@ -158,7 +158,11 @@ export default function Navbar() {
           {/* Utilidades: siempre visibles en desktop y mobile */}
           <div className="navbar-utils">
             <button className="btn-tema" onClick={toggle} aria-label="Cambiar tema">
-              {theme === 'dark' ? '☀️' : '🌙'}
+              <img
+                src={`${import.meta.env.BASE_URL}${theme === 'dark' ? 'iconos-modo/icono-sol.webp' : 'iconos-modo/icono-luna.webp'}`}
+                alt=""
+                className="tema-icono-img"
+              />
             </button>
             <button className="btn-carrito" onClick={() => navigate('/tienda/carrito')}>
               <img

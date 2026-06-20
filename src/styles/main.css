@@ -251,6 +251,13 @@ h5 {
   opacity: 1;
 }
 
+.btn-solido-oscuro {
+  background: var(--texto-principal);
+  color: var(--bg-card);
+  border: none;
+  justify-content: center;
+}
+
 /* --- Page header interior --- */
 .page-header {
   background: transparent;
@@ -1433,6 +1440,60 @@ h5 {
   text-decoration: none;
 }
 
+/* ── Franja de redes sociales ─────────────────────────── */
+.contacto-redes-franja {
+  margin-top: 24px;
+  padding: 22px 28px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-sutil);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.contacto-redes-franja-titulo {
+  font-family: var(--font-titulo);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--texto-principal);
+}
+
+.contacto-redes-horizontales {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.contacto-red-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: var(--bg-chip);
+  border: 1px solid var(--border-sutil);
+  color: var(--texto-principal);
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.contacto-red-icono:hover {
+  transform: translateY(-2px) scale(1.08);
+  background: var(--red-color);
+  border-color: var(--red-color);
+  color: #ffffff;
+}
+
+@media (max-width: 600px) {
+  .contacto-redes-franja {
+    justify-content: center;
+    text-align: center;
+  }
+}
+
 /* ── Formulario + ubicación ───────────────────────────── */
 .contacto-bottom-section {
   padding: 0 0 72px;
@@ -1574,30 +1635,11 @@ h5 {
   text-align: center;
 }
 
-.contacto-mapa-placeholder {
+.contacto-mapa {
+  width: 100%;
   aspect-ratio: 16/10;
   border-radius: 16px;
-  background: var(--bg-chip);
   border: 1px solid var(--border-media);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  text-align: center;
-  padding: 24px;
-  margin-bottom: 32px;
-}
-
-.contacto-mapa-icono {
-  font-size: 40px;
-}
-
-.contacto-mapa-placeholder p {
-  font-size: 14px;
-  color: var(--texto-secundario);
-  max-width: 280px;
-  margin: 0;
 }
 
 /* ── Responsive ───────────────────────────────────────── */
@@ -2124,11 +2166,13 @@ h5 {
 
 /* ── Card de curso ── */
 .inscr-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   border: 1px solid var(--border-sutil);
   border-radius: 18px;
   overflow: hidden;
   background: var(--bg-card);
-  cursor: pointer;
   transition:
     transform 0.22s ease,
     box-shadow 0.22s ease,
@@ -2153,7 +2197,6 @@ h5 {
 
 .inscr-card-emoji {
   font-size: 44px;
-  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.25));
   line-height: 1;
 }
 
@@ -2162,8 +2205,8 @@ h5 {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.8);
-  background: rgba(0, 0, 0, 0.2);
+  color: var(--texto-secundario);
+  background: var(--bg-chip);
   padding: 3px 10px;
   border-radius: 100px;
 }
@@ -2172,6 +2215,7 @@ h5 {
   padding: 20px 20px 24px;
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 12px;
 }
 
@@ -2215,23 +2259,456 @@ h5 {
   content: "" !important;
 }
 
-.inscr-card-btn {
+.inscr-card-acciones {
   margin-top: 4px;
-  width: 100%;
+  display: flex;
+  gap: 8px;
+}
+
+.inscr-card-btn {
+  flex: 1;
   padding: 10px 0;
-  border-radius: 10px;
-  border: none;
-  background: color-mix(in srgb, var(--btn-color) 12%, transparent);
-  color: var(--btn-color);
+  border-radius: 100px;
   font-size: 13px;
   font-weight: 700;
   font-family: var(--font-titulo);
   cursor: pointer;
-  transition: background 0.15s ease;
+  background: var(--bg-card);
+  color: var(--texto-principal);
+  border: 1.5px solid var(--border-media);
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 
 .inscr-card-btn:hover {
-  background: color-mix(in srgb, var(--btn-color) 22%, transparent);
+  transform: translateY(-1px);
+  background: var(--bg-hover);
+}
+
+.inscr-card-btn-solido {
+  background: var(--texto-principal);
+  color: var(--bg-card);
+  border: none;
+}
+
+.inscr-card-btn-solido:hover {
+  filter: brightness(1.15);
+  background: var(--texto-principal);
+}
+
+/* ── Detalle de curso (panel didáctico) ── */
+.inscr-detalle,
+.inscr-form {
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-card);
+  border: 1px solid var(--border-sutil);
+  border-radius: 20px;
+  overflow: hidden;
+  max-width: 560px;
+  max-height: 78vh;
+  margin: 0 auto;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+  animation: inscrApareceFormulario 0.25s ease;
+}
+
+@keyframes inscrApareceFormulario {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.inscr-detalle-header {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+  padding: 22px 24px 18px;
+  flex-shrink: 0;
+}
+
+.inscr-detalle-cerrar {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-media);
+  background: var(--bg-chip);
+  color: var(--texto-principal);
+  font-size: 13px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s ease;
+}
+
+.inscr-detalle-cerrar:hover {
+  background: var(--bg-hover);
+}
+
+.inscr-detalle-emoji {
+  font-size: 38px;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.inscr-detalle-header-texto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inscr-detalle-tagline {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+}
+
+.inscr-detalle-nombre {
+  font-family: var(--font-titulo);
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--texto-principal);
+  line-height: 1.15;
+}
+
+.inscr-detalle-body {
+  padding: 18px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  text-align: left;
+  overflow-y: auto;
+}
+
+.inscr-detalle-desc {
+  font-size: 14px;
+  color: var(--texto-secundario);
+  line-height: 1.8;
+  margin: 0;
+}
+
+.inscr-detalle-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.inscr-detalle-grupo-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+}
+
+.inscr-detalle-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.inscr-detalle-chip {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 13px;
+  border-radius: 100px;
+  background: var(--bg-chip);
+  border: 1px solid transparent;
+  color: var(--texto-principal);
+}
+
+.inscr-detalle-chip-outline {
+  background: transparent;
+  border: 1px solid var(--border-media);
+  color: var(--texto-secundario);
+}
+
+.inscr-detalle-horarios {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-sutil);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.inscr-detalle-horario-fila {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--border-sutil);
+}
+
+.inscr-detalle-horario-fila:last-child {
+  border-bottom: none;
+}
+
+.inscr-detalle-dia {
+  font-weight: 600;
+  color: var(--texto-principal);
+}
+
+.inscr-detalle-hora {
+  color: var(--texto-secundario);
+}
+
+.inscr-detalle-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.inscr-detalle-meta-item {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-sutil);
+  border-radius: 10px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.inscr-detalle-meta-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+}
+
+.inscr-detalle-meta-valor {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--texto-principal);
+}
+
+.inscr-detalle-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.inscr-detalle-acciones .btn {
+  flex: 1;
+  justify-content: center;
+}
+
+/* ── Formulario de inscripción ── */
+.inscr-form-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 24px;
+  border-bottom: 1px solid var(--border-sutil);
+  flex-shrink: 0;
+}
+
+.inscr-form-badge {
+  font-family: var(--font-titulo);
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--texto-principal);
+}
+
+.inscr-form-cerrar {
+  background: none;
+  border: none;
+  color: var(--texto-secundario);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.inscr-form-cerrar:hover {
+  color: var(--coral);
+}
+
+.inscr-form-body {
+  padding: 20px 24px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  text-align: left;
+  overflow-y: auto;
+}
+
+.inscr-stepper-progress {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.inscr-step-pill {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 5px 13px;
+  border-radius: 100px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-sutil);
+  color: var(--texto-secundario);
+}
+
+.inscr-step-pill.activo {
+  background: color-mix(in srgb, var(--coral) 14%, transparent);
+  border-color: color-mix(in srgb, var(--coral) 45%, transparent);
+  color: var(--coral);
+}
+
+.inscr-form-paso {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.inscr-form-paso h3 {
+  font-family: var(--font-titulo);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--texto-principal);
+  margin: 0;
+}
+
+.inscr-form-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.inscr-form-grupo label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--texto-secundario);
+}
+
+.inscr-form-grupo input,
+.inscr-form-grupo select {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-media);
+  background: var(--bg-input);
+  color: var(--texto-principal);
+  font-family: var(--font-cuerpo);
+  font-size: 14px;
+}
+
+.inscr-form-grupo input:focus,
+.inscr-form-grupo select:focus {
+  outline: none;
+  border-color: var(--coral);
+}
+
+.inscr-form-fila {
+  display: flex;
+  gap: 14px;
+}
+
+.inscr-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--texto-secundario);
+  cursor: pointer;
+}
+
+.inscr-checkbox-label input {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.inscr-form-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.inscr-form-acciones .btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Pantalla de éxito ── */
+.inscr-exito {
+  padding: 40px 28px 36px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.inscr-exito-icono {
+  font-size: 44px;
+  line-height: 1;
+}
+
+.inscr-exito h3 {
+  font-family: var(--font-titulo);
+  font-size: 22px;
+  color: var(--texto-principal);
+  margin: 0;
+}
+
+.inscr-exito p {
+  font-size: 14px;
+  color: var(--texto-secundario);
+  line-height: 1.7;
+  max-width: 420px;
+  margin: 0;
+}
+
+.inscr-exito-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* ── Responsive: detalle / formulario ── */
+@media (max-width: 640px) {
+  .inscr-detalle,
+  .inscr-form {
+    max-height: none;
+  }
+
+  .inscr-detalle-header {
+    padding: 24px 20px 20px;
+  }
+
+  .inscr-detalle-body,
+  .inscr-form-body {
+    padding: 20px 20px 28px;
+    overflow-y: visible;
+  }
+
+  .inscr-detalle-meta {
+    grid-template-columns: 1fr;
+  }
+
+  .inscr-form-header {
+    padding: 16px 20px;
+  }
+
+  .inscr-form-fila {
+    flex-direction: column;
+  }
+
+  .inscr-form-acciones,
+  .inscr-detalle-acciones {
+    flex-direction: column-reverse;
+  }
 }
 
 /* ── Pasos ── */

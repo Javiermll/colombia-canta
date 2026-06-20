@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { cursos } from "../data/cursos";
-import CursoModal from "../components/CursoModal/CursoModal";
 import Footer from "../components/Footer/Footer";
 import "../styles/main.css";
 import { BASE_URL, OG_IMAGE } from "../utils/seo";
@@ -9,6 +8,8 @@ import { BASE_URL, OG_IMAGE } from "../utils/seo";
 const PAGE_TITLE = "Inscripciones | Colombia Canta y Encanta";
 const PAGE_DESC =
   "Inscríbete en la escuela de música de Colombia Canta y Encanta. Cursos vocales, teatro musical, instrumento personalizado e iniciación musical en Medellín.";
+
+const WHATSAPP_NUMERO = "573015315119";
 
 const pasos = [
   {
@@ -18,8 +19,8 @@ const pasos = [
   },
   {
     num: "2",
-    titulo: "Escríbenos",
-    desc: "Contáctanos por WhatsApp o completa el formulario de inscripción con tus datos.",
+    titulo: "Completa el formulario",
+    desc: "Llena el formulario de inscripción aquí mismo, paso a paso, con los datos del estudiante.",
   },
   {
     num: "3",
@@ -56,9 +57,97 @@ const faqs = [
   },
 ];
 
+const FORM_DATA_INICIAL = {
+  cursoId: "",
+  cursoNombre: "",
+  estudianteNombre: "",
+  estudianteDocumento: "",
+  estudianteEdad: "",
+  acudienteNombre: "",
+  acudienteContacto: "",
+  acudienteParentesco: "",
+  horarioPreferencia: "",
+  barrio: "",
+  aceptaTerminos: false,
+};
+
+const WAIcon = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+  </svg>
+);
+
 export default function Inscripciones() {
   const [openFaq, setOpenFaq] = useState(null);
-  const [cursoSeleccionado, setCursoSeleccionado] = useState(null);
+
+  // ── Flujo de inscripción: ver detalles de un curso, o llenar el formulario ──
+  const [vistaDetalle, setVistaDetalle] = useState(null);
+  const [formInscripcion, setFormInscripcion] = useState(null);
+  const [pasoForm, setPasoForm] = useState(1);
+  const [enviado, setEnviado] = useState(false);
+  const [formData, setFormData] = useState(FORM_DATA_INICIAL);
+
+  const esMenor = Number(formData.estudianteEdad) < 18;
+
+  const scrollAComoInscribirse = () => {
+    document.getElementById("como-inscribirse")?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const manejarVerDetalles = (curso) => {
+    setFormInscripcion(null);
+    setVistaDetalle(curso);
+    scrollAComoInscribirse();
+  };
+
+  const iniciarInscripcion = (curso) => {
+    setVistaDetalle(null);
+    setFormInscripcion(curso);
+    setFormData((prev) => ({ ...prev, cursoId: curso.id, cursoNombre: curso.nombre }));
+    setPasoForm(1);
+    setEnviado(false);
+    scrollAComoInscribirse();
+  };
+
+  const cancelarFormulario = () => {
+    setFormInscripcion(null);
+    setFormData(FORM_DATA_INICIAL);
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
+  };
+
+  const siguientePaso = () => {
+    setPasoForm((prev) => (prev === 1 && !esMenor ? 3 : prev + 1));
+  };
+
+  const anteriorPaso = () => {
+    setPasoForm((prev) => (prev === 3 && !esMenor ? 1 : prev - 1));
+  };
+
+  const manejarEnvio = (e) => {
+    e.preventDefault();
+    setEnviado(true);
+  };
+
+  const urlWhatsAppConsulta = (cursoNombre) => {
+    const texto = `¡Hola! Estoy viendo los detalles del curso *${cursoNombre}* en la página web y me gustaría recibir más información sobre horarios y costos.`;
+    return `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(texto)}`;
+  };
+
+  const urlWhatsAppInscripcion = () => {
+    const lineas = [
+      `¡Hola! Me acabo de inscribir en el curso *${formData.cursoNombre}*.`,
+      `Estudiante: ${formData.estudianteNombre} (${formData.estudianteEdad} años)`,
+    ];
+    if (esMenor) {
+      lineas.push(`Acudiente: ${formData.acudienteNombre} · ${formData.acudienteParentesco}`);
+    }
+    lineas.push(`Horario preferido: ${formData.horarioPreferencia}`);
+    if (formData.barrio) lineas.push(`Barrio: ${formData.barrio}`);
+    return `https://wa.me/${WHATSAPP_NUMERO}?text=${encodeURIComponent(lineas.join("\n"))}`;
+  };
 
   return (
     <main>
@@ -91,7 +180,6 @@ export default function Inscripciones() {
       {/* ── Cursos ── */}
       <section id="cursos" className="inscr-seccion">
         <div className="container">
-          <span className="label-seccion label-rojo">Nuestros cursos</span>
           <h2 className="inscr-titulo">Elige tu camino</h2>
           <p className="inscr-subtitulo">
             Formación musical para todas las edades y niveles.
@@ -99,21 +187,12 @@ export default function Inscripciones() {
 
           <div className="inscr-cursos-grid">
             {cursos.map((c) => (
-              <div
-                key={c.id}
-                className="inscr-card"
-                onClick={() => setCursoSeleccionado(c)}
-              >
-                {/* Header coloreado */}
-                <div
-                  className="inscr-card-header"
-                  style={{ background: c.color }}
-                >
+              <div key={c.id} className="inscr-card">
+                <div className="inscr-card-header">
                   <span className="inscr-card-emoji">{c.emoji}</span>
                   <span className="inscr-card-tagline">{c.tagline}</span>
                 </div>
 
-                {/* Cuerpo */}
                 <div className="inscr-card-body">
                   <h3 className="inscr-card-nombre">{c.nombre}</h3>
                   <ul className="inscr-card-lista">
@@ -126,12 +205,22 @@ export default function Inscripciones() {
                       </li>
                     )}
                   </ul>
-                  <button
-                    className="inscr-card-btn"
-                    style={{ "--btn-color": c.color }}
-                  >
-                    Ver detalles →
-                  </button>
+                  <div className="inscr-card-acciones">
+                    <button
+                      type="button"
+                      className="inscr-card-btn"
+                      onClick={() => manejarVerDetalles(c)}
+                    >
+                      Ver detalles
+                    </button>
+                    <button
+                      type="button"
+                      className="inscr-card-btn inscr-card-btn-solido"
+                      onClick={() => iniciarInscripcion(c)}
+                    >
+                      Inscribirme
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
@@ -139,7 +228,7 @@ export default function Inscripciones() {
         </div>
       </section>
 
-      {/* ── Cómo inscribirse ── */}
+      {/* ── Cómo inscribirse — guía / detalle del curso / formulario ── */}
       <section
         id="como-inscribirse"
         className="inscr-seccion inscr-seccion-foto"
@@ -148,20 +237,323 @@ export default function Inscripciones() {
         }}
       >
         <div className="container">
-          <span className="label-seccion label-rojo">Proceso</span>
-          <h2 className="inscr-titulo">Cómo inscribirse</h2>
-          <p className="inscr-subtitulo inscr-subtitulo-claro">
-            Cuatro pasos simples para comenzar tu formación musical.
-          </p>
-          <div className="grid-4col inscr-pasos">
-            {pasos.map((p) => (
-              <div key={p.num} className="inscr-paso">
-                <div className="inscr-paso-num">{p.num}</div>
-                <h3 className="inscr-paso-titulo">{p.titulo}</h3>
-                <p className="inscr-paso-desc">{p.desc}</p>
+          {!vistaDetalle && !formInscripcion && (
+            <>
+              <span className="label-seccion label-rojo">Proceso</span>
+              <h2 className="inscr-titulo">Cómo inscribirse</h2>
+              <p className="inscr-subtitulo inscr-subtitulo-claro">
+                Cuatro pasos simples para comenzar tu formación musical.
+              </p>
+              <div className="grid-4col inscr-pasos">
+                {pasos.map((p) => (
+                  <div key={p.num} className="inscr-paso">
+                    <div className="inscr-paso-num">{p.num}</div>
+                    <h3 className="inscr-paso-titulo">{p.titulo}</h3>
+                    <p className="inscr-paso-desc">{p.desc}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
+
+          {vistaDetalle && !formInscripcion && (
+            <div className="inscr-detalle">
+              <div className="inscr-detalle-header">
+                <button
+                  className="inscr-detalle-cerrar"
+                  onClick={() => setVistaDetalle(null)}
+                  aria-label="Cerrar detalle"
+                >
+                  ✕
+                </button>
+                <span className="inscr-detalle-emoji">{vistaDetalle.emoji}</span>
+                <div className="inscr-detalle-header-texto">
+                  <span className="inscr-detalle-tagline">{vistaDetalle.tagline}</span>
+                  <h3 className="inscr-detalle-nombre">{vistaDetalle.nombre}</h3>
+                </div>
+              </div>
+
+              <div className="inscr-detalle-body">
+                <p className="inscr-detalle-desc">{vistaDetalle.descripcion}</p>
+
+                <div className="inscr-detalle-grupo">
+                  <span className="inscr-detalle-grupo-label">Modalidades</span>
+                  <div className="inscr-detalle-chips">
+                    {vistaDetalle.instrumentos.map((i) => (
+                      <span key={i} className="inscr-detalle-chip">
+                        {i}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="inscr-detalle-grupo">
+                  <span className="inscr-detalle-grupo-label">Niveles disponibles</span>
+                  <div className="inscr-detalle-chips">
+                    {vistaDetalle.niveles.map((n) => (
+                      <span key={n} className="inscr-detalle-chip inscr-detalle-chip-outline">
+                        {n}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="inscr-detalle-grupo">
+                  <span className="inscr-detalle-grupo-label">Horarios</span>
+                  <div className="inscr-detalle-horarios">
+                    {vistaDetalle.horarios.map((h, i) => (
+                      <div key={i} className="inscr-detalle-horario-fila">
+                        <span className="inscr-detalle-dia">{h.dia}</span>
+                        <span className="inscr-detalle-hora">{h.hora}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="inscr-detalle-meta">
+                  <div className="inscr-detalle-meta-item">
+                    <span className="inscr-detalle-meta-label">Duración</span>
+                    <span className="inscr-detalle-meta-valor">{vistaDetalle.duracion}</span>
+                  </div>
+                  <div className="inscr-detalle-meta-item">
+                    <span className="inscr-detalle-meta-label">Inversión</span>
+                    <span className="inscr-detalle-meta-valor">{vistaDetalle.precio}</span>
+                  </div>
+                </div>
+
+                <div className="inscr-detalle-acciones">
+                  <a
+                    href={urlWhatsAppConsulta(vistaDetalle.nombre)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="btn btn-outline-oscuro"
+                  >
+                    <WAIcon /> Preguntar por WhatsApp
+                  </a>
+                  <button
+                    type="button"
+                    className="btn btn-solido-oscuro"
+                    onClick={() => iniciarInscripcion(vistaDetalle)}
+                  >
+                    Inscribirme ahora →
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {formInscripcion && (
+            <div className="inscr-form">
+              <div className="inscr-form-header">
+                <span className="inscr-form-badge">{formInscripcion.nombre}</span>
+                {!enviado && (
+                  <button type="button" className="inscr-form-cerrar" onClick={cancelarFormulario}>
+                    ✕ Cancelar
+                  </button>
+                )}
+              </div>
+
+              {!enviado ? (
+                <form onSubmit={manejarEnvio} className="inscr-form-body">
+                  <div className="inscr-stepper-progress">
+                    <span className={`inscr-step-pill${pasoForm >= 1 ? " activo" : ""}`}>1. Datos</span>
+                    {esMenor && (
+                      <span className={`inscr-step-pill${pasoForm >= 2 ? " activo" : ""}`}>2. Acudiente</span>
+                    )}
+                    <span className={`inscr-step-pill${pasoForm >= 3 ? " activo" : ""}`}>
+                      {esMenor ? "3" : "2"}. Horario
+                    </span>
+                  </div>
+
+                  {pasoForm === 1 && (
+                    <div className="inscr-form-paso">
+                      <h3>Información del estudiante</h3>
+                      <div className="inscr-form-grupo">
+                        <label>Nombre completo *</label>
+                        <input
+                          type="text"
+                          name="estudianteNombre"
+                          required
+                          value={formData.estudianteNombre}
+                          onChange={handleChange}
+                          placeholder="Ej. Juan Pérez"
+                        />
+                      </div>
+                      <div className="inscr-form-fila">
+                        <div className="inscr-form-grupo">
+                          <label>Documento *</label>
+                          <input
+                            type="text"
+                            name="estudianteDocumento"
+                            required
+                            value={formData.estudianteDocumento}
+                            onChange={handleChange}
+                            placeholder="TI / CC"
+                          />
+                        </div>
+                        <div className="inscr-form-grupo">
+                          <label>Edad *</label>
+                          <input
+                            type="number"
+                            name="estudianteEdad"
+                            required
+                            min="1"
+                            max="120"
+                            value={formData.estudianteEdad}
+                            onChange={handleChange}
+                            placeholder="Años"
+                          />
+                        </div>
+                      </div>
+                      <div className="inscr-form-acciones">
+                        <button
+                          type="button"
+                          className="btn btn-solido-oscuro"
+                          disabled={!formData.estudianteNombre || !formData.estudianteDocumento || !formData.estudianteEdad}
+                          onClick={siguientePaso}
+                        >
+                          Continuar →
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {pasoForm === 2 && esMenor && (
+                    <div className="inscr-form-paso">
+                      <h3>Datos del acudiente</h3>
+                      <div className="inscr-form-grupo">
+                        <label>Nombre del acudiente *</label>
+                        <input
+                          type="text"
+                          name="acudienteNombre"
+                          required
+                          value={formData.acudienteNombre}
+                          onChange={handleChange}
+                        />
+                      </div>
+                      <div className="inscr-form-fila">
+                        <div className="inscr-form-grupo">
+                          <label>Teléfono *</label>
+                          <input
+                            type="tel"
+                            name="acudienteContacto"
+                            required
+                            value={formData.acudienteContacto}
+                            onChange={handleChange}
+                          />
+                        </div>
+                        <div className="inscr-form-grupo">
+                          <label>Parentesco *</label>
+                          <select
+                            name="acudienteParentesco"
+                            required
+                            value={formData.acudienteParentesco}
+                            onChange={handleChange}
+                          >
+                            <option value="">Selecciona...</option>
+                            <option value="Madre">Madre</option>
+                            <option value="Padre">Padre</option>
+                            <option value="Tutor legal">Tutor legal</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="inscr-form-acciones">
+                        <button type="button" className="btn btn-outline-oscuro" onClick={anteriorPaso}>
+                          ← Atrás
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-solido-oscuro"
+                          disabled={!formData.acudienteNombre || !formData.acudienteContacto || !formData.acudienteParentesco}
+                          onClick={siguientePaso}
+                        >
+                          Continuar →
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {pasoForm === 3 && (
+                    <div className="inscr-form-paso">
+                      <h3>Preferencias de horario</h3>
+                      <div className="inscr-form-fila">
+                        <div className="inscr-form-grupo">
+                          <label>Preferencia horaria *</label>
+                          <select
+                            name="horarioPreferencia"
+                            required
+                            value={formData.horarioPreferencia}
+                            onChange={handleChange}
+                          >
+                            <option value="">Selecciona una opción...</option>
+                            <option value="Mañana">Mañana</option>
+                            <option value="Tarde">Tarde</option>
+                            <option value="Sábados">Sábados</option>
+                          </select>
+                        </div>
+                        <div className="inscr-form-grupo">
+                          <label>Barrio</label>
+                          <input
+                            type="text"
+                            name="barrio"
+                            value={formData.barrio}
+                            onChange={handleChange}
+                          />
+                        </div>
+                      </div>
+
+                      <label className="inscr-checkbox-label">
+                        <input
+                          type="checkbox"
+                          name="aceptaTerminos"
+                          required
+                          checked={formData.aceptaTerminos}
+                          onChange={handleChange}
+                        />
+                        Acepto los términos y la política de datos personales.
+                      </label>
+
+                      <div className="inscr-form-acciones">
+                        <button type="button" className="btn btn-outline-oscuro" onClick={anteriorPaso}>
+                          ← Atrás
+                        </button>
+                        <button
+                          type="submit"
+                          className="btn btn-solido-oscuro"
+                          disabled={!formData.horarioPreferencia || !formData.aceptaTerminos}
+                        >
+                          Finalizar inscripción ✓
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </form>
+              ) : (
+                <div className="inscr-exito">
+                  <span className="inscr-exito-icono">🎉</span>
+                  <h3>¡Inscripción registrada!</h3>
+                  <p>
+                    Hola <strong>{formData.estudianteNombre}</strong>, dejamos registrado tu cupo para{" "}
+                    <strong>{formData.cursoNombre}</strong>. Para confirmarlo, escríbenos por WhatsApp con
+                    un solo clic.
+                  </p>
+                  <div className="inscr-exito-acciones">
+                    <a
+                      href={urlWhatsAppInscripcion()}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-solido-oscuro"
+                    >
+                      <WAIcon /> Confirmar por WhatsApp
+                    </a>
+                    <button type="button" className="btn btn-outline-oscuro" onClick={cancelarFormulario}>
+                      Volver a los cursos
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 
@@ -195,13 +587,6 @@ export default function Inscripciones() {
           </div>
         </div>
       </section>
-
-      {cursoSeleccionado && (
-        <CursoModal
-          curso={cursoSeleccionado}
-          onClose={() => setCursoSeleccionado(null)}
-        />
-      )}
 
       <Footer />
     </main>

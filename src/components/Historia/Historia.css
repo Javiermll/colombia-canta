@@ -97,13 +97,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
   flex-shrink: 0;
-  font-size: 17px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--amarillo), var(--coral));
-  box-shadow: 0 4px 12px rgba(245, 200, 0, 0.3);
+}
+
+.reconocimiento-icono-img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  display: block;
+}
+
+[data-theme="dark"] .reconocimiento-icono-img {
+  filter: brightness(0) invert(1);
 }
 
 .historia-reconocimiento span:last-child {
@@ -123,19 +128,14 @@
 .stat-item {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 2px;
   padding: 10px 12px;
   border-radius: 10px;
   background: var(--bg-chip);
   border: 1px solid var(--border-sutil);
-  text-align: left;
+  text-align: center;
   cursor: default;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-}
-
-.stat-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 18px var(--sombra-media);
 }
 
 .stat-numero {
@@ -143,6 +143,7 @@
   font-size: 19px;
   font-weight: 800;
   line-height: 1;
+  color: var(--coral);
 }
 
 .stat-label {
@@ -150,18 +151,6 @@
   color: var(--texto-secundario);
   line-height: 1.35;
 }
-
-.stat-item--coral .stat-numero { color: var(--coral); }
-.stat-item--coral:hover { border-color: var(--coral); }
-
-.stat-item--azul .stat-numero { color: var(--azul); }
-.stat-item--azul:hover { border-color: var(--azul); }
-
-.stat-item--amarillo .stat-numero { color: var(--amarillo-oscuro); }
-.stat-item--amarillo:hover { border-color: var(--amarillo); }
-
-.stat-item--rojo .stat-numero { color: var(--rojo); }
-.stat-item--rojo:hover { border-color: var(--rojo); }
 
 /* ── Carrusel ──────────────────────────── */
 

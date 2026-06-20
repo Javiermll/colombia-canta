@@ -16,7 +16,7 @@ const BASE = import.meta.env.BASE_URL;
 
 const stats = [
   { num: "+20", label: "años de historia" },
-  { num: "+200", label: "estudiantes formados" },
+  { num: "+1000", label: "estudiantes formados" },
   { num: "5", label: "ritmos colombianos" },
 ];
 
@@ -72,7 +72,6 @@ export default function Nosotros() {
       {/* ── Quiénes somos ─────────────────────────────────────── */}
       <section id="quienes-somos" className="nosotros-seccion">
         <div className="container">
-
           {/* Bloque 1 — intro */}
           <div className="nosotros-qs-grid">
             <div className="nosotros-qs-texto">
@@ -87,17 +86,17 @@ export default function Nosotros() {
                 Colombia.
               </p>
               <p className="nosotros-parrafo">
-                Colombia Canta y Encanta es una organización cultural dedicada
-                a la formación musical de niños y jóvenes en música
-                tradicional colombiana. Con sede en el Sector Estadio de
-                Medellín, llevamos más de dos décadas preservando y
-                difundiendo el patrimonio musical de nuestra nación.
+                Colombia Canta y Encanta es una organización cultural dedicada a
+                la formación musical de niños y jóvenes en música tradicional
+                colombiana. Con sede en el Sector Estadio de Medellín, llevamos
+                más de dos décadas preservando y difundiendo el patrimonio
+                musical de nuestra nación.
               </p>
               <p className="nosotros-parrafo">
                 Nuestra misión es conectar a las nuevas generaciones con las
                 raíces del bambuco, el pasillo, la guabina, la cumbia y el
-                currulao, llevando esa riqueza cultural a escenarios de todo
-                el mundo.
+                currulao, llevando esa riqueza cultural a escenarios de todo el
+                mundo.
               </p>
             </div>
 
@@ -123,10 +122,9 @@ export default function Nosotros() {
             <div className="nosotros-qs-texto">
               <p className="nosotros-destacado">
                 Somos un movimiento cultural que, desde Medellín, transforma
-                vidas a través de la música tradicional colombiana,
-                articulando formación artística, circulación y experiencias
-                que fortalecen la identidad y conectan a Colombia con el
-                mundo.
+                vidas a través de la música tradicional colombiana, articulando
+                formación artística, circulación y experiencias que fortalecen
+                la identidad y conectan a Colombia con el mundo.
               </p>
               <p className="nosotros-parrafo">
                 En el año 2003, nuestra fundadora Silvia Zapata, luego de una
@@ -134,8 +132,8 @@ export default function Nosotros() {
                 representando a nuestro país, decidió crear Colombia Canta y
                 Encanta: un espacio donde las familias encuentran, a través de
                 las artes escénicas, experiencias de calidad que potencian su
-                crecimiento personal, su conexión con las raíces y el trabajo
-                en equipo.
+                crecimiento personal, su conexión con las raíces y el trabajo en
+                equipo.
               </p>
               <p className="nosotros-parrafo nosotros-parrafo-fuerte">
                 Hoy somos un Centro Cultural con:
@@ -167,10 +165,9 @@ export default function Nosotros() {
                 Eslovenia, Italia, Roma, México y Estados Unidos.
               </p>
               <p className="nosotros-destacado">
-                Pero nuestro mejor premio es el crecimiento personal que
-                niños, jóvenes y familias experimentan con nuestra formación
-                artística, en un ambiente cultural con contenidos de alto
-                impacto.
+                Pero nuestro mejor premio es el crecimiento personal que niños,
+                jóvenes y familias experimentan con nuestra formación artística,
+                en un ambiente cultural con contenidos de alto impacto.
               </p>
             </div>
 
@@ -221,9 +218,9 @@ export default function Nosotros() {
               <p className="nosotros-quote-puente-texto">
                 Yo quería mantener vivo un legado que recibí y que me sirvió
                 para todas las áreas de mi vida. Quería sembrar esto en las
-                nuevas generaciones, para que pudieran conectar con sus
-                talentos al tiempo que abrazan el amor por Colombia y por las
-                historias que hay detrás de las músicas folclóricas.
+                nuevas generaciones, para que pudieran conectar con sus talentos
+                al tiempo que abrazan el amor por Colombia y por las historias
+                que hay detrás de las músicas folclóricas.
               </p>
               <p className="nosotros-quote-puente-autor">
                 Silvia Zapata Durango · Fundadora
@@ -248,11 +245,11 @@ export default function Nosotros() {
               </p>
 
               <p className="nosotros-parrafo">
-                Su trayectoria ha sido respaldada por el Ministerio de
-                Cultura, el Congreso de la República, la Gobernación de
-                Antioquia y el Concejo de Medellín, instituciones que han
-                reconocido el impacto social y cultural de este proyecto en
-                la formación de cientos de niños, jóvenes y familias.
+                Su trayectoria ha sido respaldada por el Ministerio de Cultura,
+                el Congreso de la República, la Gobernación de Antioquia y el
+                Concejo de Medellín, instituciones que han reconocido el impacto
+                social y cultural de este proyecto en la formación de cientos de
+                niños, jóvenes y familias.
               </p>
 
               <div className="nosotros-bienal">

@@ -133,6 +133,87 @@ const FOLDERS = [
       'Col_enam10.jpg': 'tripadvisor-6.webp',
     },
   },
+  {
+    input: 'public/hero-slides-raw',
+    output: 'public/hero-slides',
+    maxWidth: 1800,
+    quality: 82,
+    fit: 'inside',
+    rename: {
+      'Home 1.jpeg': 'bienvenida.webp',
+      'Home 2.png':  'quienes-somos.webp',
+      'Home 3.png':  'eventos.webp',
+      'Home 4.png':  'escuela.webp',
+      'Home 5.png':  'tienda.webp',
+      'Home 6.png':  'noticias.webp',
+      'Home 7.png':  'contacto.webp',
+    },
+  },
+  {
+    input: 'public/iconos-modo-raw',
+    output: 'public/iconos-modo',
+    maxWidth: 64,
+    quality: 90,
+    fit: 'inside',
+    rename: {
+      'Sol_1.png': 'icono-sol.webp',
+    },
+  },
+  {
+    input: 'public/nuestra-historia-raw',
+    output: 'public/nuestra-historia',
+    maxWidth: 80,
+    quality: 90,
+    fit: 'inside',
+    rename: {
+      'Trofeo.png': 'icono-trofeo.webp',
+    },
+  },
+  {
+    input: 'public/salas-raw',
+    output: 'public/salas_de_colombia',
+    maxWidth: 1000,
+    quality: 82,
+    fit: 'inside',
+    rename: {
+      'IMG_5717.JPG': 'salas-colombia-canta.webp',
+      'IMG_5372.JPG': 'salas-colombia-canta-6.webp',
+      'IMG_5400.JPG': 'salas-colombia-canta-7.webp',
+    },
+  },
+  {
+    input: 'public/colombia-enamoras-raw',
+    output: 'public/colombia-enamoras',
+    maxWidth: 1000,
+    quality: 82,
+    fit: 'inside',
+    rename: {
+      'IMG_5857.jpg': 'colombia-me-enamoras-principal.webp',
+      'IMG_5841.jpg': 'colombia-me-enamoras-6.webp',
+    },
+  },
+  {
+    input: 'public/iconos-noticias-raw2',
+    output: 'public/iconos-noticias',
+    maxWidth: 200,
+    quality: 88,
+    fit: 'inside',
+    rename: {
+      'Gemini_Generated_Image_uwlhq0uwlhq0uwlh.png': 'noticia-feria-flores.webp',
+      'Gemini_Generated_Image_3e76d33e76d33e76.png': 'noticia-alianza-comfama.webp',
+    },
+  },
+  {
+    input: 'public/noticias-banners-raw2',
+    output: 'public/noticias-banners',
+    maxWidth: 900,
+    quality: 85,
+    fit: 'inside',
+    rename: {
+      'Gemini_Generated_Image_8osnbs8osnbs8osn.png': 'noticia-banner-feria-flores.webp',
+      'Gemini_Generated_Image_4vf0134vf0134vf0.png': 'noticia-banner-comfama.webp',
+    },
+  },
 ];
 const MAX_WIDTH = 1400;
 const WEBP_QUALITY = 82;
@@ -144,7 +225,7 @@ for (const folder of FOLDERS) {
   let files;
   try {
     files = (await readdir(input)).filter(f =>
-      ['.jpg', '.jpeg', '.png', '.webp'].includes(extname(f).toLowerCase())
+      ['.jpg', '.jpeg', '.png', '.webp', '.cr2'].includes(extname(f).toLowerCase())
     );
   } catch {
     console.log(`\n⚠ ${input} no encontrada, saltando.`);

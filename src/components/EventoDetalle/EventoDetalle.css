@@ -5,11 +5,10 @@
 /* BLOQUE 1 — HERO */
 .evento-hero {
   position: relative;
-  min-height: 70vh;
+  min-height: 440px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  background-attachment: fixed;
 }
 
 .evento-hero-overlay {
@@ -22,11 +21,17 @@
 .evento-hero-content {
   position: relative;
   z-index: 2;
-  padding: 0 48px 56px;
+  /* Mismo ancho/centrado/padding horizontal que .evento-cuerpo, para que
+     el contenido del hero quede alineado con "Sobre el evento" debajo.
+     padding-top suficiente para que "Volver a eventos" siempre quede
+     por debajo del navbar flotante, sin importar cuánto contenido tenga
+     la slide (título de 1 o 2 líneas, con o sin subtítulo). */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 88px 32px 56px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  max-width: 760px;
 }
 
 .evento-volver {
@@ -42,23 +47,6 @@
 
 .evento-volver:hover {
   color: #fff;
-}
-
-.evento-hero-chip {
-  display: inline-flex;
-  align-items: center;
-  width: fit-content;
-}
-
-.chip-tipo-hero {
-  background: var(--amarillo);
-  color: var(--texto-principal);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 5px 14px;
-  border-radius: 100px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .evento-hero h1 {
@@ -228,56 +216,6 @@
   display: block;
 }
 
-/* Programación (grid de fechas) */
-.evento-prog-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 12px;
-}
-
-.evento-prog-card {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 14px;
-  border-radius: 12px;
-  background: var(--bg-chip);
-  border: 1px solid var(--border-sutil);
-}
-
-.evento-prog-fecha {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-width: 60px;
-  padding: 8px 10px;
-  border-radius: 10px;
-  background: var(--coral);
-  flex-shrink: 0;
-  gap: 2px;
-}
-
-.evento-prog-fecha b {
-  font-size: 11px;
-  font-weight: 800;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.evento-prog-fecha span {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.8);
-}
-
-.evento-prog-nombre {
-  font-size: 13px;
-  color: var(--texto-principal);
-  line-height: 1.4;
-  margin: 0;
-}
-
 /* Fases (pasos de la experiencia) */
 .evento-fases {
   display: flex;
@@ -369,23 +307,11 @@
   gap: 6px;
 }
 
-.lugar-mapa-placeholder {
-  background: var(--crema);
+.lugar-mapa {
+  width: 100%;
+  height: 240px;
+  border: 1px solid var(--border-sutil);
   border-radius: 12px;
-  height: 160px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  font-size: 32px;
-  color: var(--texto-secundario);
-  border: 1px dashed var(--border-media);
-}
-
-.lugar-mapa-placeholder span {
-  font-size: 12px;
-  color: var(--texto-secundario);
 }
 
 /* COMPRA CARD */
@@ -407,10 +333,6 @@
 
 .compra-card-header {
   padding: 20px 24px 0;
-}
-
-.compra-card-chip {
-  margin-bottom: 10px;
 }
 
 .compra-card-titulo {
@@ -604,7 +526,7 @@
 /* Responsive */
 @media (max-width: 768px) {
   .evento-hero-content {
-    padding: 0 24px 100px;
+    padding: 80px 20px 100px;
   }
 
   .sticky-cta-bar {
@@ -632,10 +554,6 @@
 
   .evento-galeria-grid {
     grid-template-columns: repeat(2, 1fr);
-  }
-
-  .evento-prog-grid {
-    grid-template-columns: 1fr;
   }
 
   .otros-eventos-grid {

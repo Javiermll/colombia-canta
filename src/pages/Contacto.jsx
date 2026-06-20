@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Helmet } from "react-helmet-async";
 import Footer from "../components/Footer/Footer";
+import { redesSociales } from "../data/redesSociales";
 import { BASE_URL, OG_IMAGE } from "../utils/seo";
 
 const PAGE_TITLE = "Contacto | Colombia Canta y Encanta";
@@ -101,11 +102,8 @@ export default function Contacto() {
         <div className="container">
           <div className="contacto-info-header">
             <div className="contacto-info-header-texto">
-              <span className="label-seccion label-rojo">
-                Diferentes maneras de encontrarnos
-              </span>
               <h2 className="contacto-info-titulo">
-                Información de contacto
+                Diferentes maneras de encontrarnos
               </h2>
               <p className="contacto-info-desc">
                 Elige el canal que más te acomode: te respondemos por
@@ -130,6 +128,25 @@ export default function Contacto() {
                 <span className="contacto-info-detalle">{item.detalle}</span>
               </div>
             ))}
+          </div>
+
+          <div className="contacto-redes-franja">
+            <span className="contacto-redes-franja-titulo">Visita nuestras redes</span>
+            <div className="contacto-redes-horizontales">
+              {redesSociales.map((red) => (
+                <a
+                  key={red.label}
+                  href={red.href}
+                  className="contacto-red-icono"
+                  style={{ "--red-color": red.color }}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={red.label}
+                >
+                  {red.svg}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -238,10 +255,13 @@ export default function Contacto() {
                 colombiano.
               </p>
 
-              <div className="contacto-mapa-placeholder">
-                <span className="contacto-mapa-icono">📍</span>
-                <p>Calle 49 76a 65, Sector Estadio, Medellín, Colombia</p>
-              </div>
+              <iframe
+                className="contacto-mapa"
+                title="Mapa de nuestra sede"
+                src={`https://www.google.com/maps?q=${encodeURIComponent("Calle 49 76a 65, Sector Estadio, Medellín, Colombia")}&output=embed`}
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
             </div>
           </div>
         </div>

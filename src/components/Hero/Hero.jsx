@@ -1,110 +1,130 @@
-﻿import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import './Hero.css';
+﻿import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import "./Hero.css";
 
 const base = import.meta.env.BASE_URL;
 
 const slides = [
   {
-    id: 'bienvenida',
-    label: 'Inicio',
-    antetitulo: '“La música es el latido de Colombia”',
+    id: "bienvenida",
+    label: "Inicio",
     titulo: (
-      <>Donde Colombia<br />canta, baila y <span className="hero-titulo-acento">encanta</span></>
+      <>
+        Donde Colombia canta, baila y{" "}
+        <span className="hero-titulo-acento">encanta</span>
+      </>
     ),
     descripcion:
-      'Somos una comunidad artística que preserva y proyecta el folclor colombiano a través de la formación, los escenarios y experiencias que conectan generaciones alrededor del mundo.',
+      "Somos una comunidad artística que preserva y proyecta el folclor colombiano a través de la formación, los escenarios y experiencias que conectan generaciones alrededor del mundo.",
     ctas: [
-      { label: 'Contáctanos',   to: '/contacto', primario: true  },
-      { label: 'Descubrir más', to: '/nosotros',  primario: false },
+      { label: "Contáctanos", to: "/contacto", primario: true },
+      { label: "Descubrir más", to: "/nosotros", primario: false },
     ],
-    imagen: 'hero-slides/bienvenida.webp',
+    imagen: "hero-slides/bienvenida.webp",
   },
   {
-    id: 'quienes-somos',
-    label: 'Quiénes somos',
-    antetitulo: '“Raíces profundas, vuelo alto”',
+    id: "quienes-somos",
+    label: "Escuela",
     titulo: (
-      <>Una fundación nacida<br />del <span className="hero-titulo-acento">corazón</span> andino</>
+      <>
+        Tu camino artístico <span className="hero-titulo-acento">comienza</span>{" "}
+        aquí
+      </>
     ),
     descripcion:
-      'Desde Medellín llevamos la música y danza tradicional colombiana al mundo. Más de una década uniendo comunidades a través del arte y la cultura.',
+      "No importa si estás empezando o quieres fortalecer tu talento. Aquí encontrarás un espacio para aprender, crecer y disfrutar la música colombiana.",
     ctas: [
-      { label: 'Nuestra historia',  to: '/nosotros', primario: true  },
-      { label: 'Conocer el elenco', to: '/elenco',   primario: false },
+      { label: "Inscríbete ahora", to: "/inscripciones", primario: true },
+      { label: "Ver programas", to: "/inscripciones", primario: false },
     ],
-    imagen: 'hero-slides/quienes-somos.webp',
+    imagen: "hero-slides/quienes-somos.webp",
   },
   {
-    id: 'eventos',
-    label: 'Eventos',
-    antetitulo: '“El escenario es nuestro hogar”',
+    id: "eventos",
+    label: "Nuestra historia",
     titulo: (
-      <>Vive la magia de<br />nuestros <span className="hero-titulo-acento">eventos</span></>
+      <>
+        La historia detrás de un{" "}
+        <span className="hero-titulo-acento">legado</span> que sigue creciendo
+      </>
     ),
     descripcion:
-      'Festivales, galas y presentaciones que llevan la esencia de Colombia a los escenarios más importantes del país y el mundo.',
+      "Silvia Zapata transformó su pasión por el folclor en una experiencia que conecta talento, tradición e identidad.",
     ctas: [
-      { label: 'Ver eventos', to: '/eventos', primario: true },
+      { label: "Conoce nuestra historia", to: "/nosotros", primario: true },
     ],
-    imagen: 'hero-slides/eventos.webp',
+    imagen: "hero-slides/eventos.webp",
   },
   {
-    id: 'escuela',
-    label: 'Escuela',
-    antetitulo: '“El ritmo vive en cada uno de nosotros”',
+    id: "escuela",
+    label: "Eventos",
     titulo: (
-      <>Aprende, crece y<br /><span className="hero-titulo-acento">transforma</span> tu vida</>
+      <>
+        Vive la magia de nuestros{" "}
+        <span className="hero-titulo-acento">eventos</span>
+      </>
     ),
     descripcion:
-      'Nuestra escuela de música y danza abre las puertas a todas las edades. Guitarra, bandola, tiple, danza folclórica y mucho más.',
+      "Festivales, galas y presentaciones que llevan la esencia de Colombia a los escenarios más importantes del país y el mundo.",
     ctas: [
-      { label: 'Inscribirse ahora', to: '/inscripciones', primario: true  },
-      { label: 'Ver programas',     to: '/inscripciones', primario: false },
+      { label: "Explorar eventos", to: "/eventos", primario: true },
+      { label: "Conocer elenco", to: "/elenco", primario: false },
     ],
-    imagen: 'hero-slides/escuela.webp',
+    imagen: "hero-slides/escuela.webp",
   },
   {
-    id: 'tienda',
-    label: 'Tienda',
-    antetitulo: '“Lleva un pedazo de Colombia contigo”',
+    id: "tienda",
+    label: "Tienda",
     titulo: (
-      <>Nuestra cultura,<br />al alcance de tus <span className="hero-titulo-acento">manos</span></>
+      <>
+        Tejiendo <br /> <span className="hero-titulo-acento">música</span>
+      </>
     ),
     descripcion:
-      'Discos, artesanías, indumentaria típica y mucho más. Cada producto lleva el alma de Colombia Canta y Encanta — apoya el arte y la cultura con cada compra.',
-    ctas: [
-      { label: 'Visitar tienda', to: '/tienda', primario: true },
-    ],
-    imagen: 'hero-slides/tienda.webp',
+      "Estamos creando un espacio donde el arte, la tradición y la identidad colombiana se transforman en piezas únicas.",
+    ctas: [{ label: "Descubre próximamente", to: "/tienda", primario: true }],
+    imagen: "hero-slides/tienda.webp",
   },
   {
-    id: 'noticias',
-    label: 'Noticias',
-    antetitulo: '“Cada logro, una historia que contar”',
+    id: "noticias",
+    label: "Festival",
     titulo: (
-      <>Mantente al día con<br />nuestra <span className="hero-titulo-acento">historia viva</span></>
+      <>
+        Una celebración que nos{" "}
+        <span className="hero-titulo-acento">conecta</span>
+      </>
     ),
     descripcion:
-      'Reconocimientos internacionales, giras, nuevos proyectos y la vida detrás del telón. Sigue de cerca todo lo que vibra en Colombia Canta y Encanta.',
+      "El Festival Nacional Colombia Canta y Encanta reúne generaciones alrededor de la música colombiana, creando escenarios para compartir, aprender y celebrar nuestro talento.",
     ctas: [
-      { label: 'Ver noticias', to: '/noticias', primario: true },
+      {
+        label: "Ver Festival",
+        to: "/eventos/festival-nacional",
+        primario: true,
+      },
+      { label: "Escríbenos", to: "/contacto", primario: false },
     ],
-    imagen: 'hero-slides/noticias.webp',
+    imagen: "hero-slides/noticias.webp",
   },
   {
-    id: 'contacto',
-    label: 'Contacto',
-    antetitulo: '“Cada gran historia comienza con un hola”',
+    id: "contacto",
+    label: "Medellín",
     titulo: (
-      <>Hagamos algo<br /><span className="hero-titulo-acento">grande</span> juntos</>
+      <>
+        Una experiencia cultural imperdible en tu visita a{" "}
+        <span className="hero-titulo-acento">Medellín</span>
+      </>
     ),
     descripcion:
-      'Alianzas, patrocinios, presentaciones privadas o simplemente para conocernos — estamos listos para colaborar contigo.',
+      "Recorre espacios llenos de encanto y vive un show cultural que ha llevado nuestra esencia a escenarios internacionales.",
     ctas: [
-      { label: 'Escríbenos', to: '/contacto', primario: true },
+      {
+        label: "Explora la experiencia",
+        to: "/eventos/colombia-me-enamoras",
+        primario: true,
+      },
     ],
-    imagen: 'hero-slides/contacto.webp',
+    imagen: "hero-slides/contacto.webp",
   },
 ];
 
@@ -116,7 +136,7 @@ export default function Hero() {
   const prev = () => setActive((a) => (a - 1 + slides.length) % slides.length);
 
   useEffect(() => {
-    const id = setInterval(next, 4000);
+    const id = setInterval(next, 8000);
     return () => clearInterval(id);
   }, [active]);
 
@@ -124,19 +144,18 @@ export default function Hero() {
 
   return (
     <section className="hero-carousel">
-
       {/* ── Imagen — derecha, difuminada hacia el fondo (crossfade) ── */}
       <div className="hero-imagen-area" aria-hidden="true">
         {slides.map((slide, i) => (
           <div
             key={slide.id}
-            className={`hero-bg${active === i ? ' hero-bg--activo' : ''}`}
+            className={`hero-bg${active === i ? " hero-bg--activo" : ""}`}
           >
             <img
               src={`${base}${slide.imagen}`}
               alt=""
               className={`hero-bg-img hero-img--${slide.id}`}
-              loading={i === 0 ? 'eager' : 'lazy'}
+              loading={i === 0 ? "eager" : "lazy"}
               decoding="async"
             />
           </div>
@@ -145,7 +164,6 @@ export default function Hero() {
 
       {/* ── Contenido izquierdo — key=active fuerza remount y reactiva animaciones ── */}
       <div key={active} className="hero-slide-contenido">
-        <p className="hero-antetitulo">{activeSlide.antetitulo}</p>
         <h1 className="hero-titulo">{activeSlide.titulo}</h1>
         <p className="hero-desc">{activeSlide.descripcion}</p>
         <div className="hero-ctas">
@@ -153,7 +171,9 @@ export default function Hero() {
             <Link
               key={cta.label}
               to={cta.to}
-              className={cta.primario ? 'hero-btn-primario' : 'hero-btn-secundario'}
+              className={
+                cta.primario ? "hero-btn-primario" : "hero-btn-secundario"
+              }
             >
               {cta.label}
             </Link>
@@ -163,16 +183,31 @@ export default function Hero() {
 
       {/* ── Dots + flechas — navegación del carrusel ── */}
       <div className="hero-dots-nav">
-        <button className="hero-nav-arrow" onClick={prev} aria-label="Slide anterior">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <button
+          className="hero-nav-arrow"
+          onClick={prev}
+          aria-label="Slide anterior"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <polyline points="18 15 12 9 6 15" />
           </svg>
         </button>
-        <div className="hero-dots" role="tablist" aria-label="Secciones del carrusel">
+        <div
+          className="hero-dots"
+          role="tablist"
+          aria-label="Secciones del carrusel"
+        >
           {slides.map((slide, i) => (
             <button
               key={slide.id}
-              className={`hero-dot${active === i ? ' hero-dot--activo' : ''}`}
+              className={`hero-dot${active === i ? " hero-dot--activo" : ""}`}
               onClick={() => goTo(i)}
               role="tab"
               aria-selected={active === i}
@@ -180,8 +215,19 @@ export default function Hero() {
             />
           ))}
         </div>
-        <button className="hero-nav-arrow" onClick={next} aria-label="Slide siguiente">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <button
+          className="hero-nav-arrow"
+          onClick={next}
+          aria-label="Slide siguiente"
+        >
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
             <polyline points="6 9 12 15 18 9" />
           </svg>
         </button>
@@ -191,12 +237,15 @@ export default function Hero() {
       <div className="hero-anuncio-evento">
         <span className="hero-anuncio-label">Próximo gran evento</span>
         <span className="hero-anuncio-diamante">◆</span>
-        <span className="hero-anuncio-nombre">Festival Colombia Canta y Encanta</span>
+        <span className="hero-anuncio-nombre">
+          Festival Colombia Canta y Encanta
+        </span>
         <span className="hero-anuncio-sep">·</span>
         <span className="hero-anuncio-fecha">23-26 Jul 2026 · Medellín</span>
-        <Link to="/eventos/festival-nacional" className="hero-anuncio-cta">Inscríbete →</Link>
+        <Link to="/eventos/festival-nacional" className="hero-anuncio-cta">
+          Inscríbete →
+        </Link>
       </div>
-
     </section>
   );
 }

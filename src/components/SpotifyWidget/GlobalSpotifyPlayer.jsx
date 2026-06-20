@@ -6,11 +6,14 @@ import { loadSpotifyIframeApi } from '../../utils/spotifyIframeApi';
 
 const ARTIST_URI = 'spotify:artist:2vzvNutd40f4qwqEulaWoO';
 const TRANSITION_MS = 180;
+const CLOSED_KEY = 'spotify-player-closed';
 
 export default function GlobalSpotifyPlayer() {
   const { dockNode, hasPlayed, setHasPlayed } = useSpotifyPlayer();
   const [docked, setDocked] = useState(false);
-  const [closed, setClosed] = useState(false);
+  // Persistido en localStorage: una vez cerrado, no debe reaparecer
+  // flotando al navegar a otra página ni en una pestaña nueva.
+  const [closed, setClosed] = useState(() => localStorage.getItem(CLOSED_KEY) === '1');
   const containerRef = useRef(null);
   const embedRef = useRef(null);
   const controllerRef = useRef(null);
@@ -57,23 +60,26 @@ export default function GlobalSpotifyPlayer() {
       if (dockNode) {
         setDocked(true);
         setClosed(false);
+        localStorage.removeItem(CLOSED_KEY);
+        // Coordenadas relativas al documento (no al viewport): con
+        // position:absolute esto alcanza para que el navegador lo
+        // desplace de forma nativa al hacer scroll, sin recalcular
+        // en cada evento (eso era lo que causaba el jitter).
         const update = () => {
           const rect = dockNode.getBoundingClientRect();
-          container.style.top = `${rect.top}px`;
-          container.style.left = `${rect.left}px`;
+          container.style.top = `${rect.top + window.scrollY}px`;
+          container.style.left = `${rect.left + window.scrollX}px`;
           container.style.width = `${rect.width}px`;
           container.style.height = `${rect.height}px`;
         };
         update();
         container.style.opacity = '1';
 
-        window.addEventListener('scroll', update, { passive: true });
         window.addEventListener('resize', update);
         const ro = new ResizeObserver(update);
         ro.observe(dockNode);
 
         container._cleanupDock = () => {
-          window.removeEventListener('scroll', update);
           window.removeEventListener('resize', update);
           ro.disconnect();
         };
@@ -112,6 +118,7 @@ export default function GlobalSpotifyPlayer() {
         onClick={() => {
           controllerRef.current?.pause();
           setClosed(true);
+          localStorage.setItem(CLOSED_KEY, '1');
         }}
         aria-label="Cerrar reproductor de Spotify"
       >

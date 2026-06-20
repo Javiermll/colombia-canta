@@ -88,9 +88,10 @@ export default function EventosFijosHome({ variant = 'hero' }) {
             <Link key={ev.id} to={`/eventos/${ev.slug}`} className={`efh-card efh-card--zigzag${ev.invertido ? ' efh-card--zigzag-reverse' : ''}`}>
               <div className="efh-zigzag-body">
                 <span className="efh-zigzag-num">{String(idx + 1).padStart(2, '0')}</span>
-                <span className="efh-zigzag-eyebrow" style={{ background: `${ev.color}1a`, color: ev.color }}>
+                <span className="efh-zigzag-eyebrow">
                   {ev.tipoIcono} {ev.tipo}
                 </span>
+                <span className="efh-zigzag-accent" style={{ background: ev.color }} />
                 <h3 className="efh-zigzag-titulo">{ev.titulo}</h3>
                 <p className="efh-zigzag-desc">{ev.descripcionCorta}</p>
 
@@ -170,13 +171,14 @@ export default function EventosFijosHome({ variant = 'hero' }) {
           <div className="efh-overlay" />
 
           <div className="efh-top">
-            <span className="efh-chip" style={{ background: `${ev.color}dd` }}>
+            <span className="efh-chip">
               {ev.tipo}
             </span>
             {ev.tripadvisorLink && <TripAdvisorBadge link={ev.tripadvisorLink} />}
           </div>
 
           <div className="efh-bottom">
+            <span className="efh-accent" style={{ background: ev.color }} />
             <h3 className="efh-titulo">{ev.titulo}</h3>
             <p className="efh-desc">{ev.descripcionCorta}</p>
             <div className="efh-pills">
