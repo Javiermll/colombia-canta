@@ -18,84 +18,35 @@ const coleccionesSuperiores = [
 
 const categoriasFiltro = ['TODAS', 'CAMISETAS', 'TANQUES', 'GORRAS', 'TOTES BAGS', 'ACCESORIOS', 'TERMOS', 'LLAVEROS', 'STICKERS'];
 
-// Conservamos las propiedades completas (tallas, colores, descripción) para alimentar el modal de compra
 const productosData = [
   { 
-    id: 1, nombre: 'Camiseta Clásica Orgullo Colombiano', categoria: 'CAMISETAS', precio: '$79.900', emoji: '👕', imgBg: '#f4f4f4', stock: true, tag: 'Popular',
+    id: 1, nombre: 'CAMISETA CLÁSICA CARTA Y ENCANTA', categoria: 'CAMISETAS', precio: '$89.000', emoji: '👕', imgBg: '#f4f4f4', stock: true, tag: 'NUEVO',
     descripcion: 'Camiseta de algodón 100% con el diseño oficial de Colombia Canta y Encanta. Tela suave y transpirable, perfecta para el día a día.',
     tallas: ['XS', 'S', 'M', 'L', 'XL'],
     colores: [{ nombre: 'Azul', hex: '#1A56DB' }, { nombre: 'Blanco', hex: '#F0F0F0' }, { nombre: 'Negro', hex: '#1a1a1a' }]
   },
   { 
-    id: 2, nombre: 'Camiseta Clásica Corazón Colombiano', categoria: 'CAMISETAS', precio: '$79.900', emoji: '👕', imgBg: '#1a1a1a', stock: true, tag: 'Artesanal',
-    descripcion: 'Diseño artístico inspirado en el ritmo del bambuco, símbolo del folclor andino colombiano. Algodón premium de alta calidad.',
-    tallas: ['XS', 'S', 'M', 'L', 'XL'],
-    colores: [{ nombre: 'Rojo', hex: '#E8341A' }, { nombre: 'Blanco', hex: '#F0F0F0' }]
-  },
-  { 
-    id: 3, nombre: 'Tank Top Corazón Lateral', categoria: 'TANQUES', precio: '$69.900', emoji: '🎽', imgBg: '#f4f4f4', stock: true, tag: null,
-    descripcion: 'Prenda fresca y cómoda con corte atlético y el detalle bordado del corazón de la marca.',
-    tallas: ['S', 'M', 'L', 'XL'],
-    colores: [{ nombre: 'Blanco', hex: '#F0F0F0' }]
-  },
-  { 
-    id: 4, nombre: 'Tank Top Colombia Vertical', categoria: 'TANQUES', precio: '$69.900', emoji: '🎽', imgBg: '#1a1a1a', stock: true, tag: null,
-    descripcion: 'Diseño minimalista con tipografía vertical estilizada. Ideal para climas cálidos y ensayos.',
-    tallas: ['S', 'M', 'L', 'XL'],
-    colores: [{ nombre: 'Negro', hex: '#1a1a1a' }]
-  },
-  { 
-    id: 5, nombre: 'Gorra Clásica Logo Multicolor', categoria: 'GORRAS', precio: '$59.900', emoji: '🧢', imgBg: '#1a1a1a', stock: true, tag: 'Nuevo',
+    id: 5, nombre: 'GORRA CLÁSICA CARTA Y ENCANTA', categoria: 'GORRAS', precio: '$69.900', emoji: '🧢', imgBg: '#1a1a1a', stock: true, tag: 'NUEVO',
     descripcion: 'Gorra de visera curva con bordado multicolor de alta definición. Ajuste regulable posterior.',
     tallas: ['Única'],
     colores: [{ nombre: 'Negro', hex: '#1a1a1a' }]
   },
   { 
-    id: 6, nombre: 'Gorra Corazón Bordado', categoria: 'GORRAS', precio: '$59.900', emoji: '🧢', imgBg: '#1a1a1a', stock: true, tag: null,
-    descripcion: 'Diseño sutil con el corazón icónico bordado en el panel frontal.',
-    tallas: ['Única'],
-    colores: [{ nombre: 'Negro', hex: '#1a1a1a' }, { nombre: 'Blanco', hex: '#F0F0F0' }]
-  },
-  { 
-    id: 7, nombre: 'Tote Bag Te llevo en mi', categoria: 'TOTES BAGS', precio: '$65.900', emoji: '👜', imgBg: '#f5ecd7', stock: true, tag: 'Best Seller',
+    id: 7, nombre: 'TOTE TE LLEVO EN MI', categoria: 'TOTES BAGS', precio: '$59.000', emoji: '👜', imgBg: '#f5ecd7', stock: true, tag: 'NUEVO',
     descripcion: 'Bolso tote de lona de algodón de alta resistencia con serigrafía oficial. Espaciosa y duradera.',
     tallas: [],
     colores: [{ nombre: 'Natural', hex: '#F5ECD7' }, { nombre: 'Negro', hex: '#1a1a1a' }]
   },
   { 
-    id: 8, nombre: 'Tula Logo Multicolor', categoria: 'TOTES BAGS', precio: '$55.900', emoji: '🎒', imgBg: '#1a1a1a', stock: true, tag: null,
-    descripcion: 'Morral tipo tula ligera con cordones ajustables, ideal para transportar accesorios ligeros.',
-    tallas: [],
-    colores: [{ nombre: 'Negro', hex: '#1a1a1a' }]
-  },
-  { 
-    id: 9, nombre: 'Termo Metálico Logo Vertical', categoria: 'TERMOS', precio: '$49.900', emoji: '🍵', imgBg: '#fff', stock: true, tag: 'Nuevo',
-    descripcion: 'Termo de acero inoxidable doble capa. Mantiene bebidas frías por 24 horas y calientes por 12 horas.',
-    tallas: [],
-    colores: [{ nombre: 'Blanco', hex: '#ffffff' }]
-  },
-  { 
-    id: 10, nombre: 'Llavero Cinta Logo', categoria: 'LLAVEROS', precio: '$19.900', emoji: '🔑', imgBg: '#1a1a1a', stock: true, tag: null,
-    descripcion: 'Llavero tipo reata de alta resistencia con mosquetón metálico premium.',
-    tallas: [],
-    colores: [{ nombre: 'Negro', hex: '#1a1a1a' }]
-  },
-  { 
-    id: 11, nombre: 'Sticker Pack Sonidos de País', categoria: 'STICKERS', precio: '$9.900', emoji: '🏷️', imgBg: '#fff', stock: true, tag: 'Exclusivo',
-    descripcion: 'Colección de pegatinas de vinilo resistentes al agua con motivos folclóricos ilustrados.',
-    tallas: [],
-    colores: []
-  },
-  { 
-    id: 12, nombre: 'Libreta Logo', categoria: 'ACCESORIOS', precio: '$19.900', emoji: '📓', imgBg: '#1a1a1a', stock: false, tag: null,
-    descripcion: 'Libreta de notas de lomo empastado con hojas cuadriculadas y el logo repujado.',
-    tallas: [],
-    colores: [{ nombre: 'Negro', hex: '#1a1a1a' }]
+    id: 2, nombre: 'CAMISETA TE LLEVO EN MI', categoria: 'CAMISETAS', precio: '$89.000', emoji: '👕', imgBg: '#1a1a1a', stock: true, tag: 'NUEVO',
+    descripcion: 'Diseño artístico inspirado en el ritmo del bambuco, símbolo del folclor andino colombiano. Algodón premium de alta calidad.',
+    tallas: ['XS', 'S', 'M', 'L', 'XL'],
+    colores: [{ nombre: 'Rojo', hex: '#E8341A' }, { nombre: 'Blanco', hex: '#F0F0F0' }]
   }
 ];
 
 export default function Tienda() {
-  const [coleccionActiva, setColeccionActiva] = useState('drop1');
+  const [coleccionActiva, setColeccionActiva] = useState('novedades');
   const [categoriaActiva, setCategoriaActiva] = useState('TODAS');
   const [ordenarPor, setOrdenarPor] = useState('relevancia');
   const [productoSeleccionado, setProductoSeleccionado] = useState(null);
@@ -105,7 +56,6 @@ export default function Tienda() {
     return categoriaActiva === 'TODAS' || p.categoria === categoriaActiva;
   });
 
-  // Callback que gatilla el modal interno una vez el usuario presiona "Agregar al Carrito" en la ficha expandida
   const handleAgregarSuccess = (nombre) => {
     setToast(`"${nombre}" agregado al carrito`);
     setTimeout(() => setToast(null), 2500);
@@ -116,20 +66,9 @@ export default function Tienda() {
       <Helmet>
         <title>{PAGE_TITLE}</title>
         <meta name="description" content={PAGE_DESC} />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content={`${BASE_URL}/#/tienda`} />
-        <meta property="og:title" content={PAGE_TITLE} />
-        <meta property="og:description" content={PAGE_DESC} />
-        <meta property="og:image" content={OG_IMAGE} />
-        <meta property="og:locale" content="es_CO" />
-        <meta property="og:site_name" content="Colombia Canta y Encanta" />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={PAGE_TITLE} />
-        <meta name="twitter:description" content={PAGE_DESC} />
-        <meta name="twitter:image" content={OG_IMAGE} />
       </Helmet>
 
-      {/* 1. HERO EDITORIAL ASIMÉTRICO */}
+      {/* 1. HERO EDITORIAL ASIMÉTRICO COMPACTO */}
       <section className="tienda-editorial-hero">
         <div className="hero-col-izq">
           <div className="hero-editorial-contenido">
@@ -158,7 +97,7 @@ export default function Tienda() {
         </div>
       </div>
 
-      {/* 3. BOTONERA SUPERIOR DE DROPS */}
+      {/* 3. BOTONERA SUPERIOR DE DROPS REDONDEADA */}
       <section className="seccion-colecciones-drops">
         <div className="container-tienda">
           <div className="grid-colecciones-links">
@@ -194,7 +133,10 @@ export default function Tienda() {
           </div>
 
           <div className="tienda-subcabecera-grid-cabecera">
-            <h2 className="titulo-coleccion-actual">DROP 1 <span className="estrella-decorativa">★</span></h2>
+            <h2 className="titulo-coleccion-actual">
+              {coleccionesSuperiores.find(c => c.id === coleccionActiva)?.nombre || 'PRODUCTOS'}{' '}
+              <span className="estrella-decorativa">★</span>
+            </h2>
             <div className="control-ordenar-dropdown">
               <span className="label-ordenar">ORDENAR POR</span>
               <select value={ordenarPor} onChange={e => setOrdenarPor(e.target.value)} className="select-ordenar-native">
@@ -207,26 +149,24 @@ export default function Tienda() {
         </div>
       </section>
 
-      {/* 5. GRID DE PRODUCTOS CON TRANSICIÓN HOVER BAR */}
+      {/* 5. GRID DE PRODUCTOS (LIMITADO A 1 FILA EN NOVEDADES) */}
       <section className="seccion-grid-productos-galeria">
         <div className="container-tienda">
-          <div className="galeria-productos-tienda-grid">
+          <div className={`galeria-productos-tienda-grid ${coleccionActiva === 'novedades' ? 'fila-unica-novedades' : ''}`}>
             {filtrados.map(prod => (
               <div
                 key={prod.id}
                 className="tarjeta-producto-limpia"
-                onClick={() => setProductoSeleccionado(prod)} // Al hacer clic en la tarjeta abre el detalle de compra
+                onClick={() => setProductoSeleccionado(prod)}
               >
-                {/* Contenedor de Imagen */}
                 <div className="wrapper-contenedor-imagen" style={{ backgroundColor: prod.imgBg }}>
                   {prod.tag && <span className="producto-card-badge">{prod.tag}</span>}
                   {!prod.stock && <span className="producto-card-agotado">Agotado</span>}
                   <span className="emoji-renderizado-fallback" aria-hidden="true">{prod.emoji}</span>
                   
-                  {/* Botón flotante de favoritos (Corazón) */}
                   <button 
                     className="btn-guardar-favorito-corazon" 
-                    onClick={(e) => { e.stopPropagation(); }} // Evita abrir el modal al dar clic al corazón
+                    onClick={(e) => { e.stopPropagation(); }}
                     aria-label="Guardar en favoritos"
                   >
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -234,7 +174,6 @@ export default function Tienda() {
                     </svg>
                   </button>
 
-                  {/* Sincronizado: Al hacer clic en la barra hover también se abre el modal de compra */}
                   <div
                     className="producto-card-hover-bar"
                     onClick={(e) => { 
@@ -243,15 +182,9 @@ export default function Tienda() {
                     }}
                   >
                     <span>{prod.stock ? 'Ver opciones / Añadir' : 'Sin Stock'}</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
-                      <line x1="3" y1="6" x2="21" y2="6" />
-                      <path d="M16 10a4 4 0 0 1-8 0" />
-                    </svg>
                   </div>
                 </div>
 
-                {/* Información del Producto debajo de la caja */}
                 <div className="meta-informacion-producto">
                   <div className="producto-card-fila-top">
                     <h3 className="titulo-producto-texto">{prod.nombre}</h3>
@@ -265,10 +198,32 @@ export default function Tienda() {
         </div>
       </section>
 
-      {/* Toast Informativo */}
+      {/* 6. PANELES SECUNDARIOS: HECHO EN COLOMBIA Y ACCESORIOS DEBAJO */}
+      {coleccionActiva === 'novedades' && (
+        <section className="seccion-paneles-inferiores">
+          <div className="container-tienda">
+            <div className="grid-paneles-dobles">
+              <div className="panel-inferior-item hecho-en-colombia">
+                <div className="panel-inf-contenido">
+                  <h2 className="panel-inf-titulo">HECHO EN COLOMBIA ★</h2>
+                  <p className="panel-inf-texto">Diseñado y producido localmente con orgullo y propósito.</p>
+                  <button className="panel-inf-btn">CONOCE MÁS</button>
+                </div>
+              </div>
+              <div className="panel-inferior-item accesorios-destacados">
+                <div className="panel-inf-contenido">
+                  <h2 className="panel-inf-titulo">ACCESORIOS ★</h2>
+                  <p className="panel-inf-texto">Pequeños detalles que dicen grandes cosas.</p>
+                  <button className="panel-inf-btn">VER COLECCIÓN</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {toast && <div className="tienda-toast">✓ {toast}</div>}
 
-      {/* El modal renderiza las opciones complejas de color, descripción, etc. */}
       {productoSeleccionado && (
         <ProductoModal
           producto={productoSeleccionado}

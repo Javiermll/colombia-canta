@@ -1,11 +1,13 @@
 /* ==========================================
-   VISTA TIENDA — REDISEÑO EDITORIAL COMPLETO
+   VISTA TIENDA — REDISEÑO EDITORIAL COMPACTO Y REDONDEADO
    ========================================== */
 
 :root {
   --bg-tienda-crema: #f5f4f0;
   --text-tienda-oscuro: #0a0a0a;
   --border-tienda-linea: #e2e0d9;
+  --radius-paneles: 12px;
+  --radius-botones: 8px;
 }
 
 .tienda-layout-raiz {
@@ -23,8 +25,11 @@
 .tienda-editorial-hero {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  height: 80vh;
+  height: 65vh;
   width: 100%;
+  gap: 16px;
+  padding: 16px 40px;
+  box-sizing: border-box;
 }
 
 .hero-col-izq, .hero-col-der {
@@ -32,50 +37,53 @@
   background-position: center;
   display: flex;
   align-items: flex-end;
-  padding: 60px;
+  padding: 40px;
   position: relative;
+  border-radius: var(--radius-paneles);
+  overflow: hidden;
 }
 
 .hero-col-izq {
-  background-image: linear-gradient(to top, rgba(0,0,0,0.6) 20%, transparent 60%), url('/assets/images/hero_tienda_bag.jpg');
+  background-image: linear-gradient(to top, rgba(0,0,0,0.65) 15%, transparent 60%), url('/assets/images/hero_tienda_bag.jpg');
   background-color: #1c1a17;
 }
 
 .hero-col-der {
-  background-image: linear-gradient(to top, rgba(0,0,0,0.6) 20%, transparent 60%), url('/assets/images/hero_tienda_model.jpg');
+  background-image: linear-gradient(to top, rgba(0,0,0,0.65) 15%, transparent 60%), url('/assets/images/hero_tienda_model.jpg');
   background-color: #2b2824;
 }
 
 .hero-editorial-contenido {
   color: #ffffff;
-  max-width: 420px;
+  max-width: 380px;
   z-index: 2;
 }
 
 .hero-ed-tagline {
-  font-size: 32px;
+  font-size: 26px;
   font-weight: 800;
   letter-spacing: -0.02em;
-  margin-bottom: 12px;
-  line-height: 1.1;
+  margin-bottom: 10px;
+  line-height: 1.15;
 }
 
 .hero-ed-parrafo {
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: 13px;
+  line-height: 1.45;
   color: rgba(255, 255, 255, 0.85);
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .hero-ed-btn {
   background: transparent;
   border: 1.5px solid #ffffff;
   color: #ffffff;
-  padding: 12px 28px;
+  padding: 10px 24px;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.1em;
   cursor: pointer;
+  border-radius: var(--radius-botones);
   transition: all 0.25s ease;
 }
 
@@ -90,8 +98,8 @@
   color: #ffffff;
   overflow: hidden;
   white-space: nowrap;
-  padding: 14px 0;
-  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 12px 0;
+  margin-top: 8px;
 }
 
 .ticker-track {
@@ -113,7 +121,7 @@
 
 /* ── 3. Pestañas Superiores de Drops ── */
 .seccion-colecciones-drops {
-  padding: 40px 0 20px;
+  padding: 30px 0 15px;
 }
 
 .grid-colecciones-links {
@@ -123,9 +131,9 @@
 }
 
 .btn-drop-tab {
-  background: transparent;
+  background: #ffffff;
   border: 1px solid var(--border-tienda-linea);
-  padding: 18px;
+  padding: 14px;
   font-size: 12px;
   font-weight: 700;
   letter-spacing: 0.05em;
@@ -135,6 +143,7 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+  border-radius: var(--radius-botones);
   transition: all 0.2s ease;
 }
 
@@ -152,7 +161,7 @@
 
 /* ── 4. Filtros de Categoría y Cabecera de Grid ── */
 .seccion-barra-navegacion-filtros {
-  padding: 24px 0 10px;
+  padding: 20px 0 10px;
 }
 
 .label-filtrar-por {
@@ -168,17 +177,18 @@
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
-  margin-bottom: 32px;
+  margin-bottom: 24px;
 }
 
 .btn-categoria-tag {
   background: #ffffff;
   border: 1px solid var(--border-tienda-linea);
   color: #2c2c2c;
-  padding: 6px 16px;
+  padding: 6px 14px;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
+  border-radius: var(--radius-botones);
   transition: all 0.15s ease;
 }
 
@@ -202,7 +212,7 @@
 }
 
 .titulo-coleccion-actual {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 800;
   margin: 0;
   letter-spacing: -0.01em;
@@ -236,15 +246,20 @@
   outline: none;
 }
 
-/* ── 5. Grid de Productos Alargado Retrato (3:4) ── */
+/* ── 5. Grid de Productos ── */
 .seccion-grid-productos-galeria {
-  padding-bottom: 80px;
+  padding-bottom: 30px;
 }
 
 .galeria-productos-tienda-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 48px 24px;
+  gap: 36px 20px;
+}
+
+/* Limitador dinámico a solo 4 elementos en una fila para Novedades */
+.galeria-productos-tienda-grid.fila-unica-novedades > .tarjeta-producto-limpia:nth-child(n+5) {
+  display: none;
 }
 
 .tarjeta-producto-limpia {
@@ -253,7 +268,6 @@
   flex-direction: column;
 }
 
-/* MODIFICADO: Cambiado de 1/1 cuadrado a Proporción Retrato Alargada (3/4) */
 .wrapper-contenedor-imagen {
   position: relative;
   aspect-ratio: 3 / 4; 
@@ -261,32 +275,31 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 2px;
+  border-radius: var(--radius-paneles);
   border: 1px solid var(--border-tienda-linea);
 }
 
 .emoji-renderizado-fallback {
-  font-size: 110px; /* Incrementado para balancear la verticalidad del espacio */
+  font-size: 100px;
   transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-/* Animación de sutil zoom en el producto al pasar el cursor */
 .tarjeta-producto-limpia:hover .emoji-renderizado-fallback {
   transform: scale(1.06);
 }
 
-/* Badges sobre la imagen */
 .producto-card-badge {
   position: absolute;
-  top: 0;
-  left: 0;
-  padding: 6px 12px;
+  top: 12px;
+  left: 12px;
+  padding: 4px 10px;
   font-size: 9px;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   background: #f5c800;
   color: #0a0a0a;
+  border-radius: 4px;
   z-index: 3;
 }
 
@@ -305,7 +318,6 @@
   z-index: 3;
 }
 
-/* Botón flotante de favoritos (Corazón) */
 .btn-guardar-favorito-corazon {
   position: absolute;
   top: 16px;
@@ -332,25 +344,19 @@
   transform: translateY(0);
 }
 
-.btn-guardar-favorito-corazon:hover {
-  color: #cc3333;
-  background-color: #ffffff;
-}
-
-/* EFECTO HOVER BAR: Animación desde abajo hacia arriba sin deformar la caja 3:4 */
 .producto-card-hover-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   background: #ffffff;
-  padding: 16px 20px;
+  padding: 14px 18px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   font-size: 11px;
   font-weight: 800;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   color: #000000;
   transform: translateY(100%);
@@ -363,29 +369,28 @@
   transform: translateY(0);
 }
 
-/* Metadata inferior limpia */
 .meta-informacion-producto {
-  padding-top: 16px;
+  padding-top: 12px;
 }
 
 .producto-card-fila-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 4px;
+  gap: 12px;
+  margin-bottom: 2px;
 }
 
 .titulo-producto-texto {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--text-tienda-oscuro);
   margin: 0;
-  line-height: 1.4;
+  line-height: 1.35;
 }
 
 .precio-producto-texto {
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 700;
   color: var(--text-tienda-oscuro);
   white-space: nowrap;
@@ -394,9 +399,80 @@
 .producto-card-cat-label {
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.05em;
   color: #767676;
   text-transform: uppercase;
+}
+
+/* ── 6. Paneles Inferiores: Hecho en Colombia & Accesorios ── */
+.seccion-paneles-inferiores {
+  padding: 10px 0 60px 0;
+}
+
+.grid-paneles-dobles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.panel-inferior-item {
+  height: 40vh;
+  background-size: cover;
+  background-position: center;
+  border-radius: var(--radius-paneles);
+  display: flex;
+  align-items: flex-end;
+  padding: 36px;
+  position: relative;
+  overflow: hidden;
+}
+
+.panel-inferior-item.hecho-en-colombia {
+  background-image: linear-gradient(to top, rgba(0,0,0,0.6) 10%, transparent 65%), url('/assets/images/hecho_en_colombia_bg.jpg');
+  background-color: #242b21;
+}
+
+.panel-inferior-item.accesorios-destacados {
+  background-image: linear-gradient(to top, rgba(0,0,0,0.6) 10%, transparent 65%), url('/assets/images/accesorios_bg.jpg');
+  background-color: #2a2521;
+}
+
+.panel-inf-contenido {
+  color: #ffffff;
+  z-index: 2;
+  max-width: 320px;
+}
+
+.panel-inf-titulo {
+  font-size: 22px;
+  font-weight: 800;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.01em;
+}
+
+.panel-inf-texto {
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 16px 0;
+}
+
+.panel-inf-btn {
+  background: transparent;
+  border: 1px solid #ffffff;
+  color: #ffffff;
+  padding: 8px 20px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  border-radius: var(--radius-botones);
+  transition: all 0.2s ease;
+}
+
+.panel-inf-btn:hover {
+  background: #ffffff;
+  color: #000000;
 }
 
 /* Toast flotante */
@@ -407,21 +483,21 @@
   transform: translateX(-50%);
   background: #000000;
   color: #ffffff;
-  padding: 14px 28px;
+  padding: 12px 24px;
   border-radius: 100px;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 600;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   z-index: 1000;
 }
 
-/* ── Breakpoints Responsivos ── */
+/* Breakpoints */
 @media (max-width: 1024px) {
   .galeria-productos-tienda-grid {
     grid-template-columns: repeat(3, 1fr);
   }
-  .grid-colecciones-links {
-    grid-template-columns: repeat(2, 1fr);
+  .galeria-productos-tienda-grid.fila-unica-novedades > .tarjeta-producto-limpia:nth-child(n+4) {
+    display: none; /* Muestra 3 en tablets */
   }
 }
 
@@ -429,20 +505,28 @@
   .tienda-editorial-hero {
     grid-template-columns: 1fr;
     height: auto;
+    padding: 16px 20px;
   }
   .hero-col-izq, .hero-col-der {
-    height: 40vh;
-    padding: 32px;
+    height: 35vh;
+    padding: 24px;
   }
   .galeria-productos-tienda-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 36px 16px;
+    gap: 28px 16px;
+  }
+  .galeria-productos-tienda-grid.fila-unica-novedades > .tarjeta-producto-limpia:nth-child(n+3) {
+    display: none; /* Muestra 2 en móviles */
+  }
+  .grid-paneles-dobles {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .panel-inferior-item {
+    height: 30vh;
+    padding: 24px;
   }
   .container-tienda {
     padding: 0 20px;
-  }
-  .btn-guardar-favorito-corazon {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
