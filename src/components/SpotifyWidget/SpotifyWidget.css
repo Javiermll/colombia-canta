@@ -57,19 +57,29 @@
   color: #1ED760;
 }
 
-/* ── Reproductor (espacio reservado para el reproductor global) ── */
+/* ── Reproductor (espacio reservado para el reproductor global) ──
+   352px es la altura "normal" oficial del embed de Spotify (con carátula +
+   lista de canciones). Con cualquier otro valor, Spotify no escala su
+   contenido proporcionalmente — solo deja espacio en blanco de más (o de
+   menos) dentro del propio iframe. Alto fijo (no flex:1) para que no se
+   estire más todavía si la tarjeta es más alta que sus vecinos. */
 .spotify-embed-placeholder {
   display: block;
   width: 100%;
-  flex: 1;
-  min-height: 232px;
+  flex: none;
+  height: 352px;
+  min-height: 352px;
 }
 
-/* ── Footer ── */
+/* ── Footer ──
+   margin-top:auto lo empuja al fondo de la tarjeta (que sí se estira para
+   igualar a Instagram/TripAdvisor); el espacio sobrante entre el embed
+   (alto fijo) y el footer queda con el fondo de la tarjeta, no en blanco. */
 .spotify-footer {
   display: flex;
   justify-content: flex-end;
   padding: 8px 14px 10px;
+  margin-top: auto;
 }
 
 .spotify-ver-link {

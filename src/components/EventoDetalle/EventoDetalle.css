@@ -31,6 +31,8 @@
   padding: 88px 32px 56px;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
+  text-align: left;
   gap: 16px;
 }
 
@@ -152,8 +154,15 @@
   padding: 56px 32px;
   display: grid;
   grid-template-columns: 1fr 360px;
+  grid-template-areas:
+    "contenido compra"
+    "lugar compra";
   gap: 48px;
   align-items: start;
+}
+
+.evento-col-izq {
+  grid-area: contenido;
 }
 
 .evento-col-izq section {
@@ -164,9 +173,12 @@
 
 .evento-col-izq section:last-child {
   border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
-.evento-col-izq h2 {
+.evento-col-izq h2,
+.evento-sec-lugar h2 {
   font-family: var(--font-cuerpo);
   font-size: 13px;
   font-weight: 700;
@@ -176,10 +188,22 @@
   margin-bottom: 16px;
 }
 
+.evento-sec-lugar {
+  grid-area: lugar;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-sutil);
+}
+
+.compra-card-wrap {
+  grid-area: compra;
+}
+
 .evento-descripcion {
   font-size: 17px;
   line-height: 1.8;
   color: var(--texto-principal);
+  text-align: justify;
+  padding: 0 8px;
 }
 
 .programa-pills {
@@ -235,6 +259,13 @@
   border-bottom: none;
 }
 
+.evento-fase-num-ico {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-shrink: 0;
+}
+
 .evento-fase-num {
   font-family: var(--font-titulo);
   font-size: 36px;
@@ -256,7 +287,6 @@
   background: var(--bg-chip);
   border: 1px solid var(--border-sutil);
   flex-shrink: 0;
-  margin-top: 2px;
 }
 
 .evento-fase-titulo {
@@ -272,6 +302,7 @@
   color: var(--texto-secundario);
   line-height: 1.7;
   margin: 0;
+  text-align: justify;
 }
 
 .evento-visitantes {
@@ -526,13 +557,9 @@
 /* Responsive */
 @media (max-width: 1024px) {
   .evento-hero-content {
-    padding: 80px 20px 100px;
+    padding: 80px 20px 56px;
     align-items: center;
     text-align: center;
-  }
-
-  .evento-volver {
-    margin: 0 auto;
   }
 
   .evento-hero-pills {
@@ -545,23 +572,142 @@
 
   .evento-cuerpo {
     grid-template-columns: 1fr;
-    padding: 32px 20px 100px;
+    grid-template-areas:
+      "contenido"
+      "compra"
+      "lugar";
+    padding: 32px 20px 56px;
     gap: 32px;
     justify-items: center;
     text-align: center;
   }
 
   .evento-col-izq,
-  .evento-col-izq section {
+  .evento-col-izq section,
+  .evento-sec-lugar,
+  .compra-card-wrap {
     width: 100%;
+  }
+
+  .evento-sec-lugar {
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .compra-card-wrap {
+    position: relative;
+  }
+
+  .compra-card-wrap::before,
+  .compra-card-wrap::after {
+    content: '';
+    position: absolute;
+    top: 12%;
+    bottom: 12%;
+    width: 3px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, transparent, var(--coral), transparent);
+    opacity: 0.5;
+    animation: evento-linea-pulso 2.6s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  .compra-card-wrap::before {
+    left: -14px;
+  }
+
+  .compra-card-wrap::after {
+    right: -14px;
+    animation-delay: 1.3s;
+  }
+
+  /* Reordenamiento: galería primero, info centrada y justificada, card de
+     pago al final con su contenido interno centrado. Igual en tablet y
+     mobile. */
+  .evento-col-izq {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .evento-sec-galeria {
+    order: -1;
+  }
+
+  /* Misma especificidad que ".evento-col-izq section:last-child" (que le
+     quita el margen/borde inferior cuando no hay Programa/Fases después):
+     forzamos el espaciado porque, al reordenarse primero, la galería nunca
+     es realmente la última visualmente aunque sí lo sea en el HTML. */
+  .evento-col-izq section.evento-sec-galeria {
+    margin-bottom: 40px;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--border-sutil);
+  }
+
+  .evento-sec-descripcion {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .evento-descripcion {
+    text-align: justify;
+    padding: 0 12px;
+  }
+
+  .evento-galeria-grid {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 220px));
+    justify-content: center;
+  }
+
+  .programa-pills {
+    justify-content: center;
   }
 
   .compra-card {
     position: static;
-    order: -1;
     width: 100%;
     max-width: 420px;
     margin: 0 auto;
+  }
+
+  .evento-fases {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+
+  .evento-fase-contenido {
+    text-align: justify;
+  }
+
+  .compra-card-header,
+  .compra-card-body,
+  .compra-card-footer,
+  .compra-card-footer p {
+    text-align: center;
+  }
+
+  .compra-card-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 14px;
+  }
+
+  .compra-card-titulo {
+    flex: 1 0 100%;
+  }
+
+  .compra-card-meta,
+  .compra-garantia,
+  .compra-contacto-btns {
+    justify-content: center;
+  }
+
+  .compra-garantias {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 6px 16px;
   }
 
   .mobile-cta-fixed {
@@ -578,11 +724,72 @@
     justify-content: center;
   }
 
-  .evento-galeria-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .otros-eventos {
+    padding: 40px 0 56px;
+  }
+}
+
+@keyframes evento-linea-pulso {
+  0%, 100% { opacity: 0.25; transform: scaleY(0.85); }
+  50% { opacity: 0.7; transform: scaleY(1); }
+}
+
+/* Tablet (600px–1024px): "Otros eventos" en 2 columnas centradas. */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .otros-eventos-grid {
+    grid-template-columns: repeat(2, minmax(0, 320px));
+    justify-content: center;
   }
 
+  .otros-eventos-grid > :nth-child(3) {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+}
+
+@media (max-width: 599px) {
   .otros-eventos-grid {
     grid-template-columns: 1fr;
+    justify-items: center;
+  }
+
+  .evento-fase {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .evento-fase-contenido {
+    text-align: center;
+  }
+
+  .evento-fase-desc {
+    text-align: center;
+    padding: 0 10px;
+  }
+
+  /* Carrusel de galería: aplica a cualquier evento con más de una foto,
+     formato único en mobile para todos los eventos detalle. */
+  .evento-galeria-grid {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 12px;
+    padding-bottom: 4px;
+    justify-content: flex-start;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .evento-galeria-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .evento-galeria-img {
+    flex: 0 0 82%;
+    width: auto;
+    scroll-snap-align: center;
   }
 }

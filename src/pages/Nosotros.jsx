@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
 import ContactoSection from "../components/Contacto/Contacto";
@@ -36,6 +37,52 @@ const fundadoraFotoGuitarra = {
   src: `${BASE}nosotros-fundadora/fundadora-guitarra.webp`,
   alt: "Silvia Zapata Durango tocando guitarra",
 };
+
+/* Solo visible en tablet/mobile: une las fotos de la fundadora (hoy
+   separadas en dos secciones distintas) en un único bloque — lado a
+   lado en tablet, carrusel deslizable en mobile. */
+function FundadoraGaleria({ fotos }) {
+  const [activo, setActivo] = useState(0);
+  const trackRef = useRef(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActivo((i) => (i + 1) % fotos.length);
+    }, 4000);
+    return () => clearInterval(timer);
+  }, [fotos.length]);
+
+  useEffect(() => {
+    if (!trackRef.current) return;
+    const slide = trackRef.current.children[activo];
+    if (slide) {
+      trackRef.current.scrollTo({ left: slide.offsetLeft, behavior: "smooth" });
+    }
+  }, [activo]);
+
+  return (
+    <div className="nosotros-fundadora-galeria">
+      <div className="nosotros-fundadora-galeria-track" ref={trackRef}>
+        {fotos.map((f, i) => (
+          <div key={i} className="nosotros-fundadora-galeria-slide">
+            <img src={f.src} alt={f.alt} className="nosotros-fundadora-galeria-img" />
+          </div>
+        ))}
+      </div>
+      <div className="nosotros-fundadora-galeria-dots">
+        {fotos.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            className={`nosotros-fundadora-galeria-dot${i === activo ? " activo" : ""}`}
+            onClick={() => setActivo(i)}
+            aria-label={`Ver foto ${i + 1}`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function Nosotros() {
   return (
@@ -205,6 +252,8 @@ export default function Nosotros() {
               Cantante · Directora · Visionaria
             </h2>
           </div>
+
+          <FundadoraGaleria fotos={[fundadoraFotoQuote, fundadoraFotoGuitarra]} />
 
           <div className="nosotros-quote-puente-grid">
             <div className="nosotros-quote-puente-foto-col">

@@ -134,7 +134,9 @@
   }
 
   .escuela-contenido p {
-    text-align: center;
+    text-align: justify;
+    font-size: 18px;
+    line-height: 1.85;
   }
 
   .escuela-imagenes {
@@ -144,5 +146,18 @@
 
   .escuela-contenido h2 {
     font-size: 36px;
+  }
+}
+
+/* Tablet (600px–1024px): el botón heredaba el stretch del flex-column
+   y quedaba a todo el ancho del bloque — en mobile sí se ve bien. */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .escuela-contenido p {
+    font-size: 18px;
+  }
+
+  .escuela-contenido .btn {
+    align-self: center;
+    width: fit-content;
   }
 }

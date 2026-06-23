@@ -160,8 +160,31 @@
     width: 100%;
   }
 
+  .testimonio-texto {
+    text-align: justify;
+  }
+
   .testimonios-header {
     align-items: center;
     text-align: center;
+  }
+}
+
+/* Mobile: tarjeta en columna — imagen, nombre, ocupación, descripción */
+@media (max-width: 599px) {
+  .testimonio-card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+  }
+
+  .testimonio-contenido {
+    align-items: center;
+  }
+
+  .testimonio-avatar {
+    width: 64px;
+    height: 64px;
   }
 }

@@ -33,19 +33,6 @@ const testimonios = [
   },
 ];
 
-const gridStyle = {
-  display: 'grid',
-  gridTemplateColumns: '1fr 1fr',
-  gap: '40px 48px',
-};
-
-const cardStyle = {
-  display: 'flex',
-  flexDirection: 'row',
-  alignItems: 'flex-start',
-  gap: '16px',
-};
-
 export default function Testimonios() {
   return (
     <section className="testimonios-section">
@@ -55,9 +42,9 @@ export default function Testimonios() {
           <h2 className="testimonios-divider-titulo">Nuestra Comunidad</h2>
         </div>
 
-        <div style={gridStyle}>
+        <div className="testimonios-grid">
           {testimonios.map((t, i) => (
-            <div key={i} style={cardStyle}>
+            <div key={i} className="testimonio-card">
               <div className="testimonio-avatar" style={{ borderColor: t.color }}>
                 <img src={t.img} alt={t.nombre} className="testimonio-avatar-img" loading="lazy" decoding="async" />
               </div>

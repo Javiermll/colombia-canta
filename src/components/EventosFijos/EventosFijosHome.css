@@ -250,7 +250,9 @@
   transform: translateX(4px);
 }
 
-/* ── Responsive ── */
+/* ── Responsive ──
+   Achicamos el bloque de texto (padding/gap/fuentes) para que la imagen
+   de fondo respire más, en vez de quedar tapada por el degradado+texto. ── */
 @media (max-width: 1024px) {
   .efh-grid {
     gap: 14px;
@@ -258,7 +260,42 @@
   }
 
   .efh-card {
-    height: 380px;
+    height: 420px;
+  }
+
+  .efh-top {
+    padding: 16px 16px 0;
+  }
+
+  .efh-bottom {
+    padding: 0 18px 20px;
+    gap: 8px;
+  }
+
+  .efh-titulo {
+    font-size: 22px;
+  }
+
+  .efh-desc {
+    font-size: 12.5px;
+    -webkit-line-clamp: 1;
+  }
+
+  .efh-pills {
+    gap: 6px;
+  }
+
+  .efh-pill {
+    font-size: 10.5px;
+    padding: 4px 11px;
+  }
+
+  .efh-pill:nth-child(3) {
+    display: none;
+  }
+
+  .efh-cta {
+    font-size: 12px;
   }
 }
 
@@ -270,7 +307,19 @@
   }
 
   .efh-card {
-    height: 360px;
+    height: 400px;
+  }
+
+  .efh-titulo {
+    font-size: 25px;
+  }
+
+  .efh-desc {
+    -webkit-line-clamp: 2;
+  }
+
+  .efh-pill:nth-child(3) {
+    display: inline-flex;
   }
 }
 
@@ -633,7 +682,7 @@
   }
 
   .efh-zigzag-desc {
-    text-align: center;
+    text-align: justify;
   }
 
   .efh-zigzag-num,
@@ -641,10 +690,17 @@
     align-self: center;
   }
 
+  /* 2 columnas en vez de 1: con 4 ítems (fases) apilados de a uno, la
+     card quedaba demasiado larga — así ocupa la mitad de alto. */
   .efh-zigzag-pills,
   .efh-zigzag-fases {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 8px;
+  }
+
+  .efh-zigzag-pill,
+  .efh-zigzag-fase {
+    padding: 6px 9px;
   }
 
   .efh-zigzag-footer {

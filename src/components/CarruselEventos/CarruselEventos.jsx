@@ -34,7 +34,7 @@ export default function CarruselEventos() {
     }
 
     const hoyTs = hoy.getTime();
-    return ordenados.slice(start, end).map(ev => ({
+    return ordenados.slice(start, end).reverse().map(ev => ({
       ...ev,
       pasado: parseFecha(ev.fechaISO).getTime() < hoyTs,
     }));

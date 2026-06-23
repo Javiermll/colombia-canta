@@ -26,11 +26,13 @@ export default function Noticias() {
           <div className="noticias-lista">
             {noticias.map((n) => (
               <Link to={`/noticias/${n.slug}`} key={n.id} className="noticias-fila">
-                <div className="noticias-fila-meta">
-                  <span className="noticias-fila-fecha">{n.fecha}</span>
-                  <span className="noticias-fila-chip">{n.categoria}</span>
+                <div className="noticias-fila-contenido">
+                  <div className="noticias-fila-meta">
+                    <span className="noticias-fila-fecha">{n.fecha}</span>
+                    <span className="noticias-fila-chip">{n.categoria}</span>
+                  </div>
+                  <h3 className="noticias-fila-titulo">{n.titulo}</h3>
                 </div>
-                <h3 className="noticias-fila-titulo">{n.titulo}</h3>
                 <div className="noticias-fila-thumb" style={{ background: n.gradiente }}>
                   {n.img
                     ? <img src={n.img} alt={n.titulo} className="noticias-fila-img" loading="lazy" decoding="async" />

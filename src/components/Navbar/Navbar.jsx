@@ -5,6 +5,70 @@ import { useCarrito } from '../../context/CarritoContext';
 import { eventosFijos } from '../../data/eventosFijos';
 import './Navbar.css';
 
+const IconoBase = ({ children }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mobile-drawer-icon" aria-hidden="true">
+    {children}
+  </svg>
+);
+
+const IconoInicio = () => (
+  <IconoBase>
+    <path d="M3 9.5 12 3l9 6.5" />
+    <path d="M5 10v10a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1V10" />
+  </IconoBase>
+);
+
+const IconoNosotros = () => (
+  <IconoBase>
+    <path d="M17 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+    <circle cx="9" cy="7" r="4" />
+    <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+  </IconoBase>
+);
+
+const IconoEventos = () => (
+  <IconoBase>
+    <rect x="3" y="4" width="18" height="18" rx="2" />
+    <path d="M16 2v4M8 2v4M3 10h18" />
+  </IconoBase>
+);
+
+const IconoTienda = () => (
+  <IconoBase>
+    <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" />
+    <path d="M3 6h18" />
+    <path d="M16 10a4 4 0 0 1-8 0" />
+  </IconoBase>
+);
+
+const IconoInscripciones = () => (
+  <IconoBase>
+    <rect x="8" y="2" width="8" height="4" rx="1" />
+    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+    <path d="M9 12h6M9 16h6" />
+  </IconoBase>
+);
+
+const IconoContacto = () => (
+  <IconoBase>
+    <rect x="2" y="4" width="20" height="16" rx="2" />
+    <path d="M22 6 12 13 2 6" />
+  </IconoBase>
+);
+
+const IconoCerrar = () => (
+  <IconoBase>
+    <path d="M18 6 6 18M6 6l12 12" />
+  </IconoBase>
+);
+
+const IconoChevron = ({ abierto }) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={`mobile-drawer-chevron${abierto ? ' abierto' : ''}`} aria-hidden="true">
+    <path d="M6 9l6 6 6-6" />
+  </svg>
+);
+
 const tiendaDropdown = [
   { nombre: "Poleras", precio: "desde $45.000", emoji: "👕", bg: "linear-gradient(135deg, #1A56DB, #0F3A9E)" },
   { nombre: "Hoodies", precio: "desde $75.000", emoji: "🧥", bg: "linear-gradient(135deg, #E8341A, #6B21A8)" },
@@ -34,6 +98,11 @@ export default function Navbar() {
     setMobileOpen(false);
     setMobileExpanded(null);
   }, [location]);
+
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileOpen]);
 
   let navClass = 'navbar';
   if (isHome) {
@@ -175,7 +244,7 @@ export default function Navbar() {
           </div>
 
           {/* Hamburger */}
-          <button className="navbar-hamburger" onClick={() => setMobileOpen(o => !o)} aria-label="Menú">
+          <button className={`navbar-hamburger${mobileOpen ? ' open' : ''}`} onClick={() => setMobileOpen(o => !o)} aria-label="Menú">
             <span className="hamburger-line" />
             <span className="hamburger-line" />
             <span className="hamburger-line" />
@@ -184,46 +253,96 @@ export default function Navbar() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      <div className={`mobile-menu${mobileOpen ? ' open' : ''}`}>
-        <Link to="/">Inicio</Link>
+      {/* Fondo oscuro detrás del panel lateral */}
+      <div
+        className={`mobile-backdrop${mobileOpen ? ' open' : ''}`}
+        onClick={() => setMobileOpen(false)}
+        aria-hidden="true"
+      />
 
-        <button className="mobile-link" onClick={() => toggleMobile('nosotros')}>
-          Nosotros {mobileExpanded === 'nosotros' ? '▴' : '▾'}
-        </button>
-        {mobileExpanded === 'nosotros' && (
-          <div className="mobile-submenu">
-            <Link to="/nosotros#quienes-somos">Quiénes somos</Link>
-            <Link to="/elenco">Elenco artístico</Link>
-            <Link to="/nosotros#noticias">Noticias</Link>
+      {/* Panel lateral (drawer) */}
+      <aside className={`mobile-drawer${mobileOpen ? ' open' : ''}`} aria-hidden={!mobileOpen}>
+        <div className="mobile-drawer-header">
+          <Link to="/" className="mobile-drawer-logo" onClick={() => setMobileOpen(false)}>
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt="Colombia Canta y Encanta" />
+          </Link>
+          <button className="mobile-drawer-cerrar" onClick={() => setMobileOpen(false)} aria-label="Cerrar menú">
+            <IconoCerrar />
+          </button>
+        </div>
+
+        <nav className="mobile-drawer-nav">
+          <Link to="/" className="mobile-drawer-link">
+            <span className="mobile-drawer-link-left"><IconoInicio /> Inicio</span>
+          </Link>
+
+          <div className="mobile-drawer-group">
+            <button className="mobile-drawer-link mobile-drawer-link--toggle" onClick={() => toggleMobile('nosotros')}>
+              <span className="mobile-drawer-link-left"><IconoNosotros /> Nosotros</span>
+              <IconoChevron abierto={mobileExpanded === 'nosotros'} />
+            </button>
+            {mobileExpanded === 'nosotros' && (
+              <div className="mobile-drawer-submenu">
+                <Link to="/nosotros#quienes-somos">Quiénes somos</Link>
+                <Link to="/elenco">Elenco artístico</Link>
+                <Link to="/noticias">Noticias</Link>
+              </div>
+            )}
           </div>
-        )}
 
-        <button className="mobile-link" onClick={() => toggleMobile('eventos')}>
-          Eventos {mobileExpanded === 'eventos' ? '▴' : '▾'}
-        </button>
-        {mobileExpanded === 'eventos' && (
-          <div className="mobile-submenu">
-            {eventosFijos.map(ev => (
-              <Link to={`/eventos/${ev.slug}`} key={ev.id}>{ev.titulo}</Link>
-            ))}
-            <Link to="/eventos">Ver todos →</Link>
+          <div className="mobile-drawer-group">
+            <button className="mobile-drawer-link mobile-drawer-link--toggle" onClick={() => toggleMobile('eventos')}>
+              <span className="mobile-drawer-link-left"><IconoEventos /> Eventos</span>
+              <IconoChevron abierto={mobileExpanded === 'eventos'} />
+            </button>
+            {mobileExpanded === 'eventos' && (
+              <div className="mobile-drawer-submenu">
+                {eventosFijos.map(ev => (
+                  <Link to={`/eventos/${ev.slug}`} key={ev.id}>{ev.titulo}</Link>
+                ))}
+                <Link to="/eventos">Ver todos →</Link>
+              </div>
+            )}
           </div>
-        )}
 
-        <Link to="/tienda">Tienda</Link>
-        <button className="mobile-link mobile-carrito" onClick={() => navigate('/tienda/carrito')}>
-          <img
-            src={`${import.meta.env.BASE_URL}${theme === 'dark' ? 'carrito-de-compras.png' : 'carrito-de-compras (1).png'}`}
-            alt=""
-            className="carrito-icono-img"
-          />
-          Carrito
-          {totalItems > 0 && <span className="mobile-carrito-badge">{totalItems}</span>}
-        </button>
-        <Link to="/inscripciones">Inscripciones</Link>
-        <Link to="/contacto">Contacto</Link>
-      </div>
+          <Link to="/tienda" className="mobile-drawer-link">
+            <span className="mobile-drawer-link-left"><IconoTienda /> Tienda</span>
+          </Link>
+
+          <button className="mobile-drawer-link" onClick={() => { setMobileOpen(false); navigate('/tienda/carrito'); }}>
+            <span className="mobile-drawer-link-left">
+              <img
+                src={`${import.meta.env.BASE_URL}${theme === 'dark' ? 'carrito-de-compras.png' : 'carrito-de-compras (1).png'}`}
+                alt=""
+                className="mobile-drawer-icon mobile-drawer-icon-img"
+              />
+              Carrito
+            </span>
+            {totalItems > 0 && <span className="mobile-carrito-badge">{totalItems}</span>}
+          </button>
+
+          <Link to="/inscripciones" className="mobile-drawer-link">
+            <span className="mobile-drawer-link-left"><IconoInscripciones /> Inscripciones</span>
+          </Link>
+
+          <Link to="/contacto" className="mobile-drawer-link">
+            <span className="mobile-drawer-link-left"><IconoContacto /> Contacto</span>
+          </Link>
+        </nav>
+
+        <div className="mobile-drawer-footer">
+          <button className="mobile-drawer-tema" onClick={toggle}>
+            <img
+              src={`${import.meta.env.BASE_URL}${theme === 'dark' ? 'iconos-modo/icono-sol.webp' : 'iconos-modo/icono-luna.webp'}`}
+              alt=""
+            />
+            {theme === 'dark' ? 'Modo claro' : 'Modo oscuro'}
+          </button>
+          <Link to="/inscripciones" className="mobile-drawer-cta" onClick={() => setMobileOpen(false)}>
+            Inscríbete ahora →
+          </Link>
+        </div>
+      </aside>
     </>
   );
 }

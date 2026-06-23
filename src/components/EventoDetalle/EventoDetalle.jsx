@@ -84,7 +84,7 @@ export default function EventoDetalle({ evento }) {
       <div className="evento-cuerpo">
         {/* Columna izquierda */}
         <div className="evento-col-izq">
-          <section>
+          <section className="evento-sec-descripcion">
             <h2>Sobre el evento</h2>
             {String(evento.descripcionLarga).split('\n\n').map((p, i) => (
               <p key={i} className="evento-descripcion">{p}</p>
@@ -92,7 +92,7 @@ export default function EventoDetalle({ evento }) {
           </section>
 
           {evento.galeria?.length > 0 && (
-            <section>
+            <section className="evento-sec-galeria">
               <h2>Galería</h2>
               <div className="evento-galeria-grid">
                 {evento.galeria.map((img, i) => (
@@ -119,9 +119,11 @@ export default function EventoDetalle({ evento }) {
               <div className="evento-fases">
                 {evento.fases.map((f, i) => (
                   <div key={i} className="evento-fase">
-                    <div className="evento-fase-num">{String(i + 1).padStart(2, '0')}</div>
-                    <div className="evento-fase-ico">{f.icono}</div>
-                    <div>
+                    <div className="evento-fase-num-ico">
+                      <div className="evento-fase-num">{String(i + 1).padStart(2, '0')}</div>
+                      <div className="evento-fase-ico">{f.icono}</div>
+                    </div>
+                    <div className="evento-fase-contenido">
                       <h3 className="evento-fase-titulo">{f.titulo}</h3>
                       <p className="evento-fase-desc">{f.descripcion}</p>
                     </div>
@@ -134,77 +136,81 @@ export default function EventoDetalle({ evento }) {
             </section>
           )}
 
-          <section>
-            <h2>El lugar</h2>
-            <div className="lugar-grid">
-              <div className="lugar-datos">
-                <h3>{evento.lugar}</h3>
-                <p><span>📍</span> {evento.direccion ?? evento.ciudad}</p>
-              </div>
-              <iframe
-                className="lugar-mapa"
-                title={`Mapa de ${evento.lugar}`}
-                src={`https://www.google.com/maps?q=${encodeURIComponent(`${evento.lugar}, ${evento.direccion ?? evento.ciudad}`)}&output=embed`}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
-            </div>
-          </section>
         </div>
 
+        {/* El lugar — sección propia para poder reordenarse en tablet/mobile */}
+        <section className="evento-sec-lugar">
+          <h2>El lugar</h2>
+          <div className="lugar-grid">
+            <div className="lugar-datos">
+              <h3>{evento.lugar}</h3>
+              <p><span>📍</span> {evento.direccion ?? evento.ciudad}</p>
+            </div>
+            <iframe
+              className="lugar-mapa"
+              title={`Mapa de ${evento.lugar}`}
+              src={`https://www.google.com/maps?q=${encodeURIComponent(`${evento.lugar}, ${evento.direccion ?? evento.ciudad}`)}&output=embed`}
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+        </section>
+
         {/* Columna derecha — card de compra */}
-        <div className="compra-card">
-          <div className="compra-card-header">
-            <div className="compra-card-titulo">{evento.titulo}</div>
-            {evento.fechaCompleta && (
+        <div className="compra-card-wrap">
+          <div className="compra-card">
+            <div className="compra-card-header">
+              <div className="compra-card-titulo">{evento.titulo}</div>
+              {evento.fechaCompleta && (
+                <div className="compra-card-meta">
+                  <span>📅</span><span>{evento.fechaCompleta}</span>
+                </div>
+              )}
+              {evento.hora && (
+                <div className="compra-card-meta">
+                  <span>🕐</span><span>{evento.hora}</span>
+                </div>
+              )}
               <div className="compra-card-meta">
-                <span>📅</span><span>{evento.fechaCompleta}</span>
+                <span>📍</span><span>{evento.lugar}</span>
               </div>
-            )}
-            {evento.hora && (
-              <div className="compra-card-meta">
-                <span>🕐</span><span>{evento.hora}</span>
+            </div>
+            <div className="compra-card-body">
+              <div className="compra-precio">
+                {evento.precio ?? (pillLibre ? 'Entrada libre' : 'Reserva tu lugar')}
               </div>
-            )}
-            <div className="compra-card-meta">
-              <span>📍</span><span>{evento.lugar}</span>
-            </div>
-          </div>
-          <div className="compra-card-body">
-            <div className="compra-precio">
-              {evento.precio ?? (pillLibre ? 'Entrada libre' : 'Reserva tu lugar')}
-            </div>
-            {evento.precioDetalle && (
-              <div className="compra-precio-detalle">{evento.precioDetalle}</div>
-            )}
-            <a href={waLink} target="_blank" rel="noopener noreferrer" className="compra-btn" style={{ background: ctaColor }}>
-              <WaIcon /> {waLabel}
-            </a>
-            {evento.bases && (
-              <a href={evento.bases} target="_blank" rel="noopener noreferrer" className="compra-bases-btn">
-                📄 Conoce las bases del concurso
+              {evento.precioDetalle && (
+                <div className="compra-precio-detalle">{evento.precioDetalle}</div>
+              )}
+              <a href={waLink} target="_blank" rel="noopener noreferrer" className="compra-btn" style={{ background: ctaColor }}>
+                <WaIcon /> {waLabel}
               </a>
-            )}
-            <div className="compra-garantias">
-              <div className="compra-garantia">
-                <span className="compra-garantia-check">✓</span>
-                <span>Respuesta inmediata</span>
-              </div>
-              <div className="compra-garantia">
-                <span className="compra-garantia-check">✓</span>
-                <span>Confirmación directa</span>
-              </div>
-              <div className="compra-garantia">
-                <span className="compra-garantia-check">✓</span>
-                <span>Soporte en español</span>
+              {evento.bases && (
+                <a href={evento.bases} target="_blank" rel="noopener noreferrer" className="compra-bases-btn">
+                  📄 Conoce las bases del concurso
+                </a>
+              )}
+              <div className="compra-garantias">
+                <div className="compra-garantia">
+                  <span className="compra-garantia-check">✓</span>
+                  <span>Respuesta inmediata</span>
+                </div>
+                <div className="compra-garantia">
+                  <span className="compra-garantia-check">✓</span>
+                  <span>Confirmación directa</span>
+                </div>
+                <div className="compra-garantia">
+                  <span className="compra-garantia-check">✓</span>
+                  <span>Soporte en español</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="compra-card-footer">
-            <p>¿Tienes preguntas?</p>
-            <div className="compra-contacto-btns">
-              <a href={waLink} className="compra-contacto-btn compra-contacto-btn--wa"><WaIcon size={14} /> WhatsApp</a>
-              <a href="mailto:hola@colombiacanta.org" className="compra-contacto-btn">✉️ Email</a>
+            <div className="compra-card-footer">
+              <p>¿Tienes preguntas?</p>
+              <div className="compra-contacto-btns">
+                <a href={waLink} className="compra-contacto-btn compra-contacto-btn--wa"><WaIcon size={14} /> WhatsApp</a>
+                <a href="mailto:hola@colombiacanta.org" className="compra-contacto-btn">✉️ Email</a>
+              </div>
             </div>
           </div>
         </div>

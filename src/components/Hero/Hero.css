@@ -364,10 +364,10 @@
     align-items: center;
     text-align: center;
     padding: 24px 24px 72px;
+    gap: 18px;
   }
 
-  .hero-titulo,
-  .hero-desc {
+  .hero-titulo {
     text-align: center;
   }
 
@@ -404,9 +404,22 @@
 
   .hero-desc {
     max-width: 100%;
-    font-size: 14px;
+    font-size: 18px;
+    line-height: 1.7;
+    text-align: center;
   }
+}
 
+/* ── Tablet only (600px–1024px): CTAs en fila, no a ancho completo,
+   contenido a medio camino entre la imagen y la franja de anuncio ── */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .hero-slide-contenido {
+    justify-content: center;
+  }
+}
+
+/* ── Mobile only (≤599px): CTAs apiladas a ancho completo ── */
+@media (max-width: 599px) {
   .hero-ctas {
     flex-direction: column;
     width: 100%;

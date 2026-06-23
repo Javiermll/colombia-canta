@@ -9,7 +9,7 @@ const navLinks = [
   { label: "Eventos",   to: "/eventos" },
   { label: "Escuela",   to: "/inscripciones" },
   { label: "Tienda",    to: "/tienda" },
-  { label: "Noticias",  to: "/nosotros#noticias" },
+  { label: "Noticias",  to: "/noticias" },
 ];
 
 const cols = [
@@ -25,9 +25,9 @@ const cols = [
     titulo: "Nosotros",
     links: [
       { label: "Quiénes somos", to: "/nosotros#quienes-somos" },
-      { label: "Elenco artístico", to: "/nosotros#elenco" },
+      { label: "Elenco artístico", to: "/elenco" },
       { label: "Inspiración", to: "/nosotros#inspiracion" },
-      { label: "Noticias", to: "/nosotros#noticias" },
+      { label: "Noticias", to: "/noticias" },
     ],
   },
   {
