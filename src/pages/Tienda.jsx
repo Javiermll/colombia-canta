@@ -16,6 +16,7 @@ const productos = [
     id: 1, nombre: 'Polera Colombia Canta', categoria: 'Poleras', precio: '$45.000',
     tag: 'Popular',
     emoji: '👕', bg: 'linear-gradient(135deg, #1A56DB, #0F3A9E)',
+    imagen: 'tienda-productos/polera-colombia-canta.webp',
     descripcion: 'Polera de algodón 100% con el diseño oficial de Colombia Canta y Encanta. Tela suave y transpirable, perfecta para el día a día.',
     tallas: ['XS', 'S', 'M', 'L', 'XL'],
     colores: [{ nombre: 'Azul', hex: '#1A56DB' }, { nombre: 'Blanco', hex: '#F0F0F0' }, { nombre: 'Negro', hex: '#1a1a1a' }],
@@ -25,6 +26,7 @@ const productos = [
     id: 2, nombre: 'Polera Bambuco', categoria: 'Poleras', precio: '$48.000',
     tag: 'Artesanal',
     emoji: '👕', bg: 'linear-gradient(135deg, #E8341A, #A8240E)',
+    imagen: 'tienda-productos/polera-bambuco.webp',
     descripcion: 'Diseño artístico inspirado en el ritmo del bambuco, símbolo del folclor andino colombiano. Algodón premium de alta calidad.',
     tallas: ['XS', 'S', 'M', 'L', 'XL'],
     colores: [{ nombre: 'Rojo', hex: '#E8341A' }, { nombre: 'Blanco', hex: '#F0F0F0' }],
@@ -173,11 +175,7 @@ export default function Tienda() {
       <section className="tienda-productos-section">
         <div className="container">
           {/* Grid de productos */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-            gap: '24px',
-          }}>
+          <div className="productos-grid">
             {filtrados.map(prod => (
               <div
                 key={prod.id}
@@ -188,7 +186,16 @@ export default function Tienda() {
                 <div className="producto-card-imagen" style={{ background: prod.bg }}>
                   {prod.tag && <span className="producto-card-badge">{prod.tag}</span>}
                   {!prod.stock && <span className="producto-card-agotado">Agotado</span>}
-                  <span className="producto-card-emoji" aria-hidden="true">{prod.emoji}</span>
+                  {prod.imagen ? (
+                    <img
+                      src={`${import.meta.env.BASE_URL}${prod.imagen}`}
+                      alt={prod.nombre}
+                      className="producto-card-foto"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <span className="producto-card-emoji" aria-hidden="true">{prod.emoji}</span>
+                  )}
 
                   {/* Barra hover */}
                   <div

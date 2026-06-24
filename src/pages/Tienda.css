@@ -182,14 +182,43 @@
    TIENDA — CARDS DE PRODUCTOS
    ========================================== */
 
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 24px;
+}
+
+/* Tablet: 2 columnas fijas y bien anchas, en vez de dejar que auto-fill
+   meta 2 columnas angostas apenas alcance a entrar una segunda. */
+@media (min-width: 600px) and (max-width: 1024px) {
+  .productos-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+/* Mobile: siempre 1 columna a todo el ancho. Con auto-fill puro, a partir
+   de ~504px (2 × 240px + gap) entraba una segunda columna angosta que
+   dejaba la foto del producto apretada — por eso a 325px se veía
+   espléndida (1 sola columna) pero en mobiles más anchos se veía mal. */
+@media (max-width: 599px) {
+  .productos-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .producto-card {
   cursor: pointer;
 }
 
-/* ── Zona imagen ── */
+/* ── Zona imagen ──
+   aspect-ratio en vez de height fijo: las fotos son cuadradas, así el
+   recorte de object-fit:cover siempre coincide exacto sin importar el
+   ancho de la card (con un alto fijo, a más ancho más se recortaba
+   arriba/abajo). */
 .producto-card-imagen {
   position: relative;
-  height: 260px;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border: 1px solid var(--border-sutil);
   display: flex;
@@ -214,6 +243,13 @@
   font-size: 72px;
   user-select: none;
   pointer-events: none;
+}
+
+.producto-card-foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 /* ── Badge ── */

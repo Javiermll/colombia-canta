@@ -56,7 +56,15 @@ export default function ProductoModal({ producto, onClose, onAgregarSuccess }) {
 
         {/* Imagen */}
         <div className="modal-imagen" style={{ background: producto.bg }}>
-          <span className="modal-emoji">{producto.emoji}</span>
+          {producto.imagen ? (
+            <img
+              src={`${import.meta.env.BASE_URL}${producto.imagen}`}
+              alt={producto.nombre}
+              className="modal-foto"
+            />
+          ) : (
+            <span className="modal-emoji">{producto.emoji}</span>
+          )}
         </div>
 
         {/* Info */}
