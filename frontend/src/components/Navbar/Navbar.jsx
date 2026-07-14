@@ -69,6 +69,14 @@ const IconoChevron = ({ abierto }) => (
   </svg>
 );
 
+// Icono decorativo exclusivo para la sección de Administración en Mobile
+const IconoAdmin = () => (
+  <IconoBase>
+    <circle cx="12" cy="12" r="3" />
+    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+  </IconoBase>
+);
+
 const tiendaDropdown = [
   { nombre: "Camisetas", precio: "desde $45.000", emoji: "👕" },
   { nombre: "Hoodies", precio: "desde $75.000", emoji: "🧥" },
@@ -84,6 +92,11 @@ export default function Navbar() {
   const navigate = useNavigate();
   const { theme, toggle } = useTheme();
   const { totalItems } = useCarrito();
+
+  // Estados de autenticación obtenidos en tiempo real
+  const token = localStorage.getItem('token');
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  const isAdmin = token && user?.role === 'admin';
 
   const isHome = location.pathname === '/';
 
@@ -120,6 +133,13 @@ export default function Navbar() {
 
   const toggleMobile = (section) => {
     setMobileExpanded(prev => prev === section ? null : section);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setMobileOpen(false);
+    navigate('/');
   };
 
   return (
@@ -215,6 +235,35 @@ export default function Navbar() {
             </div>
 
             <Link to="/contacto" className="btn-contacto">Contacto</Link>
+
+            {/* Acceso Dinámico Admin (Desktop) */}
+            {isAdmin && (
+              <div className="nav-group">
+                <Link to="/admin" className={`nav-link${isActive('/admin') ? ' active' : ''}`} style={{ color: '#ff2a74', fontWeight: 'bold' }}>
+                  Admin <span className="nav-chevron">▾</span>
+                </Link>
+                <div className="dropdown dropdown-simple">
+                  <Link to="/admin">Ir al Panel ⭐</Link>
+                  <button 
+                    onClick={handleLogout}
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '10px 15px',
+                      background: 'none',
+                      border: 'none',
+                      color: '#ff2a74',
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      fontWeight: 'bold'
+                    }}
+                  >
+                    Cerrar Sesión
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Utilidades: siempre visibles en desktop y mobile */}
@@ -332,6 +381,33 @@ export default function Navbar() {
           <Link to="/contacto" className="mobile-drawer-link">
             <span className="mobile-drawer-link-left"><IconoContacto /> Contacto</span>
           </Link>
+
+          {/* Acceso Dinámico Admin (Mobile) */}
+          {isAdmin ? (
+            <div className="mobile-drawer-group" style={{ borderTop: '1px solid var(--border-color, #eee)', marginTop: '1rem', paddingTop: '1rem' }}>
+              <Link to="/admin" className="mobile-drawer-link" style={{ color: '#ff2a74' }}>
+                <span className="mobile-drawer-link-left"><IconoAdmin /> Panel de Administración</span>
+              </Link>
+              <button 
+                onClick={handleLogout} 
+                className="mobile-drawer-link" 
+                style={{ 
+                  color: '#ff2a74', 
+                  width: '100%', 
+                  textAlign: 'left', 
+                  background: 'none', 
+                  border: 'none', 
+                  cursor: 'pointer' 
+                }}
+              >
+                <span className="mobile-drawer-link-left">👋 Cerrar Sesión</span>
+              </button>
+            </div>
+          ) : (
+            <Link to="/login" className="mobile-drawer-link" style={{ borderTop: '1px solid var(--border-color, #eee)', marginTop: '1rem', paddingTop: '1rem' }}>
+              <span className="mobile-drawer-link-left">🔐 Ingreso Admin</span>
+            </Link>
+          )}
         </nav>
 
         <div className="mobile-drawer-footer">

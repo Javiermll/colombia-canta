@@ -5,6 +5,11 @@ import { SpotifyPlayerProvider } from './context/SpotifyPlayerContext';
 import GlobalSpotifyPlayer from './components/SpotifyWidget/GlobalSpotifyPlayer';
 import Navbar from './components/Navbar/Navbar';
 import ScrollToTop from './components/ScrollToTop';
+
+// Componentes de Autenticación y Control
+import { ProtectedRoute } from './components/ProtectedRoute/ProtectedRoute';
+
+// Páginas Públicas
 import Inicio from './pages/Inicio';
 import Nosotros from './pages/Nosotros';
 import Eventos from './pages/Eventos';
@@ -17,6 +22,11 @@ import Elenco from './pages/Elenco';
 import NoticiasPage from './pages/Noticias';
 import NoticiaDetallePage from './pages/NoticiaDetallePage';
 import NotFound from './pages/NotFound';
+
+// Nuevas Páginas de Administración
+import Login from './pages/Login/Login';
+import { AdminDashboard } from './pages/Admin/AdminDashboard';
+
 import './styles/main.css';
 
 export default function App() {
@@ -28,6 +38,7 @@ export default function App() {
             <ScrollToTop />
             <Navbar />
             <Routes>
+              {/* ================= RUTAS PÚBLICAS ================= */}
               <Route path="/" element={<Inicio />} />
               <Route path="/nosotros" element={<Nosotros />} />
               <Route path="/eventos" element={<Eventos />} />
@@ -39,6 +50,17 @@ export default function App() {
               <Route path="/contacto" element={<Contacto />} />
               <Route path="/noticias" element={<NoticiasPage />} />
               <Route path="/noticias/:slug" element={<NoticiaDetallePage />} />
+              
+              {/* Ruta para el Login */}
+              <Route path="/login" element={<Login />} />
+
+              {/* ================= RUTAS PRIVADAS (ADMIN) ================= */}
+              {/* Envolvemos el dashboard para restringirlo solo a administradores */}
+              <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                <Route path="/admin" element={<AdminDashboard />} />
+              </Route>
+
+              {/* Manejo de errores 404 */}
               <Route path="/404" element={<NotFound />} />
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -1,88 +1,121 @@
 /* ==========================================
-   EVENTO DETALLE
+   EVENTO DETALLE — COLOMBIA MINIMALISTA PRO
    ========================================== */
 
 /* BLOQUE 1 — HERO */
 .evento-hero {
   position: relative;
-  min-height: 440px;
+  min-height: 260px; /* Un poquito más de aire para organizar el texto */
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
+  background: #0d0f14; /* Fondo base oscuro */
+  overflow: hidden;
 }
 
-.evento-hero-overlay {
+/* Capa 1: El degradado de Colombia bien marcado de fondo */
+.evento-hero::before {
+  content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.75) 100%);
+  z-index: 1;
+  /* Colores hermosos pero con una mezcla suave nativa para que mantenga armonía */
+  background: linear-gradient(to right, 
+    rgba(212, 163, 24, 0.7) 0%, 
+    rgba(24, 51, 114, 0.6) 50%, 
+    rgba(168, 32, 28, 0.7) 100%
+  );
   pointer-events: none;
 }
 
+/* Capa 2: La máscara de contraste para que las letras se vean perfectas */
+.evento-hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  /* Oscurece un poco la parte superior e inferior para proteger el texto blanco */
+  background: linear-gradient(to bottom, 
+    rgba(0, 0, 0, 0.45) 0%, 
+    rgba(0, 0, 0, 0.2) 50%, 
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  pointer-events: none;
+}
+
+/* Capa 3: El contenedor del texto bien ordenado */
 .evento-hero-content {
   position: relative;
-  z-index: 2;
-  /* Mismo ancho/centrado/padding horizontal que .evento-cuerpo, para que
-     el contenido del hero quede alineado con "Sobre el evento" debajo.
-     padding-top suficiente para que "Volver a eventos" siempre quede
-     por debajo del navbar flotante, sin importar cuánto contenido tenga
-     la slide (título de 1 o 2 líneas, con o sin subtítulo). */
+  z-index: 3; /* Por encima de las dos capas anteriores */
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
-  padding: 88px 32px 56px;
+  padding: 80px 32px 40px; /* Espaciado simétrico y limpio */
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
-  gap: 16px;
+  gap: 12px; /* Espacio uniforme entre elementos */
 }
 
+/* Botón Volver - Ahora en blanco puro con opacidad para que resalte ordenado */
 .evento-volver {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8) !important; /* Forzamos blanco limpio */
   text-decoration: none;
   width: fit-content;
+  transition: color 0.2s ease;
 }
 
 .evento-volver:hover {
-  color: #fff;
+  color: #ffffff !important;
 }
 
+/* Título impecable en Blanco */
 .evento-hero h1 {
-  font-size: clamp(32px, 5vw, 56px);
-  color: #fff;
-  line-height: 1.1;
+  font-size: clamp(28px, 4vw, 40px); 
+  color: #ffffff !important;
+  line-height: 1.2;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 4px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sutil sombra para separarlo del fondo */
 }
 
+/* Subtítulo en Blanco translúcido */
 .evento-hero-sub {
-  font-family: var(--font-titulo);
+  font-family: var(--font-cuerpo);
   font-style: italic;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0;
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.85) !important;
+  margin: 0 0 4px 0;
 }
 
+/* Contenedor de las pastillas/cápsulas */
 .evento-hero-pills {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 10px;
+  margin-top: 6px;
 }
 
+/* Cápsulas con Glassmorphic sutil y bordes limpios */
 .evento-hero-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  font-weight: 700;
-  padding: 6px 14px;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  padding: 6px 18px;
   border-radius: 100px;
-  background: rgba(255, 255, 255, 0.15);
-  color: #fff;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.12); /* Más sólidas para que no las tape el fondo */
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* BLOQUE 2 — STICKY CTA BAR */
