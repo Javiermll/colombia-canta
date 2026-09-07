@@ -76,11 +76,20 @@ export default function GlobalSpotifyPlayer() {
         container.style.opacity = '1';
 
         window.addEventListener('resize', update);
+        // `scroll` no burbujea hasta window, pero un listener en la fase de
+        // captura sí recibe el scroll de CUALQUIER contenedor descendiente
+        // (p. ej. el carrusel horizontal de widgets en mobile) — sin esto,
+        // `dockNode.getBoundingClientRect()` cambiaba al deslizar el
+        // carrusel pero el reproductor (position:absolute, portaled fuera
+        // de ese contenedor) se quedaba pegado en su posición vieja y
+        // terminaba superpuesto sobre los otros widgets.
+        window.addEventListener('scroll', update, true);
         const ro = new ResizeObserver(update);
         ro.observe(dockNode);
 
         container._cleanupDock = () => {
           window.removeEventListener('resize', update);
+          window.removeEventListener('scroll', update, true);
           ro.disconnect();
         };
         return;

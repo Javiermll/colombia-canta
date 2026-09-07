@@ -31,8 +31,7 @@ export default function Eventos() {
       <div className="page-header">
         <div className="container">
           <div className="page-header-inner">
-            <span className="page-header-label">Agenda · 2026</span>
-            <h1>Eventos</h1>
+            <h1>Agenda</h1>
           </div>
           <div className="page-header-divisor" />
         </div>
