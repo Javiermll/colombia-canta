@@ -3,77 +3,84 @@ import { z } from 'zod';
 import { supabase } from '../config/supabaseClient.js';
 import { requireCsrf } from '../middleware/requireCsrf.js';
 import { logAudit } from '../lib/auditLog.js';
-import { stripUndefined } from '../lib/zodMultipart.js';
+import { uploadMiddleware, validarImagenReal, procesarYSubirImagen, borrarImagenPorUrl } from '../lib/imageUpload.js';
+import { booleanFromString, jsonArrayField, nullableNumberFromString, stripUndefined } from '../lib/zodMultipart.js';
 import { toCamelCase } from '../lib/camelCase.js';
 import { errorGenerico } from '../lib/errores.js';
 
 const router = Router();
+const CARPETA = 'cursos';
+const uploadImagen = uploadMiddleware.single('imagen');
+
+// ⭐ Hallazgo real (2026-09-06, reportado por el usuario): `hora` solo
+// exigía "no vacío" — sin formato, quedaron horarios guardados como "23.00"
+// o "080000" (ninguno es una hora real). El panel usa `<input type="time">`,
+// que siempre entrega "HH:MM" en 24h cuando se usa de verdad — se valida
+// ese formato acá para que el backend no confíe solo en el input del
+// navegador (mismo criterio que el resto de este archivo: nunca confiar
+// solo en la validación del cliente).
+const HORA_HHMM = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
 const horarioSchema = z.object({
   dia: z.string().trim().min(1, 'horarios[].dia es obligatorio'),
-  hora: z.string().trim().min(1, 'horarios[].hora es obligatoria'),
+  hora: z.string().trim().regex(HORA_HHMM, 'horarios[].hora debe tener formato HH:MM (24 horas), ej. 08:00'),
   // Opcional (2026-08-28, contenido real compartido por el usuario): rango de
   // edad de esa franja puntual, ej. "6 a 8 años" — un mismo curso grupal puede
   // ofrecer horarios distintos según la edad del estudiante.
   edad: z.string().trim().max(40, 'horarios[].edad no puede superar 40 caracteres').optional().nullable(),
 });
 
-const nivelesArraySchema = z.array(z.string().uuid('cada nivel debe ser un uuid válido'))
-  .max(50, 'no puede haber más de 50 niveles asociados')
+const nivelesArraySchema = jsonArrayField(z.string().uuid('cada nivel debe ser un uuid válido'))
+  .refine((arr) => !arr || arr.length <= 50, { message: 'no puede haber más de 50 niveles asociados' })
   .optional()
   .refine((arr) => !arr || new Set(arr).size === arr.length, {
     message: 'No puede haber un mismo nivel repetido en la lista',
   });
 
-// 5.5 · Ajuste a pedido del usuario (2026-08-19): sin subida de imagen, este
-// router recibe JSON normal (ya no multipart/form-data) — los arrays/booleans
-// llegan con su tipo real, sin necesidad de los helpers `jsonArrayField`/
-// `booleanFromString` (esos son solo para cuando multer deja todo como texto).
-// ⭐ Hallazgo real (auditoría 5.5, 2026-08-19): estos campos opcionales
-// aceptan `null` además de `undefined` — el frontend los manda siempre como
-// `null` al editar un curso (nunca los omite), para poder BORRAR un valor ya
-// guardado. Antes, un campo vacío simplemente no se mandaba, así que una vez
-// puesto un tagline/duración/precio/emoji, nunca se podía volver a limpiar
-// desde el panel. `precio_numerico` necesita `z.union` en vez de solo
-// `.nullable()` porque `z.coerce.number()` convierte `null` a `0` antes de
-// llegar a `.positive()` — sin el union, mandar `null` fallaría la validación
-// en vez de limpiar el campo.
+// 5.6 · Pedido del usuario (2026-09-04): la tarjeta pública de cursos pasa a
+// usar una foto real (antes solo emoji, ver 20260819100000_alter_cursos_icono_a_emoji.sql
+// — esta ruta vuelve a ser multipart/form-data por la imagen, así que los
+// arrays/booleans/números-nullable ya no llegan con su tipo real (todo
+// multipart es texto) y necesitan los helpers de zodMultipart.js — mismo
+// patrón ya usado en Eventos/Productos. `emoji` se deja intacto como
+// respaldo visual para cursos que aún no tengan `imagen`.
 const baseCursoSchema = z.object({
   nombre: z.string().trim().min(1, 'nombre es obligatorio'),
-  tagline: z.string().trim().optional().nullable(),
+  tagline: z.string().trim().optional(),
   color: z.string().trim().optional(),
   descripcion: z.string().trim().min(1, 'descripcion es obligatoria'),
-  instrumentos: z.array(z.string().min(1)).max(20, 'no puede haber más de 20 instrumentos').optional(),
+  instrumentos: jsonArrayField(z.string().min(1)).optional().refine((arr) => !arr || arr.length <= 20, {
+    message: 'no puede haber más de 20 instrumentos',
+  }),
   // Obligatorio (mínimo 1) para un curso grupal, opcional para uno
   // personalizado — esa regla cruzada se valida a mano más abajo
   // (validarHorariosRequeridos), no acá, por el mismo motivo que
   // profesor_nombre: `.refine()` sobre el objeto completo rompería el
   // `.partial()` que arma updateCursoSchema.
-  horarios: z.array(horarioSchema).max(20, 'no puede haber más de 20 horarios').optional(),
-  duracion: z.string().trim().optional().nullable(),
-  precio: z.string().trim().optional().nullable(),
-  precio_numerico: z.union([z.null(), z.coerce.number().positive('precio_numerico debe ser mayor a 0')]).optional(),
+  horarios: jsonArrayField(horarioSchema).optional().refine((arr) => !arr || arr.length <= 20, {
+    message: 'no puede haber más de 20 horarios',
+  }),
+  duracion: z.string().trim().optional(),
+  precio: z.string().trim().optional(),
+  precio_numerico: nullableNumberFromString(z.coerce.number().positive('precio_numerico debe ser mayor a 0')).optional(),
   // Cobro aparte del precio/cuotas del semestre (2026-08-28, contenido real
-  // compartido por el usuario) — mismo union que precio_numerico y mismo
-  // motivo: `z.coerce.number()` convertiría `null` en 0 antes de `.positive()`.
-  matricula_numerico: z.union([z.null(), z.coerce.number().positive('matricula_numerico debe ser mayor a 0')]).optional(),
+  // compartido por el usuario) — mismo motivo que precio_numerico.
+  matricula_numerico: nullableNumberFromString(z.coerce.number().positive('matricula_numerico debe ser mayor a 0')).optional(),
   orden: z.coerce.number().int('orden debe ser un entero'),
   niveles: nivelesArraySchema,
   // 5.5 · Cursos personalizados con profesor (ej. clases 1 a 1 de guitarra) —
   // pre-análisis en readme_guia.md, 2026-08-18. `profesor_nombre` solo tiene
   // sentido cuando `es_personalizado` es true; validado a mano más abajo
   // (validarProfesorPersonalizado), mismo motivo que arriba.
-  es_personalizado: z.boolean().optional(),
-  profesor_nombre: z.string().trim().max(80, 'profesor_nombre no puede superar 80 caracteres').optional().nullable(),
-  // Reemplaza la subida de ícono real (2026-08-19, pedido del usuario: poco
-  // realista que el staff suba fotos acá) — mismo respaldo visual liviano ya
-  // usado en Productos/Eventos.
-  emoji: z.string().trim().max(4, 'emoji no puede superar 4 caracteres').optional().nullable(),
+  es_personalizado: booleanFromString.optional(),
+  profesor_nombre: z.string().trim().max(80, 'profesor_nombre no puede superar 80 caracteres').optional(),
+  // Respaldo visual liviano para cursos sin `imagen` todavía (ver comentario arriba).
+  emoji: z.string().trim().max(4, 'emoji no puede superar 4 caracteres').optional(),
 });
 
 const createCursoSchema = baseCursoSchema;
 const updateCursoSchema = baseCursoSchema.partial().extend({
-  activo: z.boolean().optional(),
+  activo: booleanFromString.optional(),
 });
 
 function zodError(result) {
@@ -172,8 +179,16 @@ router.get('/', async (req, res, next) => {
   res.json({ ok: true, data: data.map(aplanarNiveles) });
 });
 
-// POST / — crear curso + relaciones con niveles (JSON)
-router.post('/', requireCsrf, async (req, res, next) => {
+// POST / — crear curso + relaciones con niveles (multipart/form-data: campos + "imagen")
+router.post('/', requireCsrf, uploadImagen, async (req, res, next) => {
+  const imgFile = req.file;
+
+  if (!imgFile) {
+    const err = new Error('imagen es obligatoria');
+    err.status = 400;
+    return next(err);
+  }
+
   const result = createCursoSchema.safeParse(req.body);
   if (!result.success) {
     return next(zodError(result));
@@ -184,13 +199,17 @@ router.post('/', requireCsrf, async (req, res, next) => {
   validarHorariosRequeridos(camposCurso, null);
   await validarNivelesExisten(niveles);
 
+  await validarImagenReal(imgFile.buffer);
+  const { url: imagenUrl } = await procesarYSubirImagen(imgFile.buffer, CARPETA);
+
   const { data: curso, error: cursoError } = await supabase
     .from('cursos')
-    .insert(camposCurso)
+    .insert({ ...camposCurso, imagen: imagenUrl })
     .select()
     .single();
 
   if (cursoError) {
+    await borrarImagenPorUrl(imagenUrl);
     return next(traducirErrorCurso(cursoError));
   }
 
@@ -202,6 +221,7 @@ router.post('/', requireCsrf, async (req, res, next) => {
       // El curso ya se creó — si las relaciones fallan (ej. un nivel_id inexistente),
       // no dejamos un curso a medias: se revierte, mismo criterio que Productos.
       await supabase.from('cursos').delete().eq('id', curso.id);
+      await borrarImagenPorUrl(imagenUrl);
       return next(traducirErrorCurso(relError));
     }
   }
@@ -218,7 +238,8 @@ router.post('/', requireCsrf, async (req, res, next) => {
 });
 
 // PATCH /:id — editar. Niveles: reemplazo completo si se manda el campo (Opción A, igual que Productos).
-router.patch('/:id', requireCsrf, async (req, res, next) => {
+// Imagen: opcional — si no se manda un archivo nuevo, la existente se conserva tal cual.
+router.patch('/:id', requireCsrf, uploadImagen, async (req, res, next) => {
   const { id } = req.params;
 
   const { data: actual, error: fetchError } = await supabase.from('cursos').select('*').eq('id', id).maybeSingle();
@@ -239,10 +260,20 @@ router.patch('/:id', requireCsrf, async (req, res, next) => {
   validarHorariosRequeridos(camposCurso, actual);
   await validarNivelesExisten(niveles);
 
+  const imgFile = req.file;
+  let imagenVieja = null;
+  if (imgFile) {
+    await validarImagenReal(imgFile.buffer);
+    const { url } = await procesarYSubirImagen(imgFile.buffer, CARPETA);
+    camposCurso.imagen = url;
+    imagenVieja = actual.imagen;
+  }
+
   // Niveles ANTES que el update del curso — si esto falla, el curso todavía no se tocó.
   if (niveles !== undefined) {
     const { error: deleteError } = await supabase.from('curso_niveles').delete().eq('curso_id', id);
     if (deleteError) {
+      if (camposCurso.imagen) await borrarImagenPorUrl(camposCurso.imagen);
       return next(errorGenerico(deleteError, 'PATCH /api/admin/cursos/:id (curso_niveles delete)'));
     }
 
@@ -250,6 +281,7 @@ router.patch('/:id', requireCsrf, async (req, res, next) => {
       const filas = niveles.map((nivel_id) => ({ curso_id: id, nivel_id }));
       const { error: insertError } = await supabase.from('curso_niveles').insert(filas);
       if (insertError) {
+        if (camposCurso.imagen) await borrarImagenPorUrl(camposCurso.imagen);
         return next(traducirErrorCurso(insertError));
       }
     }
@@ -258,9 +290,13 @@ router.patch('/:id', requireCsrf, async (req, res, next) => {
   if (Object.keys(camposCurso).length > 0) {
     const { error: updateError } = await supabase.from('cursos').update(camposCurso).eq('id', id);
     if (updateError) {
+      if (camposCurso.imagen) await borrarImagenPorUrl(camposCurso.imagen);
       return next(traducirErrorCurso(updateError));
     }
   }
+
+  // Solo se borra la imagen vieja de Storage después de confirmar el UPDATE.
+  if (imagenVieja) await borrarImagenPorUrl(imagenVieja);
 
   await logAudit({
     actor: req.admin,
@@ -273,7 +309,7 @@ router.patch('/:id', requireCsrf, async (req, res, next) => {
   res.json({ ok: true, data: await obtenerCursoCompleto(id) });
 });
 
-// DELETE /:id — borra el curso (curso_niveles se va solo por ON DELETE CASCADE).
+// DELETE /:id — borra el curso (curso_niveles se va solo por ON DELETE CASCADE) + su imagen.
 // Rechazado si hay inscripciones referenciando este curso (ON DELETE RESTRICT).
 router.delete('/:id', requireCsrf, async (req, res, next) => {
   const { id } = req.params;
@@ -289,6 +325,8 @@ router.delete('/:id', requireCsrf, async (req, res, next) => {
   if (error) {
     return next(traducirErrorCurso(error, true));
   }
+
+  if (actual.imagen) await borrarImagenPorUrl(actual.imagen);
 
   await logAudit({
     actor: req.admin,

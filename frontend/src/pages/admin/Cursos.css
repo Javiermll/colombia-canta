@@ -157,46 +157,6 @@
 }
 
 /* ── Emoji (respaldo visual, 2026-08-19) ── */
-.cursos-emoji-fila {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  align-items: center;
-}
-
-.cursos-emoji-opcion {
-  width: 40px;
-  height: 40px;
-  font-size: 18px;
-  border-radius: 10px;
-  border: 1px solid var(--border-media);
-  background: var(--bg-card);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.cursos-emoji-opcion:hover {
-  background: var(--bg-hover);
-}
-
-.cursos-emoji-opcion.activo {
-  border-color: var(--coral);
-  background: color-mix(in srgb, var(--coral) 10%, transparent);
-}
-
-.cursos-emoji-input {
-  width: 60px;
-  height: 40px;
-  text-align: center;
-  font-size: 18px;
-  border-radius: 10px;
-  border: 1px solid var(--border-media);
-  background: var(--bg-input);
-  color: var(--texto-principal);
-}
-
 /* ── Horarios ── */
 .cursos-horario-fila {
   display: grid;

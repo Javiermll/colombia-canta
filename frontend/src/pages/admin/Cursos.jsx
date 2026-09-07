@@ -10,14 +10,9 @@ import Button from '../../components/admin/ui/Button';
 import ConfirmDialog from '../../components/admin/ui/ConfirmDialog';
 import HelpTooltip from '../../components/admin/ui/HelpTooltip';
 import CatalogoSimpleModal from '../../components/admin/ui/CatalogoSimpleModal';
+import ImageUploadField from '../../components/admin/ui/ImageUploadField';
 import { soloDigitos, formatMiles } from '../../utils/formato';
 import './Cursos.css';
-
-// Respaldo visual liviano en vez de subir una foto real (2026-08-19, pedido
-// del usuario: poco realista que el staff suba fotos acá) — mismo criterio ya
-// usado en Productos (campo "Emoji"). Se ofrecen algunos sugeridos + un campo
-// libre para cualquier otro emoji.
-const EMOJIS_SUGERIDOS = ['🎵', '🎶', '🎸', '🎹', '🎻', '🎤', '🥁', '🎺', '🪗', '🎷', '💃', '🕺'];
 
 function formularioDesdeCurso(curso, ordenSugerido) {
   if (!curso) {
@@ -40,6 +35,7 @@ function formularioDesdeCurso(curso, ordenSugerido) {
 // reinicia solo al cambiar de selección, sin useEffect de sincronización).
 function CursoForm({ curso, niveles, ordenSugerido, onGuardado, onBorrado, onAviso, aviso, adminFetch, onAbrirCatalogo }) {
   const [form, setForm] = useState(() => formularioDesdeCurso(curso, ordenSugerido));
+  const [archivoImagen, setArchivoImagen] = useState(null);
   const [errores, setErrores] = useState({});
   const [errorGeneral, setErrorGeneral] = useState('');
   const [guardando, setGuardando] = useState(false);
@@ -64,6 +60,11 @@ function CursoForm({ curso, niveles, ordenSugerido, onGuardado, onBorrado, onAvi
     const nuevosErrores = {};
     if (!form.nombre.trim()) nuevosErrores.nombre = 'El nombre es obligatorio';
     if (!form.descripcion.trim()) nuevosErrores.descripcion = 'La descripción es obligatoria';
+    // Obligatoria siempre (no solo al crear) — es el único respaldo visual
+    // del curso ahora que se quitó el emoji (pedido del usuario, 2026-09-06):
+    // un curso viejo sin foto todavía debe agregarle una antes de guardar
+    // cualquier otro cambio, no puede quedar así indefinidamente.
+    if (!archivoImagen && !curso?.imagen) nuevosErrores.imagen = 'La imagen es obligatoria';
     if (form.esPersonalizado && !form.profesorNombre.trim()) {
       nuevosErrores.profesorNombre = 'El nombre del profesor es obligatorio en un curso personalizado';
     }
@@ -97,51 +98,56 @@ function CursoForm({ curso, niveles, ordenSugerido, onGuardado, onBorrado, onAvi
     setGuardando(true);
     setErrorGeneral('');
     try {
-      const body = {
-        nombre: form.nombre,
-        descripcion: form.descripcion,
-        orden: form.orden,
-        es_personalizado: form.esPersonalizado,
-        // Opción A (reemplazo completo, mismo criterio que variantes de Producto):
-        // se manda siempre, incluso vacía, para poder desasignar todo.
-        instrumentos: instrumentos.items.filter((i) => i.trim()),
-        horarios: horarios.items
+      // Multipart/form-data (por la imagen) — todo llega como texto al
+      // backend, así que los arrays van serializados a JSON (mismo criterio
+      // que Eventos/Productos), y "reemplazo completo" (instrumentos,
+      // horarios, niveles) se manda siempre, incluso vacío.
+      const fd = new FormData();
+      fd.append('nombre', form.nombre);
+      fd.append('descripcion', form.descripcion);
+      fd.append('orden', String(form.orden));
+      fd.append('es_personalizado', String(form.esPersonalizado));
+      fd.append('instrumentos', JSON.stringify(instrumentos.items.filter((i) => i.trim())));
+      fd.append('horarios', JSON.stringify(
+        horarios.items
           .filter((h) => h.dia.trim() && h.hora.trim())
-          .map((h) => ({ dia: h.dia, hora: h.hora, edad: h.edad?.trim() || null })),
-        niveles: form.nivelesIds,
-      };
-      if (form.color) body.color = form.color;
+          .map((h) => ({ dia: h.dia, hora: h.hora, edad: h.edad?.trim() || undefined }))
+      ));
+      fd.append('niveles', JSON.stringify(form.nivelesIds));
+      if (form.color) fd.append('color', form.color);
+      if (archivoImagen) fd.append('imagen', archivoImagen);
 
       if (curso) {
-        // Editando: se manda siempre (o `null` si quedó vacío) — si solo se
+        // Editando: se manda siempre (vacío si se quiere borrar) — si solo se
         // manda cuando hay valor, un tagline/duración/precio/emoji ya guardado
         // nunca se puede volver a borrar desde acá (hallazgo real, auditoría
-        // 5.5, 2026-08-19).
-        body.tagline = form.tagline || null;
-        body.emoji = form.emoji || null;
-        body.duracion = form.duracion || null;
-        body.precio = form.precio || null;
-        body.precio_numerico = form.precioNumerico ? Number(form.precioNumerico) : null;
-        body.matricula_numerico = form.matriculaNumerico ? Number(form.matriculaNumerico) : null;
-        body.profesor_nombre = form.esPersonalizado ? form.profesorNombre : null;
-        body.activo = form.activo;
+        // 5.5, 2026-08-19 — sigue aplicando con multipart, solo que ahora el
+        // "vacío" es un string vacío en vez de `null`).
+        fd.append('tagline', form.tagline || '');
+        fd.append('emoji', form.emoji || '');
+        fd.append('duracion', form.duracion || '');
+        fd.append('precio', form.precio || '');
+        fd.append('precio_numerico', form.precioNumerico ? String(form.precioNumerico) : '');
+        fd.append('matricula_numerico', form.matriculaNumerico ? String(form.matriculaNumerico) : '');
+        fd.append('profesor_nombre', form.esPersonalizado ? form.profesorNombre : '');
+        fd.append('activo', String(form.activo));
       } else {
-        // Creando: no tiene sentido mandar `null` en un insert, solo se manda si hay algo.
-        if (form.tagline) body.tagline = form.tagline;
-        if (form.emoji) body.emoji = form.emoji;
-        if (form.duracion) body.duracion = form.duracion;
-        if (form.precio) body.precio = form.precio;
-        if (form.precioNumerico) body.precio_numerico = Number(form.precioNumerico);
-        if (form.matriculaNumerico) body.matricula_numerico = Number(form.matriculaNumerico);
-        if (form.esPersonalizado) body.profesor_nombre = form.profesorNombre;
+        // Creando: no tiene sentido mandar vacío en un insert, solo se manda si hay algo.
+        if (form.tagline) fd.append('tagline', form.tagline);
+        if (form.emoji) fd.append('emoji', form.emoji);
+        if (form.duracion) fd.append('duracion', form.duracion);
+        if (form.precio) fd.append('precio', form.precio);
+        if (form.precioNumerico) fd.append('precio_numerico', String(form.precioNumerico));
+        if (form.matriculaNumerico) fd.append('matricula_numerico', String(form.matriculaNumerico));
+        if (form.esPersonalizado) fd.append('profesor_nombre', form.profesorNombre);
       }
 
       if (curso) {
-        const data = await adminFetch(`/api/admin/cursos/${curso.id}`, { method: 'PATCH', body });
+        const data = await adminFetch(`/api/admin/cursos/${curso.id}`, { method: 'PATCH', body: fd });
         onGuardado(data.data, false);
         onAviso('Cambios guardados.');
       } else {
-        const data = await adminFetch('/api/admin/cursos', { method: 'POST', body });
+        const data = await adminFetch('/api/admin/cursos', { method: 'POST', body: fd });
         onGuardado(data.data, true);
         onAviso('Curso creado.');
       }
@@ -199,23 +205,19 @@ function CursoForm({ curso, niveles, ordenSugerido, onGuardado, onBorrado, onAvi
           <textarea value={form.descripcion} onChange={(e) => actualizarCampo('descripcion', e.target.value)} className={errores.descripcion ? 'invalido' : ''} style={{ minHeight: 100 }} />
         </FormField>
 
-        <FormField label="Emoji" hint="opcional — respaldo visual en la tarjeta del curso">
-          <div className="cursos-emoji-fila">
-            {EMOJIS_SUGERIDOS.map((e) => (
-              <button
-                key={e}
-                type="button"
-                className={`cursos-emoji-opcion${form.emoji === e ? ' activo' : ''}`}
-                onClick={() => actualizarCampo('emoji', e)}
-                aria-label={`Usar ${e} como emoji`}
-                aria-pressed={form.emoji === e}
-              >
-                {e}
-              </button>
-            ))}
-            <input type="text" maxLength={4} className="cursos-emoji-input" aria-label="Emoji personalizado" value={form.emoji} onChange={(e) => actualizarCampo('emoji', e.target.value)} />
-          </div>
-        </FormField>
+        {/* Único respaldo visual del curso ahora que se quitó el ícono de
+           emoji (pedido del usuario, 2026-09-06) — por eso pasa a ser
+           obligatoria siempre, no solo al crear (ver validar() más abajo). */}
+        <ImageUploadField
+          label="Foto del curso"
+          recomendado="1200×900px (4:3, se usa como portada de la tarjeta y del detalle)"
+          aspecto={4 / 3}
+          valorActual={curso?.imagen}
+          archivo={archivoImagen}
+          onChange={setArchivoImagen}
+          error={errores.imagen}
+          requerido
+        />
 
         <div className="cursos-lista-simple">
           <p className="admin-field-label-texto">
