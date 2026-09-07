@@ -1,0 +1,174 @@
+/* Mismo esqueleto de layout que Reservas.css (lista + panel de detalle).
+   Prefijo `.contadmin-` propio para no chocar con otras hojas del panel. */
+
+.contadmin-panel-header {
+  margin-bottom: 20px;
+}
+
+.contadmin-layout {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.contadmin-lista-panel {
+  position: sticky;
+  top: 116px;
+}
+
+.contadmin-cargar-mas {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.contadmin-filtros {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.contadmin-filtros input[type="text"] {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-media);
+  background: var(--bg-input);
+  color: var(--texto-principal);
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.contadmin-filtro-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--texto-secundario);
+  cursor: pointer;
+}
+
+.contadmin-contador {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+  margin: 0 0 10px;
+}
+
+.contadmin-vacio {
+  color: var(--texto-secundario);
+  font-size: 14px;
+}
+
+.contadmin-panel-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+
+.contadmin-item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-sutil);
+  background: var(--bg-card);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+}
+
+.contadmin-item:hover {
+  background: var(--bg-hover);
+}
+
+.contadmin-item.activo {
+  border-color: var(--coral);
+  background: color-mix(in srgb, var(--coral) 10%, transparent);
+}
+
+.contadmin-item-titulo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--texto-principal);
+}
+
+.contadmin-item.no-leido .contadmin-item-titulo {
+  font-weight: 700;
+}
+
+.contadmin-punto {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--coral);
+  flex-shrink: 0;
+}
+
+.contadmin-item-meta {
+  font-size: 12px;
+  color: var(--texto-secundario);
+}
+
+.contadmin-form-vacio {
+  color: var(--texto-secundario);
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.contadmin-form-vacio .admin-form-aviso {
+  display: inline-flex;
+}
+
+.contadmin-form-titulo {
+  font-family: var(--font-titulo);
+  font-size: 1.2rem;
+  color: var(--texto-principal);
+  margin: 0 0 4px;
+}
+
+.contadmin-form-sub {
+  font-size: 13px;
+  color: var(--texto-secundario);
+  margin: 0 0 20px;
+}
+
+.contadmin-form-sub a {
+  color: var(--coral);
+}
+
+.contadmin-mensaje-cuerpo {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--texto-principal);
+  white-space: pre-wrap;
+  padding: 18px;
+  background: var(--bg-hover);
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 1024px) {
+  .contadmin-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .contadmin-lista-panel {
+    position: static;
+  }
+
+  .contadmin-panel-lista {
+    max-height: 50vh;
+  }
+}

@@ -3,6 +3,23 @@ import { Helmet } from "react-helmet-async";
 import Footer from "../components/Footer/Footer";
 import { redesSociales } from "../data/redesSociales";
 import { BASE_URL, OG_IMAGE } from "../utils/seo";
+import { apiFetch } from "../utils/api";
+import { EMAIL_REGEX } from "../utils/validacion";
+
+const TELEFONO_REGEX = /^[0-9+()\s-]+$/;
+
+function validateField(field, value) {
+  if (field === "nombre") return value.trim().length < 2 ? "Ingresa tu nombre completo" : "";
+  if (field === "email") return EMAIL_REGEX.test(value.trim()) ? "" : "Ingresa un correo electrónico válido";
+  if (field === "telefono") {
+    const soloDigitos = value.replace(/\D/g, "");
+    return TELEFONO_REGEX.test(value.trim()) && soloDigitos.length >= 7
+      ? ""
+      : "Ingresa un número de teléfono válido";
+  }
+  if (field === "mensaje") return value.trim().length < 5 ? "Escribe un mensaje un poco más largo" : "";
+  return "";
+}
 
 const PAGE_TITLE = "Contacto | Colombia Canta y Encanta";
 const PAGE_DESC =
@@ -57,15 +74,50 @@ const infoItems = [
 ];
 
 export default function Contacto() {
-  const [form, setForm] = useState({ nombre: "", email: "", mensaje: "" });
+  const [form, setForm] = useState({ nombre: "", email: "", telefono: "", mensaje: "" });
+  const [touched, setTouched] = useState({});
+  const [errores, setErrores] = useState({});
   const [enviado, setEnviado] = useState(false);
+  const [enviando, setEnviando] = useState(false);
+  const [errorEnvio, setErrorEnvio] = useState("");
 
-  const handleChange = (e) =>
-    setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((f) => ({ ...f, [name]: value }));
+    if (touched[name]) setErrores((er) => ({ ...er, [name]: validateField(name, value) }));
+  };
 
-  const handleSubmit = (e) => {
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    setTouched((t) => ({ ...t, [name]: true }));
+    setErrores((er) => ({ ...er, [name]: validateField(name, value) }));
+  };
+
+  // Validación real en JS antes de tocar la API — con solo `required`/`type`/
+  // `pattern` nativos, un envío en ciertas condiciones (hallazgo real del
+  // usuario, 2026-09-06, en tablet) llegaba igual al backend con campos
+  // inválidos, mostrando el error genérico del servidor en vez de señalar
+  // cada campo. Mismo patrón que ya usa ReservaModal.jsx.
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setEnviado(true);
+    const camposAValidar = ["nombre", "email", "telefono", "mensaje"];
+    const nuevosErrores = Object.fromEntries(
+      camposAValidar.map((campo) => [campo, validateField(campo, form[campo])])
+    );
+    setTouched(Object.fromEntries(camposAValidar.map((campo) => [campo, true])));
+    setErrores(nuevosErrores);
+    if (Object.values(nuevosErrores).some(Boolean)) return;
+
+    setEnviando(true);
+    setErrorEnvio("");
+    try {
+      await apiFetch("/api/contacto", { method: "POST", body: form });
+      setEnviado(true);
+    } catch (err) {
+      setErrorEnvio(err.message);
+    } finally {
+      setEnviando(false);
+    }
   };
 
   return (
@@ -124,8 +176,10 @@ export default function Contacto() {
             {infoItems.map((item) => (
               <div key={item.label} className="contacto-info-item">
                 <div className="contacto-info-icono">{item.icono}</div>
-                <strong className="contacto-info-label">{item.label}</strong>
-                <span className="contacto-info-detalle">{item.detalle}</span>
+                <div className="contacto-info-texto">
+                  <strong className="contacto-info-label">{item.label}</strong>
+                  <span className="contacto-info-detalle">{item.detalle}</span>
+                </div>
               </div>
             ))}
           </div>
@@ -159,16 +213,26 @@ export default function Contacto() {
             <div className="contacto-form-card">
               {enviado ? (
                 <div className="contacto-enviado">
-                  <div className="contacto-enviado-icono">✅</div>
+                  <img
+                    src={`${BASE}logo.png`}
+                    alt="Colombia Canta y Encanta"
+                    className="contacto-enviado-logo"
+                  />
+                  <div className="contacto-enviado-icono" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" width="30" height="30">
+                      <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </div>
                   <h3 className="contacto-enviado-titulo">
                     ¡Mensaje enviado!
                   </h3>
+                  <div className="contacto-enviado-franja" aria-hidden="true" />
                   <p className="contacto-enviado-desc">
                     Nos pondremos en contacto contigo pronto.
                   </p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} className="contacto-form">
+                <form onSubmit={handleSubmit} className="contacto-form" noValidate>
                   <div className="contacto-form-intro">
                     <h3 className="contacto-form-titulo">
                       ¡Contáctanos para más información!
@@ -190,9 +254,12 @@ export default function Contacto() {
                         name="nombre"
                         value={form.nombre}
                         onChange={handleChange}
-                        required
-                        className="contacto-form-input"
+                        onBlur={handleBlur}
+                        className={`contacto-form-input${touched.nombre && errores.nombre ? " invalido" : ""}`}
                       />
+                      {touched.nombre && errores.nombre && (
+                        <span className="contacto-form-field-error">{errores.nombre}</span>
+                      )}
                     </div>
                     <div className="contacto-form-group">
                       <label className="contacto-form-label" htmlFor="email">
@@ -204,10 +271,31 @@ export default function Contacto() {
                         name="email"
                         value={form.email}
                         onChange={handleChange}
-                        required
-                        className="contacto-form-input"
+                        onBlur={handleBlur}
+                        className={`contacto-form-input${touched.email && errores.email ? " invalido" : ""}`}
                       />
+                      {touched.email && errores.email && (
+                        <span className="contacto-form-field-error">{errores.email}</span>
+                      )}
                     </div>
+                  </div>
+
+                  <div className="contacto-form-group">
+                    <label className="contacto-form-label" htmlFor="telefono">
+                      Teléfono
+                    </label>
+                    <input
+                      id="telefono"
+                      type="tel"
+                      name="telefono"
+                      value={form.telefono}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={`contacto-form-input${touched.telefono && errores.telefono ? " invalido" : ""}`}
+                    />
+                    {touched.telefono && errores.telefono && (
+                      <span className="contacto-form-field-error">{errores.telefono}</span>
+                    )}
                   </div>
 
                   <div className="contacto-form-group">
@@ -219,14 +307,19 @@ export default function Contacto() {
                       name="mensaje"
                       value={form.mensaje}
                       onChange={handleChange}
-                      required
+                      onBlur={handleBlur}
                       rows={4}
-                      className="contacto-form-textarea"
+                      className={`contacto-form-textarea${touched.mensaje && errores.mensaje ? " invalido" : ""}`}
                     />
+                    {touched.mensaje && errores.mensaje && (
+                      <span className="contacto-form-field-error">{errores.mensaje}</span>
+                    )}
                   </div>
 
-                  <button type="submit" className="contacto-form-btn">
-                    Enviar mensaje
+                  {errorEnvio && <p className="contacto-form-error">{errorEnvio}</p>}
+
+                  <button type="submit" className="contacto-form-btn" disabled={enviando}>
+                    {enviando ? "Enviando…" : "Enviar mensaje"}
                     <svg
                       viewBox="0 0 24 24"
                       fill="none"
@@ -249,19 +342,22 @@ export default function Contacto() {
             {/* Ubicación */}
             <div className="contacto-ubicacion-col">
               <h2 className="contacto-ubicacion-titulo">Nuestra ubicación</h2>
+              <div className="contacto-ubicacion-franja" aria-hidden="true" />
               <p className="contacto-ubicacion-desc">
                 Visítanos en nuestra sede en el Sector Estadio de Medellín,
                 el lugar donde se forman las nuevas generaciones del folclor
                 colombiano.
               </p>
 
-              <iframe
-                className="contacto-mapa"
-                title="Mapa de nuestra sede"
-                src={`https://www.google.com/maps?q=${encodeURIComponent("Calle 49 76a 65, Sector Estadio, Medellín, Colombia")}&output=embed`}
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              />
+              <div className="contacto-mapa-marco">
+                <iframe
+                  className="contacto-mapa"
+                  title="Mapa de nuestra sede"
+                  src={`https://www.google.com/maps?q=${encodeURIComponent("Calle 49 76a 65, Sector Estadio, Medellín, Colombia")}&output=embed`}
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                />
+              </div>
             </div>
           </div>
         </div>

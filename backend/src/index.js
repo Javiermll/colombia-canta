@@ -20,6 +20,7 @@ import eventosFijosRouter, { eventosFijosPublicoRouter } from './routes/eventosF
 import inscripcionesRouter, { inscripcionesPublicRouter } from './routes/inscripciones.js';
 import reservasRouter, { reservasPublicRouter } from './routes/reservas.js';
 import pedidosRouter, { pedidosPublicRouter } from './routes/pedidos.js';
+import contactoRouter, { contactoPublicRouter } from './routes/contacto.js';
 import auditLogRouter from './routes/auditLog.js';
 import perfilRouter from './routes/perfil.js';
 
@@ -76,6 +77,7 @@ app.use('/api/admin/eventos-fijos', requireAdmin, eventosFijosRouter);
 app.use('/api/admin/inscripciones', requireAdmin, inscripcionesRouter);
 app.use('/api/admin/reservas', requireAdmin, reservasRouter);
 app.use('/api/admin/pedidos', requireAdmin, pedidosRouter);
+app.use('/api/admin/contacto', requireAdmin, contactoRouter);
 // A pedido del usuario (2026-08-31): el historial completo de acciones (quién
 // hizo qué en todo el panel) queda restringido al maestro, mismo criterio que
 // ya usa Administradores — un admin normal no necesita ver la actividad del
@@ -104,6 +106,7 @@ app.use('/api/eventos-fijos', eventosFijosPublicoRouter);
 app.use('/api/inscripciones', inscripcionesPublicRouter);
 app.use('/api/reservas', reservasPublicRouter);
 app.use('/api/pedidos', pedidosPublicRouter);
+app.use('/api/contacto', contactoPublicRouter);
 
 // Multer usa mensajes genéricos en inglés (ej. "Unexpected field" cuando se supera
 // el límite de archivos) — se traducen los códigos más comunes a algo legible.
