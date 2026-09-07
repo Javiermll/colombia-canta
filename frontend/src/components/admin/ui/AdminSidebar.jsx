@@ -1,20 +1,38 @@
 import { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  Image,
+  Newspaper,
+  PartyPopper,
+  CalendarDays,
+  ShoppingBag,
+  GraduationCap,
+  ClipboardList,
+  Ticket,
+  Package,
+  Mail,
+  Users,
+  History,
+} from 'lucide-react';
 import { useAdminAuth } from '../../../context/AdminAuthContext';
 
 // 5.2 · Decisión del usuario (2026-08-14): el menú solo muestra secciones que
 // ya existen de verdad — nada de links "próximamente" a Eventos/Tienda/etc.
 // Se agrega una entrada acá mismo cuando la pantalla real quede construida.
+// ⭐ Íconos pasados de emoji a lucide-react (pedido del usuario, 2026-09-07)
+// — se veían inconsistentes entre sistemas operativos/navegadores; con SVG
+// + `currentColor` además heredan gratis el color coral del link activo.
 const SECCIONES = [
-  { to: '/admin/hero', label: 'Carrusel (Hero)', emoji: '🖼️' },
-  { to: '/admin/noticias', label: 'Noticias', emoji: '📰' },
-  { to: '/admin/eventos', label: 'Eventos', emoji: '🎪' },
-  { to: '/admin/eventos-fijos', label: 'Eventos Fijos', emoji: '📅' },
-  { to: '/admin/productos', label: 'Productos', emoji: '🛍️' },
-  { to: '/admin/cursos', label: 'Cursos', emoji: '🎓' },
-  { to: '/admin/inscripciones', label: 'Inscripciones', emoji: '📝' },
-  { to: '/admin/reservas', label: 'Reservas', emoji: '🎟️' },
-  { to: '/admin/pedidos', label: 'Pedidos', emoji: '📦' },
+  { to: '/admin/hero', label: 'Carrusel (Hero)', Icono: Image },
+  { to: '/admin/noticias', label: 'Noticias', Icono: Newspaper },
+  { to: '/admin/eventos', label: 'Eventos', Icono: PartyPopper },
+  { to: '/admin/eventos-fijos', label: 'Eventos Fijos', Icono: CalendarDays },
+  { to: '/admin/productos', label: 'Productos', Icono: ShoppingBag },
+  { to: '/admin/cursos', label: 'Cursos', Icono: GraduationCap },
+  { to: '/admin/inscripciones', label: 'Inscripciones', Icono: ClipboardList },
+  { to: '/admin/reservas', label: 'Reservas', Icono: Ticket },
+  { to: '/admin/pedidos', label: 'Pedidos', Icono: Package },
+  { to: '/admin/contacto', label: 'Contacto', Icono: Mail },
 ];
 
 // 5.7 · Aparte del array de arriba porque estas entradas no son para todos los
@@ -24,8 +42,8 @@ const SECCIONES = [
 // mismo criterio (también reforzado server-side, ver `requireRole` en
 // `backend/src/index.js` — esto no es solo un ajuste visual).
 const SECCIONES_MAESTRO = [
-  { to: '/admin/administradores', label: 'Administradores', emoji: '👤' },
-  { to: '/admin/historial', label: 'Historial', emoji: '🕓' },
+  { to: '/admin/administradores', label: 'Administradores', Icono: Users },
+  { to: '/admin/historial', label: 'Historial', Icono: History },
 ];
 
 // ⭐ Ajuste 5.2 (2026-08-14, pedido tras probar el panel real): en tablet/
@@ -125,7 +143,7 @@ export default function AdminSidebar() {
             const activo = location.pathname.startsWith(s.to);
             return (
               <Link key={s.to} to={s.to} className={`admin-sidebar-link${activo ? ' activo' : ''}`}>
-                <span className="admin-sidebar-emoji" aria-hidden="true">{s.emoji}</span>
+                <s.Icono className="admin-sidebar-icono" aria-hidden="true" size={18} strokeWidth={2} />
                 {s.label}
               </Link>
             );
@@ -136,7 +154,7 @@ export default function AdminSidebar() {
               to={s.to}
               className={`admin-sidebar-link${location.pathname.startsWith(s.to) ? ' activo' : ''}`}
             >
-              <span className="admin-sidebar-emoji" aria-hidden="true">{s.emoji}</span>
+              <s.Icono className="admin-sidebar-icono" aria-hidden="true" size={18} strokeWidth={2} />
               {s.label}
             </Link>
           ))}

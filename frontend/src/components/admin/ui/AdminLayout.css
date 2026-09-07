@@ -97,10 +97,8 @@
   background: color-mix(in srgb, var(--coral) 12%, transparent);
 }
 
-.admin-sidebar-emoji {
-  font-size: 16px;
+.admin-sidebar-icono {
   width: 20px;
-  text-align: center;
   flex-shrink: 0;
 }
 
