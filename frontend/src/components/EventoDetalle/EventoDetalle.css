@@ -1064,15 +1064,6 @@
     gap: 6px 16px;
   }
 
-  .mobile-cta-fixed-spacer {
-    display: block;
-  }
-
-  .mobile-cta-fixed {
-    display: block;
-  }
-
-
   .lugar-grid {
     grid-template-columns: 1fr;
     text-align: center;
@@ -1181,6 +1172,20 @@
 }
 
 @media (max-width: 599px) {
+  /* ⭐ Hallazgo real (2026-09-06): esta barra fija vivía en el bloque de
+     ≤1024px pese a llamarse "mobile" — aparecía también en tablet
+     acompañando al carrusel de programación/navegación, donde se veía mal
+     (duplicaba el CTA que ya está en `.compra-card`, visible ahí mismo sin
+     necesidad de flotar). Se restringe a mobile real, que es para donde se
+     diseñó (`.compra-card` no es visible sin scrollear en ese ancho). */
+  .mobile-cta-fixed-spacer {
+    display: block;
+  }
+
+  .mobile-cta-fixed {
+    display: block;
+  }
+
   .otros-eventos-grid {
     grid-template-columns: 1fr;
     justify-items: center;
