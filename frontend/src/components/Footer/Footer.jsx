@@ -194,6 +194,7 @@ export default function Footer() {
               <Link to="/politicas-eventos-gratuitos">Eventos gratuitos</Link>
               <Link to="/politicas-eventos-pago">Eventos de pago</Link>
               <Link to="/politica-envios">Envíos y entrega</Link>
+              <Link to="/politica-privacidad">Política de privacidad</Link>
             </div>
           </div>
 

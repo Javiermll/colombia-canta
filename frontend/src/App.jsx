@@ -17,6 +17,7 @@ import AdminCursos from './pages/admin/Cursos';
 import AdminInscripciones from './pages/admin/Inscripciones';
 import AdminReservas from './pages/admin/Reservas';
 import AdminPedidos from './pages/admin/Pedidos';
+import AdminContacto from './pages/admin/Contacto';
 import AdminHistorial from './pages/admin/Historial';
 import Navbar from './components/Navbar/Navbar';
 import ScrollToTop from './components/ScrollToTop';
@@ -38,7 +39,9 @@ import TerminosCondiciones from './pages/TerminosCondiciones';
 import PoliticasEventosGratuitos from './pages/PoliticasEventosGratuitos';
 import PoliticasEventosPago from './pages/PoliticasEventosPago';
 import PoliticaEnvios from './pages/PoliticaEnvios';
+import PoliticaPrivacidad from './pages/PoliticaPrivacidad';
 import NotFound from './pages/NotFound';
+import CookieBanner from './components/CookieBanner/CookieBanner';
 import './styles/main.css';
 
 // 5.2 · El panel SÍ comparte el Navbar del sitio público (decisión revisada,
@@ -79,6 +82,7 @@ export default function App() {
                 <Route path="/politicas-eventos-gratuitos" element={<PoliticasEventosGratuitos />} />
                 <Route path="/politicas-eventos-pago" element={<PoliticasEventosPago />} />
                 <Route path="/politica-envios" element={<PoliticaEnvios />} />
+                <Route path="/politica-privacidad" element={<PoliticaPrivacidad />} />
                 <Route path="/admin/login" element={<AdminLogin />} />
                 <Route path="/admin/bienvenida" element={<AdminBienvenida />} />
                 <Route path="/admin" element={<Navigate to="/admin/hero" replace />} />
@@ -91,12 +95,14 @@ export default function App() {
                 <Route path="/admin/inscripciones" element={<RequireAuth><AdminInscripciones /></RequireAuth>} />
                 <Route path="/admin/reservas" element={<RequireAuth><AdminReservas /></RequireAuth>} />
                 <Route path="/admin/pedidos" element={<RequireAuth><AdminPedidos /></RequireAuth>} />
+                <Route path="/admin/contacto" element={<RequireAuth><AdminContacto /></RequireAuth>} />
                 <Route path="/admin/historial" element={<RequireAuth><AdminHistorial /></RequireAuth>} />
                 <Route path="/admin/administradores" element={<RequireAuth><AdminAdministradores /></RequireAuth>} />
                 <Route path="/404" element={<NotFound />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <PlayerSitioPublico />
+              <CookieBanner />
             </BrowserRouter>
           </AdminAuthProvider>
         </SpotifyPlayerProvider>

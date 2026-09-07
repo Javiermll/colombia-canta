@@ -25,6 +25,7 @@ export default function PaginaLegal({ documento, ruta }) {
         <div className="container">
           <div className="page-header-inner">
             <span className="page-header-label">Colombia Canta y Encanta</span>
+            <div className="page-header-franja" aria-hidden="true" />
             <h1>{documento.titulo}</h1>
           </div>
           <div className="page-header-divisor" />
