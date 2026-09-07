@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useCursos } from "../hooks/useCursos";
@@ -105,7 +105,41 @@ export default function Inscripciones() {
   const { cursos, cargando, error } = useCursos();
   const [openFaq, setOpenFaq] = useState(null);
   const [pasoIdx, setPasoIdx] = useState(0);
-  const [cursoCarruselIdx, setCursoCarruselIdx] = useState(0);
+  // Carrusel de cursos (≤1024px): 1 tarjeta a la vez en mobile, 2 en tablet
+  // — pedido del usuario (2026-09-05), mismo criterio de "detectar el ancho
+  // con matchMedia" ya usado en Escuela.jsx/Nosotros.jsx.
+  const [cardsPorPagina, setCardsPorPagina] = useState(1);
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 600px) and (max-width: 1024px)');
+    const actualizar = () => setCardsPorPagina(mq.matches ? 2 : 1);
+    actualizar();
+    mq.addEventListener('change', actualizar);
+    return () => mq.removeEventListener('change', actualizar);
+  }, []);
+
+  // Pedido del usuario (2026-09-05): en mobile la foto se saca por completo
+  // (todas las tarjetas quedan simétricas con el mismo respaldo de emoji,
+  // en vez de mezclar tarjetas altas-con-foto y bajas-sin-foto en el mismo
+  // carrusel de a 1). Tablet/desktop sí la siguen mostrando.
+  const [esMobile, setEsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 599px)');
+    const actualizar = () => setEsMobile(mq.matches);
+    actualizar();
+    mq.addEventListener('change', actualizar);
+    return () => mq.removeEventListener('change', actualizar);
+  }, []);
+
+  const paginasCursos = useMemo(() => {
+    const grupos = [];
+    for (let i = 0; i < cursos.length; i += cardsPorPagina) grupos.push(cursos.slice(i, i + cardsPorPagina));
+    return grupos;
+  }, [cursos, cardsPorPagina]);
+
+  const [carruselPaginaIdx, setCarruselPaginaIdx] = useState(0);
+  useEffect(() => {
+    setCarruselPaginaIdx(0);
+  }, [cardsPorPagina]);
 
   // ── Flujo de inscripción: ver detalles de un curso, o llenar el formulario ──
   const [vistaDetalle, setVistaDetalle] = useState(null);
@@ -119,14 +153,9 @@ export default function Inscripciones() {
   const esMenor = Number(formData.estudianteEdad) < 18;
   const cursoIdx = vistaDetalle ? cursos.findIndex((c) => c.id === vistaDetalle.id) : -1;
 
-  const scrollAComoInscribirse = () => {
-    document.getElementById("como-inscribirse")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   const manejarVerDetalles = (curso) => {
     setFormInscripcion(null);
     setVistaDetalle(curso);
-    scrollAComoInscribirse();
   };
 
   const iniciarInscripcion = (curso) => {
@@ -135,13 +164,42 @@ export default function Inscripciones() {
     setFormData((prev) => ({ ...prev, cursoId: curso.id, cursoNombre: curso.nombre }));
     setPasoForm(1);
     setEnviado(false);
-    scrollAComoInscribirse();
   };
 
   const cancelarFormulario = () => {
     setFormInscripcion(null);
     setFormData(FORM_DATA_INICIAL);
     setErrorEnvio(null);
+  };
+
+  // Modal (pedido del usuario, 2026-09-06): "Ver detalles"/"Inscribirme" pasan
+  // de reemplazar el contenido de "Cómo inscribirse" a flotar como ventana
+  // desplegable encima de toda la página — mismo patrón ya usado en
+  // ReservaModal (overlay con click-afuera-para-cerrar + Escape + bloqueo de
+  // scroll del body, bottom-sheet en mobile vía CSS).
+  const modalAbierto = !!(vistaDetalle || formInscripcion);
+  const overlayRef = useRef(null);
+
+  useEffect(() => {
+    if (!modalAbierto) return;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = ''; };
+  }, [modalAbierto]);
+
+  useEffect(() => {
+    if (!modalAbierto) return;
+    const onKey = (e) => { if (e.key === 'Escape') cerrarModal(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [modalAbierto]);
+
+  function cerrarModal() {
+    if (formInscripcion) cancelarFormulario();
+    else setVistaDetalle(null);
+  }
+
+  const manejarClickOverlay = (e) => {
+    if (e.target === overlayRef.current) cerrarModal();
   };
 
   const handleChange = (e) => {
@@ -210,30 +268,47 @@ export default function Inscripciones() {
 
   // Reutilizada por el grid (tablet/desktop) y el carrusel (mobile, <600px) —
   // misma tarjeta, sin duplicar el markup entre los 2 layouts.
-  const renderTarjetaCurso = (c) => (
+  //
+  // Rediseño simplificado (pedido del usuario, 2026-09-06): la tarjeta de
+  // presentación pasa a ser una tarjeta "de contenido" — sin la lista de
+  // instrumentos, el badge "Clases personalizadas" ni la duración (los 3 ya
+  // están en "Ver detalles"), sin el emoji en mobile (se saca del todo, ni
+  // foto ni emoji ahí — en cambio lleva un acento de color propio arriba,
+  // ver `.inscr-card-acento-mobile`), y con la franja tricolor corta entre
+  // título y descripción como detalle visual. El tagline pasa de pastilla
+  // flotando sobre la foto a un antetítulo simple arriba del título — se
+  // sentía desordenado flotando, sobre todo en tablet.
+  const renderTarjetaCurso = (c) => {
+    const mostrarFoto = !!c.imagen;
+
+    return (
     <div className="inscr-card">
-      <div className="inscr-card-header">
-        <span className="inscr-card-icono" aria-hidden="true">{c.emoji || "🎵"}</span>
-        <span className="inscr-card-tagline">{c.tagline}</span>
-      </div>
+      {/* Acento de color del curso — solo visible en mobile (CSS), donde ya
+         no hay foto ni emoji para darle identidad visual a la tarjeta
+         (pedido del usuario, 2026-09-06: mobile se veía "simple"). */}
+      <div className="inscr-card-acento-mobile" style={{ background: c.color || 'var(--coral)' }} aria-hidden="true" />
+
+      {!esMobile && (
+        mostrarFoto ? (
+          <div className="inscr-card-foto-wrap">
+            <img src={c.imagen} alt="" className="inscr-card-foto" loading="lazy" decoding="async" />
+          </div>
+        ) : (
+          <div
+            className="inscr-card-header"
+            style={c.color ? { background: `color-mix(in srgb, ${c.color} 14%, transparent)` } : undefined}
+          >
+            <span className="inscr-card-icono" aria-hidden="true">{c.emoji || "🎵"}</span>
+          </div>
+        )
+      )}
 
       <div className="inscr-card-body">
+        {c.tagline && <span className="inscr-card-tagline">{c.tagline}</span>}
         <h3 className="inscr-card-nombre">{c.nombre}</h3>
-        {c.esPersonalizado && (
-          <span className="inscr-card-personalizado">
-            👤 Clases personalizadas{c.profesorNombre ? ` · ${c.profesorNombre}` : ''}
-          </span>
-        )}
-        <ul className="inscr-card-lista">
-          {(c.instrumentos || []).slice(0, 4).map((i) => (
-            <li key={i}>{i}</li>
-          ))}
-          {(c.instrumentos || []).length > 4 && (
-            <li className="inscr-card-mas">
-              +{c.instrumentos.length - 4} más
-            </li>
-          )}
-        </ul>
+        <div className="inscr-card-franja" aria-hidden="true" />
+        {c.descripcion && <p className="inscr-card-desc">{c.descripcion}</p>}
+
         <div className="inscr-card-acciones">
           <button
             type="button"
@@ -252,7 +327,8 @@ export default function Inscripciones() {
         </div>
       </div>
     </div>
-  );
+    );
+  };
 
   // Franjas reales del curso ya configuradas por el admin, para que el
   // horario sea seleccionable en vez de un texto libre o 3 opciones fijas
@@ -309,26 +385,40 @@ export default function Inscripciones() {
             {cursos.map((c) => <div key={c.id}>{renderTarjetaCurso(c)}</div>)}
           </div>
 
-          {/* Mobile (<600px): carrusel — mismo formato visual de tarjeta, sin la lista larga hacia abajo */}
+          {/* ≤1024px: carrusel paginado — 1 tarjeta a la vez en mobile, 2 en
+             tablet (pedido del usuario, 2026-09-05), en vez de la lista larga
+             hacia abajo que quedaba en el grid a ese ancho. */}
           <div className="inscr-cursos-carrusel">
             <button
               className="inscr-pasos-nav inscr-pasos-nav-prev"
-              onClick={() => setCursoCarruselIdx((i) => Math.max(0, i - 1))}
-              disabled={cursoCarruselIdx === 0}
-              aria-label="Curso anterior"
+              onClick={() => setCarruselPaginaIdx((i) => Math.max(0, i - 1))}
+              disabled={carruselPaginaIdx === 0}
+              aria-label="Cursos anteriores"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
                 <path d="M15 18l-6-6 6-6"/>
               </svg>
             </button>
 
-            {renderTarjetaCurso(cursos[cursoCarruselIdx])}
+            {/* Pedido del usuario (2026-09-05): si la última página queda con
+               menos tarjetas que `cardsPorPagina` (ej. 1 sola en un carrusel
+               de a 2), no debe estirarse a ocupar toda la fila — se ve
+               "gigante" comparada con las demás páginas. */}
+            <div className={`inscr-cursos-carrusel-fila${
+              cardsPorPagina === 1 ? ' inscr-cursos-carrusel-fila--uno' : ''
+            }${
+              (paginasCursos[carruselPaginaIdx]?.length || 0) < cardsPorPagina ? ' inscr-cursos-carrusel-fila--incompleta' : ''
+            }`}>
+              {(paginasCursos[carruselPaginaIdx] || []).map((c) => (
+                <div key={c.id}>{renderTarjetaCurso(c)}</div>
+              ))}
+            </div>
 
             <button
               className="inscr-pasos-nav inscr-pasos-nav-next"
-              onClick={() => setCursoCarruselIdx((i) => Math.min(cursos.length - 1, i + 1))}
-              disabled={cursoCarruselIdx === cursos.length - 1}
-              aria-label="Siguiente curso"
+              onClick={() => setCarruselPaginaIdx((i) => Math.min(paginasCursos.length - 1, i + 1))}
+              disabled={carruselPaginaIdx === paginasCursos.length - 1}
+              aria-label="Más cursos"
             >
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
                 <path d="M9 18l6-6-6-6"/>
@@ -336,12 +426,12 @@ export default function Inscripciones() {
             </button>
 
             <div className="inscr-pasos-dots">
-              {cursos.map((c, i) => (
+              {paginasCursos.map((pagina, i) => (
                 <button
-                  key={c.id}
-                  className={`inscr-pasos-dot${i === cursoCarruselIdx ? ' activo' : ''}`}
-                  onClick={() => setCursoCarruselIdx(i)}
-                  aria-label={`Ver curso ${i + 1}: ${c.nombre}`}
+                  key={pagina[0]?.id ?? i}
+                  className={`inscr-pasos-dot${i === carruselPaginaIdx ? ' activo' : ''}`}
+                  onClick={() => setCarruselPaginaIdx(i)}
+                  aria-label={`Ver página ${i + 1} de cursos`}
                 />
               ))}
             </div>
@@ -360,10 +450,12 @@ export default function Inscripciones() {
         }}
       >
         <div className="container">
-          {!vistaDetalle && !formInscripcion && (
-            <>
-              <span className="label-seccion label-rojo">Proceso</span>
-              <h2 className="inscr-titulo">Cómo inscribirse</h2>
+          {/* Pedido del usuario (2026-09-06): esta guía se queda siempre
+             visible — "Ver detalles"/"Inscribirme" ya no la reemplazan
+             acá, ahora abren una ventana desplegable flotante (ver el
+             overlay más abajo, después de esta sección). */}
+          <span className="label-seccion label-rojo">Proceso</span>
+          <h2 className="inscr-titulo">Cómo inscribirse</h2>
               <p className="inscr-subtitulo inscr-subtitulo-claro">
                 Cuatro pasos simples para comenzar tu formación musical.
               </p>
@@ -419,10 +511,9 @@ export default function Inscripciones() {
                   ))}
                 </div>
               </div>
-            </>
-          )}
 
           {vistaDetalle && !formInscripcion && (
+            <div className="icm-overlay" ref={overlayRef} onClick={manejarClickOverlay}>
             <div className="inscr-detalle-wrapper">
               <button
                 className="inscr-nav-curso inscr-nav-lateral"
@@ -436,17 +527,39 @@ export default function Inscripciones() {
               </button>
 
               <div className="inscr-detalle">
+                {/* Botón cerrar como hijo directo de la tarjeta (no del
+                   header de texto) — flota sobre la esquina superior de la
+                   foto. Hallazgo real (pedido del usuario, 2026-09-07): antes
+                   vivía dentro de `.inscr-detalle-header`, posicionado
+                   relativo a ESE bloque (que empieza justo después de la
+                   foto) — en mobile eso coincidía casi exacto con la flecha
+                   "siguiente" (centrada al 50% de la altura total de la
+                   tarjeta), superponiéndose. Ahora se ancla al borde superior
+                   de la tarjeta entera, lejos de esa flecha sin importar
+                   cuánto mida el contenido de abajo. */}
+                <button
+                  className="inscr-detalle-cerrar"
+                  onClick={() => setVistaDetalle(null)}
+                  aria-label="Cerrar detalle"
+                >
+                  ✕
+                </button>
+                {/* Reemplaza el ícono de emoji (pedido del usuario,
+                   2026-09-06) — la foto ya es obligatoria en el admin, así
+                   que siempre debería haber una para mostrar acá. */}
+                {vistaDetalle.imagen && (
+                  <div className="inscr-detalle-foto-wrap">
+                    <img src={vistaDetalle.imagen} alt="" className="inscr-detalle-foto" />
+                  </div>
+                )}
                 <div className="inscr-detalle-header">
-                  <button
-                    className="inscr-detalle-cerrar"
-                    onClick={() => setVistaDetalle(null)}
-                    aria-label="Cerrar detalle"
-                  >
-                    ✕
-                  </button>
-                  <span className="inscr-detalle-icono" aria-hidden="true">{vistaDetalle.emoji || "🎵"}</span>
                   <div className="inscr-detalle-header-texto">
                     <span className="inscr-detalle-tagline">{vistaDetalle.tagline}</span>
+                    {/* Franja tricolor corta entre antetítulo y título — mismo
+                       lenguaje visual que el resto del sitio, pedido del
+                       usuario (2026-09-06) para este desplegable en todas
+                       las responsividades. */}
+                    <div className="inscr-detalle-franja" aria-hidden="true" />
                     <h3 className="inscr-detalle-nombre">{vistaDetalle.nombre}</h3>
                   </div>
                 </div>
@@ -573,9 +686,11 @@ export default function Inscripciones() {
                 </button>
               </div>
             </div>
+            </div>
           )}
 
           {formInscripcion && (
+            <div className="icm-overlay" ref={overlayRef} onClick={manejarClickOverlay}>
             <div className="inscr-form">
               <div className="inscr-form-header">
                 <span className="inscr-form-badge">{formInscripcion.nombre}</span>
@@ -833,6 +948,7 @@ export default function Inscripciones() {
                   </div>
                 </div>
               )}
+            </div>
             </div>
           )}
         </div>

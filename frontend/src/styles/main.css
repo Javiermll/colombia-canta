@@ -289,6 +289,26 @@ h5 {
   margin-bottom: 20px;
 }
 
+/* Franja tricolor entre antetítulo y título — pedido del usuario
+   (2026-09-07), solo en las páginas legales (únicas que usan PaginaLegal).
+   En desktop el header queda alineado a la izquierda por defecto, así que
+   no necesita `margin:auto`; a partir de 1024px `.page-header-inner` pasa a
+   `align-items:center` (ver media query más abajo) y esa misma regla ya
+   centra esta caja igual que al texto — a diferencia del bug ya resuelto en
+   `.inscr-detalle-franja`, acá el padre sí define `align-items` explícito. */
+.page-header-franja {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  margin: 2px 0 22px;
+  background: linear-gradient(
+    to right,
+    #fcd116 0%, #fcd116 50%,
+    #003087 50%, #003087 75%,
+    #ce1126 75%, #ce1126 100%
+  );
+}
+
 .page-header h1 {
   color: var(--texto-principal);
   font-family: var(--font-titulo);
@@ -694,31 +714,71 @@ h5 {
   text-align: justify;
 }
 
+/* Franja tricolor corta entre antetítulo y título, en los 3 grupos del
+   elenco (mismo lenguaje visual que Historia/Escuela/Noticias/Eventos).
+   Pedido del usuario, 2026-09-03. */
+.elenco-grupo-texto .label-seccion::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 4px;
+  margin: 8px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    #fcd116 0%, #fcd116 50%,
+    #003087 50%, #003087 75%,
+    #ce1126 75%, #ce1126 100%
+  );
+}
+
 @media (max-width: 1024px) {
   .elenco-grupo,
   .elenco-grupo--reverse {
     flex-direction: column;
     min-height: auto;
     align-items: center;
+    background: var(--fondo-secundario);
   }
 
-  .elenco-grupo-img-wrap {
-    flex: 0 0 280px;
-    height: 280px;
-    width: 100%;
-  }
-
+  /* Aplana el bloque de texto para poder intercalar la imagen entre el
+     antetítulo/título y la descripción — pedido del usuario (2026-09-03):
+     [antetítulo] [franja tribal] [título] [imagen] [descripción]. El
+     `display:contents` no saca a `.elenco-grupo-texto` del DOM, así que los
+     selectores descendientes de acá abajo lo siguen encontrando. */
   .elenco-grupo-texto {
-    padding: 36px 24px;
-    align-items: center;
+    display: contents;
+  }
+
+  .elenco-grupo-texto > .label-seccion {
+    order: 1;
+    margin-top: 36px;
+  }
+
+  .elenco-grupo-texto > .elenco-grupo-titulo {
+    order: 2;
+    padding: 0 24px;
     text-align: center;
   }
 
-  .elenco-grupo-desc {
+  /* Pedido del usuario (2026-09-03): la descripción va antes que la
+     imagen, no después — [antetítulo] [franja] [título] [descripción]
+     [imagen]. */
+  .elenco-grupo-texto > .elenco-grupo-desc {
+    order: 3;
     max-width: 560px;
     margin: 0 auto;
+    padding: 0 24px;
     font-size: 18px;
     text-align: justify;
+  }
+
+  .elenco-grupo-img-wrap {
+    order: 4;
+    flex: 0 0 280px;
+    height: 280px;
+    width: 100%;
+    margin: 24px 0 36px;
   }
 }
 
@@ -817,31 +877,80 @@ h5 {
   margin-bottom: 4px;
 }
 
-/* "Hoy somos un Centro Cultural con" */
+/* Franja tricolor corta entre el antetítulo y el título de "Quiénes somos"
+   (mismo lenguaje visual que Historia/Escuela/Noticias/Eventos). Pedido del
+   usuario, 2026-09-03. */
+.nosotros-qs-texto .label-seccion::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 4px;
+  margin: 8px auto 0;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    #fcd116 0%, #fcd116 50%,
+    #003087 50%, #003087 75%,
+    #ce1126 75%, #ce1126 100%
+  );
+}
+
+/* "Hoy somos un Centro Cultural con" — pedido del usuario (2026-09-03):
+   rediseño de las pills (se veían mal en tablet) más el icono en una
+   burbuja circular, lista para recibir un ícono en imagen (ver
+   `.nosotros-hoy-icono-img`) en vez del emoji actual sin romper nada
+   mientras tanto. */
 .nosotros-hoy-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 12px;
   margin-top: 4px;
 }
 
 .nosotros-hoy-item {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 12px 14px;
-  border-radius: 10px;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
   background: var(--bg-chip);
   border: 1px solid var(--border-sutil);
-  font-size: 13px;
+  font-size: 13.5px;
   font-weight: 600;
   color: var(--texto-principal);
   line-height: 1.3;
+  box-shadow: 0 2px 10px var(--sombra-sutil);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nosotros-hoy-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px var(--sombra-media);
 }
 
 .nosotros-hoy-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--coral) 12%, transparent);
   font-size: 18px;
   flex-shrink: 0;
+}
+
+/* Para cuando el emoji se reemplace por un ícono en imagen: negro en light,
+   blanco en dark (mismo criterio que `.reconocimiento-icono-img` en
+   Historia.css). */
+.nosotros-hoy-icono-img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+}
+
+[data-theme="dark"] .nosotros-hoy-icono-img {
+  filter: brightness(0) invert(1);
 }
 
 /* Cifras — franja completa */
@@ -1437,6 +1546,17 @@ h5 {
     height: 360px;
   }
 
+  /* En este rango la grilla de 1 columna (heredada del bloque ≤1024px)
+     dejaba las pills como franjas angostas y muy separadas — pedido del
+     usuario (2026-09-03): "se ve bastante mal" en tablet. Volvemos a 2
+     columnas, que es el ancho para el que está pensado el diseño de pill. */
+  .nosotros-hoy-grid {
+    grid-template-columns: 1fr 1fr;
+    max-width: 560px;
+    width: 100%;
+    margin: 4px auto 0;
+  }
+
   /* Galería de la fundadora: las dos fotos lado a lado, sin necesidad de carrusel */
   .nosotros-fundadora-galeria {
     max-width: 640px;
@@ -1449,14 +1569,31 @@ h5 {
 }
 
 @media (max-width: 599px) {
+  /* Los widgets de "Inspiración y comunidad" (Spotify/Instagram/TripAdvisor)
+     ocupaban mucha altura apilados en mobile — pedido del usuario
+     (2026-09-03): que se puedan recorrer deslizando hacia los lados en vez
+     de bajar tanto. Carrusel nativo por scroll-snap, sin JS: cada tarjeta
+     asoma un poco la siguiente para dar la pista visual de que se desliza. */
   .grid-3col {
-    grid-template-columns: 1fr;
-    justify-items: center;
+    display: flex;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-left: 24px;
+    gap: 14px;
+    margin: 0 -24px;
+    padding: 4px 24px 10px;
+  }
+
+  .grid-3col::-webkit-scrollbar {
+    display: none;
   }
 
   .grid-3col > * {
-    width: 100%;
+    flex: 0 0 84%;
     max-width: 320px;
+    scroll-snap-align: start;
   }
 
   .grid-4col {
@@ -1537,6 +1674,13 @@ h5 {
   border: 1px solid var(--border-sutil);
   border-radius: 16px;
   text-align: center;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.contacto-info-item:hover {
+  transform: translateY(-3px);
+  border-color: var(--coral);
+  box-shadow: 0 10px 28px var(--sombra-media);
 }
 
 .contacto-info-icono {
@@ -1624,6 +1768,19 @@ h5 {
     justify-content: center;
     text-align: center;
   }
+
+  /* ⭐ Hallazgo real (pedido del usuario, 2026-09-06): `.contacto-redes-franja`
+     ya centraba SU propio contenido, pero `.contacto-redes-horizontales` es
+     un flex item que se angosta al ancho de su fila más larga (4 íconos) —
+     si los 6 no caben en una fila, la segunda fila (2 íconos) queda pegada
+     a la izquierda de ESE ancho angosto, no centrada bajo los 6. Forzarlo a
+     ocupar el ancho completo de la tarjeta arregla el centrado de cada fila
+     envuelta, sin importar cuántos íconos entren por fila.
+     Ver mismo tipo de bug ya resuelto en `.inscr-detalle-franja`. */
+  .contacto-redes-horizontales {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 /* ── Formulario + ubicación ───────────────────────────── */
@@ -1632,10 +1789,11 @@ h5 {
 }
 
 .contacto-form-card {
-  background: #111111;
+  background: var(--bg-card);
+  border: 1px solid var(--border-sutil);
   border-radius: 20px;
   padding: 40px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 40px var(--sombra-fuerte);
 }
 
 .contacto-form {
@@ -1651,13 +1809,13 @@ h5 {
 .contacto-form-titulo {
   font-family: var(--font-titulo);
   font-size: 26px;
-  color: #ffffff;
+  color: var(--texto-principal);
   margin-bottom: 6px;
 }
 
 .contacto-form-desc {
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--texto-secundario);
 }
 
 .contacto-form-grid {
@@ -1677,7 +1835,7 @@ h5 {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.45);
+  color: var(--texto-secundario);
   margin-bottom: 8px;
 }
 
@@ -1687,8 +1845,8 @@ h5 {
   padding: 8px 0;
   background: transparent;
   border: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
+  border-bottom: 1px solid var(--border-media);
+  color: var(--texto-principal);
   font-size: 15px;
   font-family: var(--font-cuerpo);
   outline: none;
@@ -1701,8 +1859,20 @@ h5 {
   border-bottom-color: var(--coral);
 }
 
+.contacto-form-input.invalido,
+.contacto-form-textarea.invalido {
+  border-bottom-color: var(--rojo);
+}
+
 .contacto-form-textarea {
   resize: none;
+}
+
+.contacto-form-field-error {
+  display: block;
+  font-size: 11px;
+  color: var(--rojo);
+  margin-top: 6px;
 }
 
 .contacto-form-btn {
@@ -1729,25 +1899,85 @@ h5 {
   transform: translateY(-1px);
 }
 
+.contacto-form-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.contacto-form-error {
+  color: var(--rojo);
+  font-size: 13px;
+  margin: -8px 0 0;
+}
+
 .contacto-enviado {
   text-align: center;
   padding: 40px 0;
+  animation: contactoEnviadoFade 0.4s ease;
+}
+
+/* logo.png es arte claro pensado para fondos oscuros (mismo archivo que usa
+   el Navbar) — sobre la tarjeta clara de esta confirmación necesita el mismo
+   `brightness(0)` que ya usan `.navbar--white .logo-img`/`.mobile-drawer-logo
+   img` para volverse negro en light mode, y quedar sin filtro en dark mode. */
+.contacto-enviado-logo {
+  height: 40px;
+  margin: 0 auto 28px;
+  display: block;
+  filter: brightness(0);
+}
+
+[data-theme="dark"] .contacto-enviado-logo {
+  filter: none;
 }
 
 .contacto-enviado-icono {
-  font-size: 56px;
-  margin-bottom: 16px;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--coral);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--coral) 12%, transparent);
+  animation: contactoEnviadoPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.contacto-enviado-franja {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  margin: 14px auto 18px;
+  background: linear-gradient(
+    to right,
+    #fcd116 0%, #fcd116 50%,
+    #003087 50%, #003087 75%,
+    #ce1126 75%, #ce1126 100%
+  );
+}
+
+@keyframes contactoEnviadoFade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes contactoEnviadoPop {
+  from { transform: scale(0.6); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
 .contacto-enviado-titulo {
   font-family: var(--font-titulo);
   font-size: 24px;
   margin-bottom: 10px;
-  color: #ffffff;
+  color: var(--texto-principal);
 }
 
 .contacto-enviado-desc {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--texto-secundario);
 }
 
 .contacto-ubicacion-titulo {
@@ -1759,6 +1989,19 @@ h5 {
   text-align: center;
 }
 
+.contacto-ubicacion-franja {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  margin: 10px auto 20px;
+  background: linear-gradient(
+    to right,
+    #fcd116 0%, #fcd116 50%,
+    #003087 50%, #003087 75%,
+    #ce1126 75%, #ce1126 100%
+  );
+}
+
 .contacto-ubicacion-desc {
   font-size: 15px;
   line-height: 1.7;
@@ -1767,11 +2010,32 @@ h5 {
   text-align: center;
 }
 
+.contacto-mapa-marco {
+  padding: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-sutil);
+  border-radius: 20px;
+  box-shadow: 0 8px 30px var(--sombra-media);
+}
+
 .contacto-mapa {
   width: 100%;
   aspect-ratio: 16/10;
-  border-radius: 16px;
-  border: 1px solid var(--border-media);
+  border-radius: 14px;
+  border: none;
+  display: block;
+}
+
+@media (max-width: 1024px) {
+  /* Hallazgo real (pedido del usuario, 2026-09-06): en tablet el grid pasa a
+     una sola columna (ver .grid-2col-contacto) y esta columna hereda el
+     ancho completo del contenedor — con aspect-ratio 16/10, eso vuelve el
+     mapa desproporcionadamente alto. Se le pone un tope de ancho, igual que
+     ya se centra el resto de esta grid en este breakpoint. */
+  .contacto-ubicacion-col {
+    max-width: 560px;
+    width: 100%;
+  }
 }
 
 /* ── Responsive ───────────────────────────────────────── */
@@ -1781,8 +2045,23 @@ h5 {
     text-align: center;
   }
 
+  /* Pedido del usuario (2026-09-05): en tablet/mobile el corazón debe
+     aparecer antes del título y la descripción, no después — el grid
+     apila en orden de DOM (texto primero), así que se reordena visualmente
+     sin tocar el JSX. */
+  .contacto-info-header-img-col {
+    order: -1;
+  }
+
+  /* Hallazgo real (pedido del usuario, 2026-09-06): entre ~768px y 1024px el
+     `.container` sigue dando hasta ~976px de ancho — de sobra para 3 columnas,
+     pero de una sola columna centrada (lo que pasa acá) resultaba en líneas
+     de texto larguísimas y tarjetas/redes estiradas de punta a punta. Se le
+     pone un tope de ancho a todo el bloque para que se vea contenido, no
+     "none" (que es lo que dejaba crecer sin límite). */
   .contacto-info-header-texto {
-    max-width: none;
+    max-width: 620px;
+    margin: 0 auto;
   }
 
   .contacto-info-header-img {
@@ -1793,6 +2072,36 @@ h5 {
 
   .contacto-info-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .contacto-redes-franja {
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* La sección se sentía demasiado larga apilando 3 tarjetas verticales
+     centradas (ícono arriba, texto abajo) — se compacta a filas
+     horizontales (ícono a la izquierda, texto a la derecha). */
+  .contacto-info-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-align: left;
+    padding: 16px 18px;
+  }
+
+  .contacto-info-icono {
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .contacto-info-texto {
+    min-width: 0;
   }
 
   .contacto-form-card {
@@ -1802,6 +2111,32 @@ h5 {
   .contacto-form-grid {
     grid-template-columns: 1fr;
     gap: 20px;
+  }
+}
+
+@media (max-width: 599px) {
+  .contacto-info-section {
+    padding: 32px 0 40px;
+  }
+
+  .contacto-info-header {
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .contacto-info-header-img {
+    width: 68px;
+    height: 68px;
+  }
+
+  .contacto-info-item {
+    padding: 14px 16px;
+    gap: 14px;
+  }
+
+  .contacto-info-icono {
+    width: 42px;
+    height: 42px;
   }
 }
 
@@ -2372,19 +2707,66 @@ h5 {
   gap: 24px;
 }
 
-/* Carrusel de cursos (mobile, <600px — ver breakpoint más abajo). Mismo
-   formato de tarjeta que el grid, 1 a la vez con flechas + puntos, en vez de
-   una lista larga hacia abajo. Reutiliza los botones/puntos de navegación ya
-   estilados para el carrusel de "Cómo inscribirse" (.inscr-pasos-nav/-dots). */
+/* Carrusel de cursos (≤1024px — ver breakpoint más abajo). Mismo formato de
+   tarjeta que el grid, paginado con flechas + puntos en vez de una lista
+   larga hacia abajo: 1 tarjeta a la vez en mobile, 2 en tablet (pedido del
+   usuario, 2026-09-05 — ver `cardsPorPagina` en Inscripciones.jsx).
+   Reutiliza los botones/puntos de navegación ya estilados para el carrusel
+   de "Cómo inscribirse" (.inscr-pasos-nav/-dots), con colores propios acá
+   abajo porque esos nacieron para una sección de fondo oscuro y esta
+   sección es clara. */
 .inscr-cursos-carrusel {
   display: none;
   position: relative;
   padding: 0 44px;
 }
 
-.inscr-cursos-carrusel .inscr-card {
+.inscr-cursos-carrusel-fila {
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+}
+
+/* Hijo directo (el `<div key=...>` que envuelve cada tarjeta en JSX) — un
+   `flex` en `.inscr-card` en sí no alcanza porque flexbox reparte el
+   espacio entre sus hijos directos, no entre nietos (hallazgo real,
+   2026-09-05: sin esto, cada envoltorio quedaba shrink-to-fit a su propio
+   contenido y las 2 tarjetas terminaban con anchos muy distintos). */
+.inscr-cursos-carrusel-fila > div {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+}
+
+.inscr-cursos-carrusel-fila--uno {
   max-width: 360px;
   margin: 0 auto;
+}
+
+/* Página incompleta (ej. 1 sola tarjeta en un carrusel de a 2): mantiene el
+   mismo ancho que tendría con pareja, centrada, en vez de estirarse a todo
+   lo ancho de la fila. */
+.inscr-cursos-carrusel-fila--incompleta {
+  justify-content: center;
+}
+
+.inscr-cursos-carrusel-fila--incompleta > div {
+  flex: 0 1 calc(50% - 8px);
+}
+
+.inscr-cursos-carrusel .inscr-pasos-nav {
+  background: var(--bg-card);
+  border-color: var(--border-media);
+  color: var(--texto-principal);
+  box-shadow: 0 2px 10px var(--sombra-sutil);
+}
+
+.inscr-cursos-carrusel .inscr-pasos-nav:hover:not(:disabled) {
+  background: var(--bg-hover);
+}
+
+.inscr-cursos-carrusel .inscr-pasos-dot {
+  background: var(--border-media);
 }
 
 /* ── Card de curso ── */
@@ -2405,33 +2787,72 @@ h5 {
 .inscr-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 16px 40px var(--sombra-media);
-  border-color: var(--border-media);
+  border-color: var(--coral);
 }
 
+/* Acento de color del curso, solo en mobile — pedido del usuario
+   (2026-09-06): sin foto/emoji/etiquetas ahí, la tarjeta se veía "simple",
+   esto le da algo de identidad propia por curso sin agregar contenido. */
+.inscr-card-acento-mobile {
+  display: none;
+}
+
+/* Respaldo visual (sin foto todavía, ver `.inscr-card-foto-wrap` más abajo
+   para cuando sí la hay) — franja de color usando el acento del curso si lo
+   tiene, para que no se vea como un hueco vacío arriba de la tarjeta. */
+/* Misma proporción fija (4:3) que `.inscr-card-foto-wrap` — así todas las
+   tarjetas miden igual en una fila del grid, tenga el curso foto todavía o
+   no (respaldo de emoji + acento de color mientras tanto). */
 .inscr-card-header {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  padding: 28px 20px 24px;
-  text-align: center;
+  aspect-ratio: 4 / 3;
+  width: 100%;
 }
 
 .inscr-card-icono {
-  font-size: 40px;
+  font-size: 44px;
   line-height: 1;
 }
 
+/* Foto real del curso — pedido del usuario (2026-09-04), reemplaza el
+   respaldo de emoji cuando el admin ya cargó una. Proporción única (4:3) en
+   TODOS los anchos de pantalla (nunca se pisa en un media query) — el
+   recorte lo elige el admin una sola vez al subirla (ImageCropModal), así
+   que no hay sorpresas de responsividad como pasaba con las fotos de
+   Productos, que sí necesitaban formas distintas según dónde se mostraran.
+   Solo tablet/desktop — en mobile no se renderiza nada de esto (ver
+   `esMobile` en Inscripciones.jsx), la tarjeta va directo al contenido. */
+.inscr-card-foto-wrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
+
+.inscr-card-foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.35s ease;
+}
+
+.inscr-card:hover .inscr-card-foto {
+  transform: scale(1.04);
+}
+
+/* Antetítulo simple (no pill) — pedido del usuario (2026-09-06): "la
+   etiqueta... podría estar dispuesta en otra parte de la card", en vez de
+   flotar como pastilla sobre la foto (se sentía desordenado en tablet). */
 .inscr-card-tagline {
+  align-self: flex-start;
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #fff;
-  background: var(--coral);
-  padding: 3px 10px;
-  border-radius: 100px;
+  color: var(--coral);
 }
 
 .inscr-card-body {
@@ -2439,7 +2860,7 @@ h5 {
   display: flex;
   flex-direction: column;
   flex: 1;
-  gap: 12px;
+  gap: 8px;
 }
 
 .inscr-card-nombre {
@@ -2450,50 +2871,48 @@ h5 {
   line-height: 1.2;
 }
 
-.inscr-card-personalizado {
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--texto-secundario);
-  background: var(--bg-hover);
-  border-radius: 100px;
-  padding: 4px 10px;
-  align-self: flex-start;
+/* Franja tricolor corta entre título y descripción — mismo lenguaje visual
+   que el resto del sitio (Historia/Escuela/Noticias/Eventos/Elenco), acá
+   pedida entre título y descripción en vez de bajo el antetítulo (pedido
+   del usuario, 2026-09-06). */
+.inscr-card-franja {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    #fcd116 0%, #fcd116 50%,
+    #003087 50%, #003087 75%,
+    #ce1126 75%, #ce1126 100%
+  );
 }
 
-.inscr-card-lista {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  flex: 1;
-}
-
-.inscr-card-lista li {
+/* `min-height` reserva siempre el alto de 3 líneas aunque el texto real
+   sea más corto — pedido del usuario (2026-09-06): "el contenido interior
+   es no simétrico entre cards". Sin esto, una descripción corta dejaba un
+   hueco de tamaño distinto en cada tarjeta (el hueco se movía según cuánto
+   texto hubiera); con esto, el hueco siempre queda en el mismo lugar y del
+   mismo tamaño en todas — la duración/precio ya no está en la tarjeta
+   (ver "Ver detalles"), así que la descripción es el único bloque de largo
+   variable que queda. */
+.inscr-card-desc {
   font-size: 13px;
   color: var(--texto-secundario);
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  line-height: 1.55;
+  margin: 0;
+  min-height: calc(1.55em * 3);
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.inscr-card-lista li::before {
-  content: "★";
-  font-size: 9px;
-  color: var(--amarillo);
-  flex-shrink: 0;
-}
-
-.inscr-card-mas {
-  font-style: italic;
-  opacity: 0.7;
-}
-
-.inscr-card-mas::before {
-  content: "" !important;
-}
-
+/* Los botones siempre quedan pegados abajo sin importar cuánto contenido
+   tenga cada tarjeta (con/sin tagline, descripción, meta), incluso cuando
+   alguno de esos bloques no se renderiza por estar vacío. */
 .inscr-card-acciones {
-  margin-top: 4px;
+  margin-top: auto;
+  padding-top: 4px;
   display: flex;
   gap: 8px;
 }
@@ -2551,6 +2970,32 @@ h5 {
 }
 
 /* ── Detalle de curso (panel didáctico) ── */
+/* ── Ventana desplegable (overlay) — pedido del usuario (2026-09-06):
+   "Ver detalles"/"Inscribirme" flotan encima de toda la página en vez de
+   reemplazar el contenido de "Cómo inscribirse". Mismo patrón exacto que
+   ReservaModal (`.rm-overlay`/`.rm-modal`): centrado en tablet/desktop,
+   bottom-sheet (aparece desde abajo) en mobile — ver el media query más
+   abajo. Vive donde ya estaba el JSX en el árbol (dentro de la sección
+   "Cómo inscribirse"), pero `position:fixed` lo saca del flujo normal
+   igual que a ReservaModal, sin necesidad de un portal. */
+.icm-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(4px);
+  animation: icmFade 0.2s ease;
+}
+
+@keyframes icmFade {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
 .inscr-detalle,
 .inscr-form {
   display: flex;
@@ -2560,7 +3005,7 @@ h5 {
   border-radius: 20px;
   overflow: hidden;
   max-width: 560px;
-  max-height: 78vh;
+  max-height: 85vh;
   margin: 0 auto;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
   animation: inscrApareceFormulario 0.25s ease;
@@ -2569,6 +3014,26 @@ h5 {
 @keyframes inscrApareceFormulario {
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Reemplaza el ícono de emoji (pedido del usuario, 2026-09-06) — foto real
+   del curso, ahora obligatoria en el admin. */
+.inscr-detalle {
+  position: relative;
+}
+
+.inscr-detalle-foto-wrap {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.inscr-detalle-foto {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .inscr-detalle-header {
@@ -2584,30 +3049,29 @@ h5 {
 
 .inscr-detalle-cerrar {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 30px;
-  height: 30px;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
-  border: 1.5px solid var(--border-media);
-  background: var(--bg-chip);
-  color: var(--texto-principal);
-  font-size: 13px;
+  border: none;
+  /* Flota sobre la foto (no sobre el fondo de la tarjeta) — un color fijo
+     semitransparente se ve bien sobre cualquier foto, a diferencia de los
+     tokens de tema (bg-chip/bg-hover), que no tienen relación con los
+     colores de la imagen de fondo. */
+  background: rgba(0, 0, 0, 0.45);
+  color: #ffffff;
+  font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 6;
   transition: background 0.15s ease;
 }
 
 .inscr-detalle-cerrar:hover {
-  background: var(--bg-hover);
-}
-
-.inscr-detalle-icono {
-  font-size: 38px;
-  flex-shrink: 0;
-  line-height: 1;
+  background: rgba(0, 0, 0, 0.65);
 }
 
 .inscr-detalle-header-texto {
@@ -2622,6 +3086,26 @@ h5 {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--texto-secundario);
+}
+
+/* Franja tricolor corta — pedido del usuario (2026-09-06), en todas las
+   responsividades. ⭐ Hallazgo real: `.inscr-detalle-header-texto` no fija
+   `align-items` (queda en `stretch`, el default), así que el `<span>`/`<h3>`
+   de al lado se ven centrados solo porque su TEXTO usa `text-align:center`
+   heredado — pero esta franja no tiene texto, es una caja vacía, así que
+   sin `align-self` propio quedaba pegada al borde izquierdo en vez de
+   centrada. */
+.inscr-detalle-franja {
+  align-self: center;
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(
+    to right,
+    #fcd116 0%, #fcd116 50%,
+    #003087 50%, #003087 75%,
+    #ce1126 75%, #ce1126 100%
+  );
 }
 
 .inscr-detalle-nombre {
@@ -2791,6 +3275,7 @@ h5 {
 
 /* ── Navegación entre cursos (flechas al lado del modal) ── */
 .inscr-detalle-wrapper {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2825,19 +3310,41 @@ h5 {
   display: none;
 }
 
+/* Pedido del usuario (2026-09-06): en mobile no le gustaban las flechas
+   abajo del todo (fuera de la tarjeta, sobre el fondo oscuro) — pasan a
+   flotar sobre los bordes izquierdo/derecho de la propia tarjeta,
+   centradas verticalmente, como un control de carrusel/lightbox. Quedan
+   fijas ahí (no seentro del contenido que scrollea) porque su referencia de
+   posición es `.inscr-detalle-wrapper`, que no scrollea — solo
+   `.inscr-detalle-body`, adentro, lo hace. */
 @media (max-width: 599px) {
   .inscr-nav-lateral {
     display: none;
   }
-  .inscr-detalle-wrapper {
-    flex-direction: column;
-    align-items: center;
-  }
+
   .inscr-nav-mobile-row {
     display: flex;
-    justify-content: center;
-    gap: 16px;
-    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    justify-content: space-between;
+    padding: 0 10px;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .inscr-nav-mobile-row .inscr-nav-curso {
+    pointer-events: auto;
+    background: var(--bg-card);
+    border-color: var(--border-media);
+    color: var(--texto-principal);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  }
+
+  .inscr-nav-mobile-row .inscr-nav-curso:hover:not(:disabled) {
+    background: var(--bg-hover);
   }
 }
 
@@ -3032,11 +3539,33 @@ h5 {
   margin-top: 8px;
 }
 
-/* ── Responsive: detalle / formulario ── */
+/* ── Responsive: detalle / formulario (ventana desplegable) ──
+   Bottom sheet — mismo patrón exacto que ReservaModal en mobile: el
+   overlay ancla abajo (sin padding) y la tarjeta sube desde el borde
+   inferior, con esquinas superiores redondeadas y su propio scroll interno
+   (ya no hay `max-height: none` — ahora es un overlay real de altura
+   acotada al viewport, no contenido embebido en el flujo de la página). */
 @media (max-width: 599px) {
+  .icm-overlay {
+    align-items: flex-end;
+    padding: 0;
+  }
+
   .inscr-detalle,
   .inscr-form {
-    max-height: none;
+    max-width: 100%;
+    max-height: 92vh;
+    border-radius: 20px 20px 0 0;
+    animation: icmSheetUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .inscr-detalle-wrapper {
+    width: 100%;
+  }
+
+  @keyframes icmSheetUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
   }
 
   .inscr-detalle-header {
@@ -3046,7 +3575,7 @@ h5 {
   .inscr-detalle-body,
   .inscr-form-body {
     padding: 20px 20px 28px;
-    overflow-y: visible;
+    overflow-y: auto;
   }
 
   .inscr-detalle-meta {
@@ -3274,9 +3803,12 @@ h5 {
 
 /* ── Responsive ── */
 @media (max-width: 1024px) {
-  .inscr-cursos-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  /* Pedido del usuario (2026-09-05): a este ancho el grid de 2 columnas
+     dejaba tarjetas muy altas para la lista larga hacia abajo — pasa a
+     carrusel paginado (2 tarjetas a la vez, ver `cardsPorPagina` en
+     Inscripciones.jsx), mismo mecanismo que ya usaba mobile con 1 sola. */
+  .inscr-cursos-grid { display: none; }
+  .inscr-cursos-carrusel { display: block; }
 
   .inscr-titulo {
     font-size: 40px;
@@ -3313,9 +3845,12 @@ h5 {
     text-align: center;
   }
 
-  .inscr-card-lista {
-    text-align: left;
+  .inscr-card-tagline {
     align-self: center;
+  }
+
+  .inscr-card-franja {
+    margin: 0 auto;
   }
 
   .inscr-card-acciones {
@@ -3336,20 +3871,37 @@ h5 {
     font-size: 36px;
   }
 
-  .inscr-cursos-grid { display: none; }
-  .inscr-cursos-carrusel { display: block; }
-
   .inscr-titulo {
     font-size: 32px;
+  }
+
+  .inscr-card-acento-mobile {
+    display: block;
+    height: 5px;
+  }
+
+  /* Un poco más de aire y una línea extra de descripción — hay más espacio
+     libre sin foto/emoji arriba, pedido del usuario (2026-09-06). */
+  .inscr-card-body {
+    padding-top: 24px;
+  }
+
+  .inscr-card-desc {
+    -webkit-line-clamp: 4;
+    min-height: calc(1.55em * 4);
   }
 
   .inscr-card-acciones {
     align-items: center;
   }
 
+  /* ⭐ Hallazgo real (2026-09-05): `width: 50%` recortaba el texto
+     "Inscribirme" a la mitad — no había espacio suficiente. Con `width:auto`
+     el botón se ajusta a su propio texto (sigue centrado por
+     `.inscr-card-acciones { align-items: center }`, arriba). */
   .inscr-card-btn {
-    width: 50%;
-    padding: 10px 14px;
+    width: auto;
+    padding: 10px 24px;
     font-size: 12px;
   }
 }
