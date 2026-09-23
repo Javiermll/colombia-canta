@@ -3,6 +3,7 @@ readme_guia.md
 pasos_completos.md
 guia_diseno_panel.md
 manual_administradores.md
+registros_dns_cloudflare.md
 
 node_modules
 .env
