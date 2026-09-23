@@ -21,6 +21,14 @@
 .eventos-lista-panel {
   position: sticky;
   top: 116px;
+  /* ⭐ Rediseño (pedido del usuario, 2026-09-10) — mismo lenguaje visual que
+     ya se le dio al menú principal del panel (AdminSidebar/AdminLayout.css):
+     tarjeta propia con fondo distinto del body y borde sutil, en vez de
+     flotar directo sobre el fondo de la página. */
+  background: var(--bg-card);
+  border: 1px solid var(--border-sutil);
+  border-radius: 16px;
+  padding: 18px;
 }
 
 .eventos-filtros {
@@ -58,10 +66,14 @@
 .eventos-panel-lista {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 2px;
   max-height: 70vh;
   overflow-y: auto;
 }
+
+.eventos-panel-lista::-webkit-scrollbar { width: 5px; }
+.eventos-panel-lista::-webkit-scrollbar-track { background: transparent; }
+.eventos-panel-lista::-webkit-scrollbar-thumb { background: var(--border-media); border-radius: 4px; }
 
 .eventos-item {
   display: flex;
@@ -70,20 +82,30 @@
   gap: 4px;
   padding: 12px 14px;
   border-radius: 10px;
-  border: 1px solid var(--border-sutil);
-  background: var(--bg-card);
+  border: 1px solid transparent;
+  background: transparent;
   cursor: pointer;
   text-align: left;
   width: 100%;
+  transition: background 0.15s ease, transform 0.15s ease;
 }
 
 .eventos-item:hover {
   background: var(--bg-hover);
+  transform: translateX(2px);
 }
 
+/* ⭐ Rediseño (pedido del usuario, 2026-09-10): mismo acento que la sección
+   activa del menú principal (AdminSidebar) — barra `inset` a la izquierda en
+   vez de un simple cambio de borde, para que el evento seleccionado se
+   reconozca de un vistazo entre varios. */
 .eventos-item.activo {
-  border-color: var(--coral);
   background: color-mix(in srgb, var(--coral) 10%, transparent);
+  box-shadow: inset 3px 0 0 var(--coral);
+}
+
+.eventos-item.activo .eventos-item-titulo {
+  color: var(--coral);
 }
 
 .eventos-item-titulo {
@@ -143,6 +165,45 @@
 
 .eventos-fecha-preview strong {
   color: var(--texto-principal);
+}
+
+/* ── PIN de puerta (Fase 6, 2026-09-08) ── */
+.eventos-pin-puerta {
+  margin-bottom: 20px;
+}
+
+.eventos-pin-puerta-valor {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  /* ⭐ Hallazgo real (auditoría de accesibilidad, Fase 6, 2026-09-09): coral
+     sobre `--bg-hover` (un lavado casi blanco en tema claro) daba ≈2.9:1 de
+     contraste — por debajo del mínimo 3:1, justo en el número que el admin
+     necesita leer con precisión para compartirlo con el staff. Texto blanco
+     sobre coral-oscuro sólido da ≈4.4:1 en ambos temas (ninguno de los 2
+     colores cambia con claro/oscuro). */
+  color: #ffffff;
+  background: var(--coral-oscuro);
+  border-radius: 8px;
+  padding: 10px 16px;
+  margin: 0 0 10px;
+  display: inline-block;
+}
+
+.eventos-pin-puerta-vacio {
+  font-size: 13px;
+  color: var(--texto-secundario);
+  margin: 0 0 10px;
+}
+
+.eventos-pin-puerta-link {
+  font-size: 12px;
+  margin: 0 0 12px;
+  word-break: break-all;
+}
+
+.eventos-pin-puerta-link a {
+  color: var(--azul);
 }
 
 /* ── Pills ── */
@@ -245,7 +306,7 @@
 
 .eventos-zona-fila {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 1.3fr 1fr 0.8fr auto;
   gap: 10px;
   align-items: center;
   margin-bottom: 10px;

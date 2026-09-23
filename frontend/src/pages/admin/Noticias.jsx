@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { Search } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useScrollAlSeleccionar } from '../../hooks/useScrollAlSeleccionar';
 import AdminLayout from '../../components/admin/ui/AdminLayout';
@@ -75,7 +76,10 @@ function NoticiaForm({ noticia, onGuardado, onBorrado, onAviso, aviso, adminFetc
 
   async function guardar(e) {
     e.preventDefault();
-    if (!validar()) return;
+    if (!validar()) {
+      setErrorGeneral('Hay campos por corregir — revisa los que quedaron marcados en rojo.');
+      return;
+    }
 
     setGuardando(true);
     setErrorGeneral('');
@@ -219,8 +223,6 @@ function NoticiaForm({ noticia, onGuardado, onBorrado, onAviso, aviso, adminFetc
           />
         </div>
 
-        {errorGeneral && <p className="admin-page-error">{errorGeneral}</p>}
-
         {aviso && (
           <p className="admin-form-aviso" role="status">
             <span aria-hidden="true">✓</span> {aviso}
@@ -237,6 +239,7 @@ function NoticiaForm({ noticia, onGuardado, onBorrado, onAviso, aviso, adminFetc
             </Button>
           )}
         </div>
+        {errorGeneral && <p className="admin-page-error" role="alert">{errorGeneral}</p>}
       </form>
 
       <ConfirmDialog
@@ -314,6 +317,7 @@ export default function Noticias() {
       <div className="noticias-panel-header">
         <div className="noticias-panel-header-textos">
           <h1 className="admin-page-titulo">Gestión de Noticias</h1>
+          <div className="admin-page-franja" aria-hidden="true" />
           <p className="admin-page-sub">Crea, edita y filtra las noticias del sitio libremente.</p>
         </div>
         <Button onClick={() => seleccionar(null)}>+ Nueva noticia</Button>
@@ -332,12 +336,16 @@ export default function Noticias() {
           <div className="noticias-layout">
             <div className="noticias-lista-panel">
               <div className="noticias-filtros">
-                <input
-                  type="text"
-                  placeholder="🔎 Buscar por título…"
-                  value={busqueda}
-                  onChange={(e) => setBusqueda(e.target.value)}
-                />
+                <div className="admin-buscador">
+                  <Search size={16} className="admin-buscador-icono" aria-hidden="true" />
+                  <input
+                    type="text"
+                    placeholder="Buscar por título…"
+                    value={busqueda}
+                    onChange={(e) => setBusqueda(e.target.value)}
+                    style={{ paddingLeft: 38 }}
+                  />
+                </div>
                 <select value={filtroCategoria} onChange={(e) => setFiltroCategoria(e.target.value)}>
                   <option value="todas">Todas las categorías</option>
                   {CATEGORIAS.map((c) => <option key={c} value={c}>{c}</option>)}

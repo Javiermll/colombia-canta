@@ -94,4 +94,10 @@
   .hero-cta-encabezados {
     display: none;
   }
+
+  /* Pedido del usuario (2026-09-07): las pills de slides, centradas en
+     mobile/tablet en vez de pegadas a la izquierda. */
+  .hero-selector {
+    justify-content: center;
+  }
 }

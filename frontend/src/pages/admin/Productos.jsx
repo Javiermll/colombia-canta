@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { Search } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useListaDinamica } from '../../hooks/useListaDinamica';
 import { useScrollAlSeleccionar } from '../../hooks/useScrollAlSeleccionar';
@@ -156,7 +157,10 @@ function ProductoForm({ producto, colecciones, categorias, onGuardado, onBorrado
 
   async function guardar(e) {
     e.preventDefault();
-    if (!validar()) return;
+    if (!validar()) {
+      setErrorGeneral('Hay campos por corregir — revisa los que quedaron marcados en rojo.');
+      return;
+    }
 
     setGuardando(true);
     setErrorGeneral('');
@@ -394,8 +398,6 @@ function ProductoForm({ producto, colecciones, categorias, onGuardado, onBorrado
           <Button type="button" variant="secundario" onClick={() => variantes.agregar(varianteVacia())}>+ Agregar variante</Button>
         </div>
 
-        {errorGeneral && <p className="admin-page-error">{errorGeneral}</p>}
-
         {aviso && (
           <p className="admin-form-aviso" role="status">
             <span aria-hidden="true">✓</span> {aviso}
@@ -412,6 +414,7 @@ function ProductoForm({ producto, colecciones, categorias, onGuardado, onBorrado
             </Button>
           )}
         </div>
+        {errorGeneral && <p className="admin-page-error" role="alert">{errorGeneral}</p>}
       </form>
 
       <ConfirmDialog
@@ -508,6 +511,7 @@ export default function Productos() {
       <div className="prod-panel-header">
         <div className="prod-panel-header-textos">
           <h1 className="admin-page-titulo">Gestión de Productos</h1>
+          <div className="admin-page-franja" aria-hidden="true" />
           <p className="admin-page-sub">Crea, edita y filtra los productos de la tienda.</p>
         </div>
         <div className="prod-panel-header-acciones">
@@ -528,12 +532,16 @@ export default function Productos() {
         <div className="prod-layout">
           <div className="prod-lista-panel">
             <div className="prod-filtros">
-              <input
-                type="text"
-                placeholder="🔎 Buscar por nombre…"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-              />
+              <div className="admin-buscador">
+                <Search size={16} className="admin-buscador-icono" aria-hidden="true" />
+                <input
+                  type="text"
+                  placeholder="Buscar por nombre…"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  style={{ paddingLeft: 38 }}
+                />
+              </div>
               <select value={filtroColeccion} onChange={(e) => setFiltroColeccion(e.target.value)}>
                 <option value="todas">Todas las colecciones</option>
                 {colecciones.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}

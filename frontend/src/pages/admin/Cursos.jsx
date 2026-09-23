@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { Search } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useListaDinamica } from '../../hooks/useListaDinamica';
 import { useScrollAlSeleccionar } from '../../hooks/useScrollAlSeleccionar';
@@ -93,7 +94,10 @@ function CursoForm({ curso, niveles, ordenSugerido, onGuardado, onBorrado, onAvi
 
   async function guardar(e) {
     e.preventDefault();
-    if (!validar()) return;
+    if (!validar()) {
+      setErrorGeneral('Hay campos por corregir — revisa los que quedaron marcados en rojo.');
+      return;
+    }
 
     setGuardando(true);
     setErrorGeneral('');
@@ -347,8 +351,6 @@ function CursoForm({ curso, niveles, ordenSugerido, onGuardado, onBorrado, onAvi
           </FormField>
         </div>
 
-        {errorGeneral && <p className="admin-page-error">{errorGeneral}</p>}
-
         {aviso && (
           <p className="admin-form-aviso" role="status">
             <span aria-hidden="true">✓</span> {aviso}
@@ -365,6 +367,7 @@ function CursoForm({ curso, niveles, ordenSugerido, onGuardado, onBorrado, onAvi
             </Button>
           )}
         </div>
+        {errorGeneral && <p className="admin-page-error" role="alert">{errorGeneral}</p>}
       </form>
 
       <ConfirmDialog
@@ -475,12 +478,16 @@ export default function Cursos() {
         <div className="cursos-layout">
           <div className="cursos-lista-panel">
             <div className="cursos-filtros">
-              <input
-                type="text"
-                placeholder="🔎 Buscar por nombre…"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-              />
+              <div className="admin-buscador">
+                <Search size={16} className="admin-buscador-icono" aria-hidden="true" />
+                <input
+                  type="text"
+                  placeholder="Buscar por nombre…"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  style={{ paddingLeft: 38 }}
+                />
+              </div>
               <select value={filtroModalidad} onChange={(e) => setFiltroModalidad(e.target.value)}>
                 <option value="todos">Todas las modalidades</option>
                 <option value="grupal">Grupales</option>

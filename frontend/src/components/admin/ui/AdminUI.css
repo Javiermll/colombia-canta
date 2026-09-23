@@ -15,9 +15,134 @@
   margin: 0 0 24px;
 }
 
+/* Franja tricolor entre el título y la descripción de cada pantalla del
+   panel — pedido del usuario (2026-09-07), mismo lenguaje visual que el
+   resto del sitio. Alineada a la izquierda por defecto (como el título en
+   desktop); se centra solo en la media query de abajo. */
+.admin-page-franja {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  margin: 6px 0 14px;
+  background: linear-gradient(
+    to right,
+    #fcd116 0%, #fcd116 50%,
+    #003087 50%, #003087 75%,
+    #ce1126 75%, #ce1126 100%
+  );
+}
+
+/* Ícono de lupa reutilizable para los buscadores del panel (Noticias,
+   Eventos, Productos, Cursos, Inscripciones, Reservas, Pedidos, Contacto) —
+   pedido del usuario (2026-09-07), reemplaza el emoji "🔎" que vivía como
+   texto plano dentro del placeholder. */
+.admin-buscador {
+  position: relative;
+}
+
+.admin-buscador-icono {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--texto-secundario);
+  pointer-events: none;
+}
+
 .admin-page-error {
   color: var(--rojo);
   font-size: 14px;
+}
+
+/* ⭐ Verificación de pago de Mercado Pago (pedido del usuario, 2026-09-10) —
+   ver VerificarPagoMp.jsx. Mismo criterio de 3 colores que el resto del
+   panel: verde/rojo para acierto/error concreto, amarillo para "no se puede
+   confirmar automáticamente, revisa a mano" (ni bien ni mal). */
+.verpago {
+  margin-top: 8px;
+}
+
+.verpago-aviso {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  margin: 8px 0 0;
+}
+
+.verpago-aviso--error {
+  color: var(--rojo);
+}
+
+.verpago-resultado {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1.5px solid;
+}
+
+.verpago-resultado--ok {
+  background: color-mix(in srgb, #1a8a4a 8%, transparent);
+  border-color: color-mix(in srgb, #1a8a4a 35%, transparent);
+}
+
+.verpago-resultado--error {
+  background: color-mix(in srgb, var(--rojo) 8%, transparent);
+  border-color: color-mix(in srgb, var(--rojo) 35%, transparent);
+}
+
+.verpago-resultado--alerta {
+  background: color-mix(in srgb, var(--amarillo) 12%, transparent);
+  border-color: color-mix(in srgb, var(--amarillo) 45%, transparent);
+}
+
+.verpago-resultado-titulo {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 13.5px;
+  font-weight: 700;
+  margin: 0 0 10px;
+  color: var(--texto-principal);
+}
+
+.verpago-resultado--ok .verpago-resultado-titulo { color: #1a8a4a; }
+.verpago-resultado--error .verpago-resultado-titulo { color: var(--rojo); }
+.verpago-resultado--alerta .verpago-resultado-titulo { color: var(--amarillo-oscuro); }
+
+.verpago-datos {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  margin: 0;
+}
+
+.verpago-datos dt {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--texto-secundario);
+  margin: 0 0 2px;
+}
+
+.verpago-datos dd {
+  font-size: 13.5px;
+  color: var(--texto-principal);
+  margin: 0;
+}
+
+.verpago-detalle {
+  font-size: 12.5px;
+  color: var(--texto-secundario);
+  margin: 10px 0 0;
+  line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+  .verpago-datos {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ⭐ Ajuste 2026-08-15 (pedido del usuario): el aviso de "guardado"/"borrado"
@@ -106,14 +231,24 @@
   .admin-card {
     padding: 20px 16px;
   }
+}
 
-  /* ⭐ Pedido del usuario (2026-08-15): título/subtítulo de cada pantalla del
-     panel, centrados en mobile en vez de pegados a la izquierda — lee mejor
-     en una pantalla angosta, mismo criterio ya usado en el resto del sitio
-     público (`.page-header` en main.css también centra en mobile). */
+/* ⭐ Pedido del usuario (2026-08-15, ampliado a tablet 2026-09-07):
+   título/subtítulo de cada pantalla del panel, centrados en mobile Y tablet
+   en vez de pegados a la izquierda — lee mejor en pantallas angostas, mismo
+   criterio ya usado en el resto del sitio público (`.page-header` en
+   main.css también centra hasta 1024px). La franja, al ser una caja sin
+   texto, necesita `margin:auto` (no le sirve `text-align`) — mismo criterio
+   ya resuelto antes en `.inscr-detalle-franja`/`.contacto-ubicacion-franja`. */
+@media (max-width: 1024px) {
   .admin-page-titulo,
   .admin-page-sub {
     text-align: center;
+  }
+
+  .admin-page-franja {
+    margin-left: auto;
+    margin-right: auto;
   }
 }
 
@@ -383,6 +518,12 @@
   margin: 0 0 10px;
   font-family: var(--font-titulo);
   color: var(--texto-principal);
+  /* Hallazgo real (pedido del usuario, 2026-09-07): el título interpola un
+     correo (ej. "¿Reenviar la invitación a sebastianmedinagonza@gmail.com?")
+     — un correo no tiene espacios, así que el navegador nunca encuentra un
+     punto natural para partirlo y lo desborda fuera de la tarjeta en vez de
+     bajar de línea. */
+  overflow-wrap: break-word;
 }
 
 .admin-dialog p {
@@ -390,6 +531,7 @@
   color: var(--texto-secundario);
   font-size: 14px;
   line-height: 1.5;
+  overflow-wrap: break-word;
 }
 
 .admin-dialog-acciones {

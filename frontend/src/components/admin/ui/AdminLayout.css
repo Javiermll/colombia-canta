@@ -5,11 +5,12 @@
 }
 
 .admin-sidebar {
-  width: 240px;
+  width: 252px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
-  padding: 116px 16px 24px;
+  padding: 116px 14px 20px;
+  background: var(--bg-card);
   border-right: 1px solid var(--border-sutil);
   /* ⭐ Bug real (2026-08-31, encontrado por el usuario): sin position/height
      acá, este flex item se estira tanto como `.admin-contenido` (comportamiento
@@ -26,17 +27,47 @@
   overflow-y: auto;
 }
 
+/* ⭐ Rediseño (pedido del usuario, 2026-09-10): "más elegante" — scrollbar
+   fina y discreta en vez de la barra ancha por defecto del navegador, para
+   que no compita visualmente con el menú cuando hay muchas secciones. */
+.admin-sidebar::-webkit-scrollbar { width: 5px; }
+.admin-sidebar::-webkit-scrollbar-track { background: transparent; }
+.admin-sidebar::-webkit-scrollbar-thumb { background: var(--border-media); border-radius: 4px; }
+
 .admin-sidebar-footer {
   margin-top: auto;
   padding-top: 16px;
   border-top: 1px solid var(--border-sutil);
 }
 
+.admin-sidebar-usuario-fila {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 6px;
+  margin: 0 0 12px;
+}
+
+.admin-sidebar-avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--coral), var(--azul));
+  color: #fff;
+  font-family: var(--font-titulo);
+  font-size: 13px;
+  font-weight: 700;
+}
+
 .admin-sidebar-usuario {
-  font-size: 12px;
-  color: var(--texto-secundario);
-  padding: 0 12px;
-  margin: 0 0 8px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--texto-principal);
+  margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -53,53 +84,84 @@
   font-weight: 600;
   cursor: pointer;
   font-family: var(--font-cuerpo);
+  transition: background 0.15s ease, border-color 0.15s ease;
 }
 
 .admin-sidebar-logout:hover {
   background: var(--bg-hover);
+  border-color: var(--border-sutil);
 }
 
 .admin-sidebar-titulo {
+  font-family: var(--font-titulo);
   font-size: 11px;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--texto-secundario);
-  padding: 0 12px;
-  margin: 0 0 12px;
+  padding: 0 10px;
+  margin: 0 0 16px;
 }
 
 .admin-sidebar-nav {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
+}
+
+/* Separa el link a /puerta (fuera del panel, otra experiencia) del resto de
+   las secciones — mismo tono de borde que ya usa `.admin-sidebar-footer`. */
+.admin-sidebar-separador {
+  height: 1px;
+  background: var(--border-sutil);
+  margin: 10px 6px;
 }
 
 .admin-sidebar-link {
+  position: relative;
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 11px 12px;
+  gap: 11px;
+  padding: 10px 12px;
   border-radius: 10px;
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 600;
-  color: var(--texto-principal);
+  color: var(--texto-secundario);
   text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
 }
 
 .admin-sidebar-link:hover {
   background: var(--bg-hover);
+  color: var(--texto-principal);
+  transform: translateX(2px);
 }
 
+/* ⭐ Rediseño (pedido del usuario, 2026-09-10): antes el estado activo era
+   solo un cambio de color + un fondo plano — se agrega una barra de acento a
+   la izquierda (patrón común de paneles admin "elegantes") y un fondo del
+   ícono para que la sección actual se distinga de un vistazo, incluso en la
+   franja angosta de mobile. */
 .admin-sidebar-link.activo {
   color: var(--coral);
-  background: color-mix(in srgb, var(--coral) 12%, transparent);
+  background: color-mix(in srgb, var(--coral) 10%, transparent);
+  font-weight: 700;
+  /* Barra de acento a la izquierda, DENTRO del propio elemento (`inset` en
+     vez de un `::before` posicionado por fuera) — el sidebar tiene
+     `overflow-y: auto`, que por spec de CSS fuerza `overflow-x` a `auto`
+     también (no se puede scrollear un eje sin el otro dejar de ser
+     `visible`), así que cualquier cosa posicionada fuera de los límites del
+     link quedaría recortada. Con `box-shadow: inset` no hay ese riesgo. */
+  box-shadow: inset 3px 0 0 var(--coral);
 }
 
 .admin-sidebar-icono {
   width: 20px;
   flex-shrink: 0;
+}
+
+.admin-sidebar-link.activo .admin-sidebar-icono {
+  color: var(--coral);
 }
 
 .admin-contenido {

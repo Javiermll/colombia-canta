@@ -108,7 +108,10 @@ function HeroForm({ slide, ordenSugerido, onGuardado, onBorrado, onAviso, aviso,
 
   async function guardar(e) {
     e.preventDefault();
-    if (!validar()) return;
+    if (!validar()) {
+      setErrorGeneral('Hay campos por corregir — revisa los que quedaron marcados en rojo.');
+      return;
+    }
 
     setGuardando(true);
     setErrorGeneral('');
@@ -266,8 +269,6 @@ function HeroForm({ slide, ordenSugerido, onGuardado, onBorrado, onAviso, aviso,
           onPosicionChange={(x, y) => setForm((f) => ({ ...f, posicionX: x, posicionY: y }))}
         />
 
-        {errorGeneral && <p className="admin-page-error">{errorGeneral}</p>}
-
         {aviso && (
           <p className="admin-form-aviso" role="status">
             <span aria-hidden="true">✓</span> {aviso}
@@ -284,6 +285,7 @@ function HeroForm({ slide, ordenSugerido, onGuardado, onBorrado, onAviso, aviso,
             </Button>
           )}
         </div>
+        {errorGeneral && <p className="admin-page-error" role="alert">{errorGeneral}</p>}
       </form>
 
       <ConfirmDialog
@@ -353,7 +355,8 @@ export default function Hero() {
 
   return (
     <AdminLayout>
-      <h1 className="admin-page-titulo">Carrusel del inicio (Hero)</h1>
+      <h1 className="admin-page-titulo">Carrusel del inicio</h1>
+      <div className="admin-page-franja" aria-hidden="true" />
       <p className="admin-page-sub">Las slides que rotan en la portada del sitio, en el orden que definas aquí.</p>
 
       {cargando && <p>Cargando…</p>}

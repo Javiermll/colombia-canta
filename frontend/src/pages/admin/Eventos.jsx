@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from 'react';
+import { Search } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useListaDinamica } from '../../hooks/useListaDinamica';
 import { useScrollAlSeleccionar } from '../../hooks/useScrollAlSeleccionar';
-import { formatearFechaEvento } from '../../utils/formato';
+import { formatearFechaEvento, MONEDAS, formatearMonto, parsePrecioCompuesto } from '../../utils/formato';
 import AdminLayout from '../../components/admin/ui/AdminLayout';
 import Card from '../../components/admin/ui/Card';
 import FormField from '../../components/admin/ui/FormField';
@@ -12,6 +13,7 @@ import ImageUploadField from '../../components/admin/ui/ImageUploadField';
 import GaleriaUploadField from '../../components/admin/ui/GaleriaUploadField';
 import ConfirmDialog from '../../components/admin/ui/ConfirmDialog';
 import HelpTooltip from '../../components/admin/ui/HelpTooltip';
+import PinPuerta from '../../components/admin/ui/PinPuerta';
 import './Eventos.css';
 
 // Ajuste 2026-08-16 (pedido del usuario): `tipo` pasó a ser texto libre en el
@@ -61,37 +63,10 @@ const PRECIO_AUTOMATICO = {
 // monedas confirmado con el usuario: Colombia, USD y el resto de LATAM se
 // decide más adelante (Fase 6, junto con Mercado Pago) — acá se cubren las
 // 2 monedas que ya aparecen en datos reales/históricos del sitio.
-const MONEDAS = [
-  { valor: 'COP', label: 'COP', sufijo: '' },
-  { valor: 'USD', label: 'USD', sufijo: ' USD' },
-];
-
-function formatearMonto(monto, moneda) {
-  const numero = Number(monto);
-  if (!monto || Number.isNaN(numero) || numero <= 0) return '';
-  const m = MONEDAS.find((x) => x.valor === moneda) || MONEDAS[0];
-  return `$${numero.toLocaleString('es-CO')}${m.sufijo}`;
-}
-
-// Para precargar el monto/moneda al editar un evento cuyo precio ya quedó
-// guardado como texto compuesto (ej. "$45.000" o "Desde $35,99 USD").
-//
-// ⭐ Hallazgo real (auditoría 5.3, 2026-08-16): la versión anterior sacaba
-// TODOS los dígitos con `replace(/[^0-9]/g, '')`, sin distinguir el punto de
-// miles de la coma decimal que pone `formatearMonto` (formato es-CO) — un
-// precio con centavos como "$35,99 USD" se convertía en monto "3599" al
-// releerlo (perdía la coma Y el orden de magnitud), corrompiendo lo que el
-// admin acababa de escribir en cada tecleo (el campo de monto se recalcula
-// desde `form.precio` en cada render). Ahora se conserva el primer tramo
-// numérico completo (dígitos + separadores) y se invierte el formato es-CO
-// (`.` = miles, `,` = decimales) al revés de como lo arma `formatearMonto`.
-function parsePrecioCompuesto(texto) {
-  if (!texto) return { monto: '', moneda: 'COP' };
-  const moneda = /usd/i.test(texto) ? 'USD' : 'COP';
-  const tramoNumerico = texto.match(/[\d.,]+/)?.[0] || '';
-  const monto = tramoNumerico.replace(/\./g, '').replace(',', '.');
-  return { monto, moneda };
-}
+// `MONEDAS`/`formatearMonto`/`parsePrecioCompuesto` se movieron a
+// `utils/formato.js` (auditoría de cierre de Fase 5, 2026-09-08) — el
+// sitio público (`ReservaModal.jsx`) los necesita igual para calcular el
+// "Total estimado" de una reserva respetando la moneda real del precio.
 
 // Ajuste 2026-08-16 (pedido del usuario): sugerencias de texto de botón para
 // los caminos que no son "De pago" — se completan solas pero se pueden
@@ -110,7 +85,7 @@ function formularioDesdeEvento(evento) {
       descripcion: '', descripcionLarga: '',
       accionTipo: '', cta: '', ctaWa: '', waLink: '', precio: '', precioDetalle: '',
       inscripcionLink: '', inscripcionCerrada: false, bases: '',
-      color: '#1A56DB', colorHero: '#0F3A9E', maxEntradas: '', destacadoHero: false, activo: true,
+      color: '#1A56DB', colorHero: '#0F3A9E', maxEntradas: '', cupoTotal: '', destacadoHero: false, activo: true,
     };
   }
   return {
@@ -121,7 +96,7 @@ function formularioDesdeEvento(evento) {
     accionTipo: evento.accion_tipo, cta: evento.cta, ctaWa: evento.cta_wa || '', waLink: evento.wa_link || '',
     precio: evento.precio, precioDetalle: evento.precio_detalle || '',
     inscripcionLink: evento.inscripcion_link || '', inscripcionCerrada: evento.inscripcion_cerrada || false, bases: evento.bases || '',
-    color: evento.color, colorHero: evento.color_hero, maxEntradas: evento.max_entradas || '',
+    color: evento.color, colorHero: evento.color_hero, maxEntradas: evento.max_entradas || '', cupoTotal: evento.cupo_total || '',
     destacadoHero: evento.destacado_hero || false, activo: evento.activo,
   };
 }
@@ -282,6 +257,26 @@ function EventoForm({ evento, tiposSugeridos, onGuardado, onBorrado, onAviso, av
         if (tieneAlgo && !completo) zonaErrores[idx] = 'Completa nombre y precio, o borra la fila';
       });
       if (Object.keys(zonaErrores).length > 0) nuevosErrores.zonas = zonaErrores;
+
+      // ⭐ Pedido explícito del usuario (2026-09-07): el cupo por zona debe
+      // "cuadrar" con el cupo total del evento — si se define cupo en
+      // cualquier zona, TODAS deben tenerlo y la suma debe ser exacta. Se
+      // repite en el backend (eventos.js, validarCuposZonas) como defensa
+      // real, esto acá es solo para avisar antes de intentar guardar.
+      const zonasCompletas = zonas.items.filter((z) => z.nombre.trim() && z.precio.trim());
+      const conCupo = zonasCompletas.filter((z) => String(z.cupo || '').trim());
+      if (conCupo.length > 0 && Object.keys(zonaErrores).length === 0) {
+        if (conCupo.length !== zonasCompletas.length) {
+          nuevosErrores.cupoZonas = 'Si defines cupo para una zona, todas las zonas deben tener uno';
+        } else if (!form.cupoTotal) {
+          nuevosErrores.cupoZonas = 'Si defines cupo por zona, también debes definir el cupo total del evento arriba';
+        } else {
+          const suma = conCupo.reduce((acc, z) => acc + Number(z.cupo), 0);
+          if (suma !== Number(form.cupoTotal)) {
+            nuevosErrores.cupoZonas = `La suma de cupos por zona (${suma}) debe ser igual al cupo total del evento (${form.cupoTotal})`;
+          }
+        }
+      }
     }
     const testimonioErrores = {};
     testimonios.items.forEach((t, idx) => {
@@ -297,7 +292,10 @@ function EventoForm({ evento, tiposSugeridos, onGuardado, onBorrado, onAviso, av
 
   async function guardar(e) {
     e.preventDefault();
-    if (!validar()) return;
+    if (!validar()) {
+      setErrorGeneral('Hay campos por corregir — revisa los que quedaron marcados en rojo.');
+      return;
+    }
 
     setGuardando(true);
     setErrorGeneral('');
@@ -342,14 +340,31 @@ function EventoForm({ evento, tiposSugeridos, onGuardado, onBorrado, onAviso, av
       if (form.accionTipo === 'libre' || form.accionTipo === 'pago') {
         if (form.maxEntradas) fd.append('max_entradas', String(form.maxEntradas));
         else if (evento) fd.append('max_entradas', '');
+        if (form.cupoTotal) fd.append('cupo_total', String(form.cupoTotal));
+        else if (evento) fd.append('cupo_total', '');
       }
       fd.append('destacado_hero', String(form.destacadoHero));
       if (evento) fd.append('activo', String(form.activo));
 
       const pillsLimpias = pills.items.filter((p) => p.texto.trim());
       if (pillsLimpias.length > 0) fd.append('pills', JSON.stringify(pillsLimpias));
-      const zonasLimpias = (form.accionTipo === 'pago' ? zonas.items : []).filter((z) => z.nombre.trim() && z.precio.trim());
-      if (zonasLimpias.length > 0) fd.append('zonas', JSON.stringify(zonasLimpias));
+      const zonasLimpias = (form.accionTipo === 'pago' ? zonas.items : [])
+        .filter((z) => z.nombre.trim() && z.precio.trim())
+        .map((z) => {
+          const { cupo, ...resto } = z;
+          // El cupo vacío se OMITE (no se manda como '') — a diferencia de
+          // max_entradas/cupo_total, acá no hace falta un valor "borrar"
+          // explícito porque toda la fila de `zonas` se reemplaza entera en
+          // cada guardado (no es un PATCH parcial campo por campo).
+          return String(cupo || '').trim() ? { ...resto, cupo: String(cupo).trim() } : resto;
+        });
+      // ⭐ Hallazgo real (auditoría Fase 6, 2026-09-09): con el guard `> 0`, borrar
+      // TODAS las zonas de un evento "De pago" (dejándolo en 0) nunca mandaba la
+      // clave `zonas` — el backend, al no recibirla, no tocaba el valor viejo (un
+      // PATCH parcial), dejando zonas fantasma pegadas en la base con el evento
+      // mostrando "Cambios guardados". Mientras siga en 'pago', se manda siempre
+      // (incluso `[]`), para que un vaciado real se guarde como tal.
+      if (form.accionTipo === 'pago') fd.append('zonas', JSON.stringify(zonasLimpias));
       const testimoniosLimpios = testimonios.items.filter((t) => t.texto.trim() && t.nombre.trim());
       if (testimoniosLimpios.length > 0) fd.append('testimonios', JSON.stringify(testimoniosLimpios));
       const programaLimpio = programa.items.filter((p) => p.trim());
@@ -402,6 +417,15 @@ function EventoForm({ evento, tiposSugeridos, onGuardado, onBorrado, onAviso, av
               onChange={(e) => actualizarCampo('activo', e.target.checked)}
             />
           </div>
+        )}
+
+        {evento && (form.accionTipo === 'libre' || form.accionTipo === 'pago') && (
+          <PinPuerta
+            endpoint={`/api/admin/eventos/${evento.id}/pin-puerta`}
+            pinInicial={evento.pin_puerta}
+            adminFetch={adminFetch}
+            onError={setErrorGeneral}
+          />
         )}
 
         {/* ── Datos básicos ── */}
@@ -594,6 +618,31 @@ function EventoForm({ evento, tiposSugeridos, onGuardado, onBorrado, onAviso, av
           </FormField>
         </div>
 
+        {/* Pedido del usuario (2026-09-08): en "Gratis" estos campos van justo
+           debajo de precio/WhatsApp (no hay "Detalle del precio" en gratis);
+           en "De pago" van debajo de "Detalle del precio" y ANTES de "Zonas
+           de precio" — pedido explícito del usuario, aunque el cupo total
+           dependa de lo que se cargue en zonas más abajo. */}
+        {form.accionTipo === 'libre' && (
+          <div className="admin-field-fila">
+            <FormField
+              label="Máximo de entradas por reserva"
+              hint="opcional"
+              ayuda="Cuántas entradas puede pedir una sola persona en UNA reserva. Si se deja vacío, el default es 5."
+            >
+              <input type="number" min="1" value={form.maxEntradas} onChange={(e) => actualizarCampo('maxEntradas', e.target.value)} />
+            </FormField>
+            <FormField
+              label="Cupo total del evento"
+              hint="opcional"
+              ayuda="La cantidad máxima de entradas que se pueden reservar en TOTAL para este evento — evita que se sobrevenda. Si se deja vacío, no hay límite. Distinto del campo de la izquierda, que limita cuántas se piden en una sola reserva."
+              ayudaEjemplo="150 asientos en total"
+            >
+              <input type="number" min="1" value={form.cupoTotal} onChange={(e) => actualizarCampo('cupoTotal', e.target.value)} />
+            </FormField>
+          </div>
+        )}
+
         {form.accionTipo === 'pago' && (
           <>
             <FormField
@@ -604,10 +653,27 @@ function EventoForm({ evento, tiposSugeridos, onGuardado, onBorrado, onAviso, av
             >
               <input type="text" placeholder="Ej. Diferentes zonas disponibles" value={form.precioDetalle} onChange={(e) => actualizarCampo('precioDetalle', e.target.value)} />
             </FormField>
+            <div className="admin-field-fila">
+              <FormField
+                label="Máximo de entradas por reserva"
+                hint="opcional"
+                ayuda="Cuántas entradas puede pedir una sola persona en UNA reserva. Si se deja vacío, el default es 5."
+              >
+                <input type="number" min="1" value={form.maxEntradas} onChange={(e) => actualizarCampo('maxEntradas', e.target.value)} />
+              </FormField>
+              <FormField
+                label="Cupo total del evento"
+                hint="opcional"
+                ayuda="La cantidad máxima de entradas que se pueden vender/reservar en TOTAL para este evento — evita que se sobrevenda. Si se deja vacío, no hay límite. Si cargaste cupo por zona abajo, este debe ser igual a la suma de esas zonas."
+                ayudaEjemplo="150 asientos en total para el Concierto de gala"
+              >
+                <input type="number" min="1" value={form.cupoTotal} onChange={(e) => actualizarCampo('cupoTotal', e.target.value)} />
+              </FormField>
+            </div>
             <div className="eventos-zonas">
               <p className="admin-field-label-texto">
                 Zonas de precio (opcional)
-                <HelpTooltip texto={`Los montos de las zonas se guardan en la misma moneda elegida arriba para el precio (hoy: ${MONEDAS.find((m) => m.valor === monedaPrecio)?.label}).`} />
+                <HelpTooltip texto={`Los montos de las zonas se guardan en la misma moneda elegida arriba para el precio (hoy: ${MONEDAS.find((m) => m.valor === monedaPrecio)?.label}). El cupo de cada zona es opcional, pero si se usa en una debe usarse en todas, y la suma debe ser igual al "Cupo total del evento" (más arriba).`} />
               </p>
               {zonas.items.map((zona, idx) => (
                 <div key={idx}>
@@ -624,17 +690,26 @@ function EventoForm({ evento, tiposSugeridos, onGuardado, onBorrado, onAviso, av
                       onChange={(e) => zonas.actualizar(idx, 'precio', formatearMonto(e.target.value, monedaPrecio))}
                       className={errores.zonas?.[idx] ? 'invalido' : ''}
                     />
+                    <input
+                      type="number"
+                      min="1"
+                      placeholder="Cupo (opcional)"
+                      aria-label="Cupo de la zona"
+                      value={zona.cupo || ''}
+                      onChange={(e) => zonas.actualizar(idx, 'cupo', e.target.value)}
+                    />
                     <button type="button" className="admin-fila-quitar" onClick={() => zonas.quitar(idx)} aria-label="Quitar zona">×</button>
                   </div>
                   {errores.zonas?.[idx] && <span className="admin-field-error" role="alert">{errores.zonas[idx]}</span>}
                 </div>
               ))}
               <div className="eventos-pills-acciones">
-                <Button type="button" variant="secundario" onClick={() => zonas.agregar({ nombre: '', precio: '' })}>+ Agregar zona</Button>
+                <Button type="button" variant="secundario" onClick={() => zonas.agregar({ nombre: '', precio: '', cupo: '' })}>+ Agregar zona</Button>
                 {zonas.items.length > 0 && (
                   <Button type="button" variant="secundario" onClick={sugerirPrecioDesdeZonas}>↺ Sugerir precio desde zonas</Button>
                 )}
               </div>
+              {errores.cupoZonas && <span className="admin-field-error" role="alert">{errores.cupoZonas}</span>}
             </div>
           </>
         )}
@@ -705,11 +780,6 @@ function EventoForm({ evento, tiposSugeridos, onGuardado, onBorrado, onAviso, av
             <input type="color" value={form.colorHero} onChange={(e) => actualizarCampo('colorHero', e.target.value)} />
           </FormField>
         </div>
-        {(form.accionTipo === 'libre' || form.accionTipo === 'pago') && (
-          <FormField label="Máximo de entradas por reserva" hint="opcional, default 5">
-            <input type="number" min="1" value={form.maxEntradas} onChange={(e) => actualizarCampo('maxEntradas', e.target.value)} />
-          </FormField>
-        )}
         <div className="admin-form-top">
           <Checkbox
             label="Mostrar en la portada como evento destacado"
@@ -718,8 +788,6 @@ function EventoForm({ evento, tiposSugeridos, onGuardado, onBorrado, onAviso, av
           />
           <HelpTooltip texto="Solo un evento puede estar destacado a la vez — marcar este desmarca automáticamente cualquier otro que lo estuviera." />
         </div>
-
-        {errorGeneral && <p className="admin-page-error">{errorGeneral}</p>}
 
         {aviso && (
           <p className="admin-form-aviso" role="status">
@@ -737,6 +805,7 @@ function EventoForm({ evento, tiposSugeridos, onGuardado, onBorrado, onAviso, av
             </Button>
           )}
         </div>
+        {errorGeneral && <p className="admin-page-error" role="alert">{errorGeneral}</p>}
       </form>
 
       <ConfirmDialog
@@ -840,6 +909,7 @@ export default function Eventos() {
       <div className="eventos-panel-header">
         <div className="eventos-panel-header-textos">
           <h1 className="admin-page-titulo">Gestión de Eventos</h1>
+          <div className="admin-page-franja" aria-hidden="true" />
           <p className="admin-page-sub">Crea, edita y filtra los eventos del sitio libremente.</p>
         </div>
         <Button onClick={() => seleccionar(null)}>+ Nuevo evento</Button>
@@ -857,12 +927,16 @@ export default function Eventos() {
         <div className="eventos-layout">
           <div className="eventos-lista-panel">
             <div className="eventos-filtros">
-              <input
-                type="text"
-                placeholder="🔎 Buscar por título…"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-              />
+              <div className="admin-buscador">
+                <Search size={16} className="admin-buscador-icono" aria-hidden="true" />
+                <input
+                  type="text"
+                  placeholder="Buscar por título…"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  style={{ paddingLeft: 38 }}
+                />
+              </div>
               <select value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)}>
                 <option value="todos">Todos los tipos</option>
                 {tiposEnUso.map((t) => <option key={t} value={t}>{t}</option>)}

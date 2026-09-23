@@ -7,6 +7,7 @@ import FormField from '../../components/admin/ui/FormField';
 import Button from '../../components/admin/ui/Button';
 import HelpTooltip from '../../components/admin/ui/HelpTooltip';
 import ImageUploadField from '../../components/admin/ui/ImageUploadField';
+import PinPuerta from '../../components/admin/ui/PinPuerta';
 import './EventosFijos.css';
 
 // Mismas fotos que se muestran en el detalle de evento (`EventoDetalle.jsx`,
@@ -68,7 +69,7 @@ function horaDesde24h(hora24) {
 // modal bloquea cualquier clic fuera de él mientras está abierto), pero se
 // corrige igual por las dudas de otro dispositivo de entrada.
 function showVacio() {
-  return { _key: crypto.randomUUID(), hora: '', fechaISO: '', nombre: '', descripcion: '', foto: '', archivoNuevo: null };
+  return { _key: crypto.randomUUID(), hora: '', fechaISO: '', nombre: '', descripcion: '', foto: '', cupo: '', archivoNuevo: null };
 }
 
 // Traduce un show ya guardado (formato del backend) al formato que usa el
@@ -81,6 +82,7 @@ function showDesdeBackend(s) {
     nombre: s.nombre || '',
     descripcion: s.descripcion || '',
     foto: s.foto || '',
+    cupo: s.cupo || '',
     archivoNuevo: null,
   };
 }
@@ -107,6 +109,7 @@ function ExperienciaFija({ experiencia, adminFetch, onActualizado }) {
   const modoCompleto = experiencia.slug === SLUG_PROGRAMACION_COMPLETA;
 
   const [mes, setMes] = useState(experiencia.mes || '');
+  const [cupoTotal, setCupoTotal] = useState(experiencia.cupo_total || '');
   const [guardandoMes, setGuardandoMes] = useState(false);
   const [avisoMes, setAvisoMes] = useState('');
   const [errorMes, setErrorMes] = useState('');
@@ -136,6 +139,7 @@ function ExperienciaFija({ experiencia, adminFetch, onActualizado }) {
     try {
       const fd = new FormData();
       fd.append('mes', mes);
+      fd.append('cupo_total', cupoTotal ? String(cupoTotal) : '');
       const data = await adminFetch(`/api/admin/eventos-fijos/${experiencia.id}`, { method: 'PATCH', body: fd });
       onActualizado(data.data);
       setAvisoMes('Mes guardado.');
@@ -166,13 +170,16 @@ function ExperienciaFija({ experiencia, adminFetch, onActualizado }) {
   async function guardarProgramacion(e) {
     e.preventDefault();
     setErrorProg('');
-    if (!validarProgramacion()) return;
+    if (!validarProgramacion()) {
+      setErrorProg('Hay filas por corregir — revisa las que quedaron marcadas en rojo.');
+      return;
+    }
 
     const showsLimpios = shows.items.filter(tieneAlgo);
     const fotosIndices = [];
     const archivosNuevos = [];
     const programacionFinal = showsLimpios.map((s, idx) => {
-      const item = { dia: diaCortoDesdeISO(s.fechaISO), hora: horaDesde24h(s.hora), fechaISO: s.fechaISO };
+      const item = { dia: diaCortoDesdeISO(s.fechaISO), hora: horaDesde24h(s.hora), fechaISO: s.fechaISO, cupo: s.cupo ? Number(s.cupo) : null };
       if (modoCompleto) {
         item.nombre = s.nombre.trim();
         item.descripcion = s.descripcion.trim();
@@ -211,11 +218,24 @@ function ExperienciaFija({ experiencia, adminFetch, onActualizado }) {
         El resto del contenido de esta experiencia (fotos de portada, descripciones, etiquetas, fases) es fijo y no se edita desde aquí.
       </p>
 
+      <PinPuerta
+        endpoint={`/api/admin/eventos-fijos/${experiencia.id}/pin-puerta`}
+        pinInicial={experiencia.pin_puerta}
+        adminFetch={adminFetch}
+        onError={setErrorProg}
+      />
+
       <form onSubmit={guardarMes} className="evfijos-form-mes">
         <FormField label="Mes" hint='ej. "Agosto 2026" — se muestra junto a la programación'>
           <input type="text" value={mes} onChange={(e) => setMes(e.target.value)} />
         </FormField>
-        {errorMes && <p className="admin-page-error">{errorMes}</p>}
+        <FormField
+          label="Cupo para reservas sin fecha específica"
+          hint="opcional, sin límite si se deja vacío"
+          ayuda="Solo aplica si alguien reserva sin elegir una fecha puntual de la programación de abajo. Cada fecha/show de la programación tiene su propio cupo (se define en cada fila)."
+        >
+          <input type="number" min="1" value={cupoTotal} onChange={(e) => setCupoTotal(e.target.value)} />
+        </FormField>
         {avisoMes && (
           <p className="admin-form-aviso" role="status">
             <span aria-hidden="true">✓</span> {avisoMes}
@@ -224,6 +244,7 @@ function ExperienciaFija({ experiencia, adminFetch, onActualizado }) {
         <Button type="submit" variant="secundario" disabled={guardandoMes}>
           {guardandoMes ? 'Guardando…' : 'Guardar mes'}
         </Button>
+        {errorMes && <p className="admin-page-error" role="alert">{errorMes}</p>}
       </form>
 
       <div className="evfijos-programacion">
@@ -263,6 +284,14 @@ function ExperienciaFija({ experiencia, adminFetch, onActualizado }) {
                 <input type="date" aria-label="Fecha del show" value={s.fechaISO} onChange={(e) => shows.actualizar(idx, 'fechaISO', e.target.value)} className={erroresShows[idx] ? 'invalido' : ''} />
                 <input type="time" aria-label="Hora" value={s.hora} onChange={(e) => shows.actualizar(idx, 'hora', e.target.value)} className={erroresShows[idx] ? 'invalido' : ''} />
                 {s.fechaISO && <span className="evfijos-show-dia-preview">{diaCortoDesdeISO(s.fechaISO)}</span>}
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Cupo (opcional)"
+                  aria-label="Cupo de este show"
+                  value={s.cupo}
+                  onChange={(e) => shows.actualizar(idx, 'cupo', e.target.value)}
+                />
               </div>
               {modoCompleto && (
                 <>
@@ -279,7 +308,6 @@ function ExperienciaFija({ experiencia, adminFetch, onActualizado }) {
           {modoCompleto ? '+ Agregar show' : '+ Agregar fecha'}
         </Button>
 
-        {errorProg && <p className="admin-page-error">{errorProg}</p>}
         {avisoProg && (
           <p className="admin-form-aviso" role="status">
             <span aria-hidden="true">✓</span> {avisoProg}
@@ -290,6 +318,7 @@ function ExperienciaFija({ experiencia, adminFetch, onActualizado }) {
           <Button type="button" onClick={guardarProgramacion} disabled={guardandoProg}>
             {guardandoProg ? 'Guardando…' : modoCompleto ? 'Guardar programación' : 'Guardar fechas'}
           </Button>
+          {errorProg && <p className="admin-page-error" role="alert">{errorProg}</p>}
         </div>
       </div>
     </Card>
@@ -324,6 +353,7 @@ export default function EventosFijos() {
       <div className="evfijos-panel-header">
         <div className="evfijos-panel-header-textos">
           <h1 className="admin-page-titulo">Eventos Fijos</h1>
+          <div className="admin-page-franja" aria-hidden="true" />
           <p className="admin-page-sub">Edita el mes y la programación de las experiencias fijas.</p>
         </div>
       </div>

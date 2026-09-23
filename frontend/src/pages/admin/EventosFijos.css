@@ -84,7 +84,7 @@
 
 .evfijos-show-fila-datos {
   display: grid;
-  grid-template-columns: 1fr 1fr auto;
+  grid-template-columns: 1fr 1fr auto 110px;
   gap: 10px;
   align-items: center;
 }

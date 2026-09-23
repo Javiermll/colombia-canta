@@ -13,6 +13,8 @@ import {
   Mail,
   Users,
   History,
+  QrCode,
+  Percent,
 } from 'lucide-react';
 import { useAdminAuth } from '../../../context/AdminAuthContext';
 
@@ -28,6 +30,7 @@ const SECCIONES = [
   { to: '/admin/eventos', label: 'Eventos', Icono: PartyPopper },
   { to: '/admin/eventos-fijos', label: 'Eventos Fijos', Icono: CalendarDays },
   { to: '/admin/productos', label: 'Productos', Icono: ShoppingBag },
+  { to: '/admin/cupones', label: 'Cupones', Icono: Percent },
   { to: '/admin/cursos', label: 'Cursos', Icono: GraduationCap },
   { to: '/admin/inscripciones', label: 'Inscripciones', Icono: ClipboardList },
   { to: '/admin/reservas', label: 'Reservas', Icono: Ticket },
@@ -140,7 +143,12 @@ export default function AdminSidebar() {
         </div>
         <nav className="admin-sidebar-nav">
           {SECCIONES.map((s) => {
-            const activo = location.pathname.startsWith(s.to);
+            // ⭐ Hallazgo real (pedido del usuario, 2026-09-07): `startsWith`
+            // marcaba "Eventos" Y "Eventos Fijos" activos a la vez estando en
+            // /admin/eventos-fijos, porque ese path también empieza con
+            // "/admin/eventos". Todas las rutas del panel son planas (sin
+            // sub-rutas tipo /admin/eventos/:id) — comparar exacto alcanza.
+            const activo = location.pathname === s.to;
             return (
               <Link key={s.to} to={s.to} className={`admin-sidebar-link${activo ? ' activo' : ''}`}>
                 <s.Icono className="admin-sidebar-icono" aria-hidden="true" size={18} strokeWidth={2} />
@@ -152,22 +160,45 @@ export default function AdminSidebar() {
             <Link
               key={s.to}
               to={s.to}
-              className={`admin-sidebar-link${location.pathname.startsWith(s.to) ? ' activo' : ''}`}
+              className={`admin-sidebar-link${location.pathname === s.to ? ' activo' : ''}`}
             >
               <s.Icono className="admin-sidebar-icono" aria-hidden="true" size={18} strokeWidth={2} />
               {s.label}
             </Link>
           ))}
+
+          {/* ⭐ Pedido del usuario (2026-09-10): acceso fácil a la pantalla de
+             puerta (/puerta) desde ADENTRO del panel — antes solo se llegaba
+             escribiendo la URL a mano. Nunca en el footer público (esa
+             pantalla queda protegida por su propio PIN, pero no tiene
+             sentido anunciarla a cualquier visitante del sitio). Abre en
+             pestaña nueva porque es una experiencia aparte, sin Navbar/menú
+             del panel (ver App.jsx) — pensada para el celular del staff, no
+             para navegarse desde acá. */}
+          <div className="admin-sidebar-separador" role="separator" />
+          <Link to="/puerta" target="_blank" rel="noopener noreferrer" className="admin-sidebar-link">
+            <QrCode className="admin-sidebar-icono" aria-hidden="true" size={18} strokeWidth={2} />
+            Validar entradas (/puerta)
+          </Link>
         </nav>
 
         <div className="admin-sidebar-footer">
-          {/* 2026-08-31, a pedido del usuario: saludo persistente y visible
-             mientras se navega el panel — el email queda como respaldo para
-             las cuentas que todavía no tienen `nombre` guardado (ver
-             Bienvenida.jsx) y como tooltip completo en cualquier caso. */}
-          <p className="admin-sidebar-usuario" title={admin?.email}>
-            {admin?.nombre ? `¡Hola, ${admin.nombre}!` : admin?.email}
-          </p>
+          {/* ⭐ Rediseño (pedido del usuario, 2026-09-10): avatar con iniciales
+             para darle más jerarquía visual al pie del menú — mismo dato que
+             ya se mostraba (nombre o email), solo con una identidad visual
+             más clara que un párrafo suelto. */}
+          <div className="admin-sidebar-usuario-fila">
+            <span className="admin-sidebar-avatar" aria-hidden="true">
+              {(admin?.nombre || admin?.email || '?').trim().charAt(0).toUpperCase()}
+            </span>
+            {/* 2026-08-31, a pedido del usuario: saludo persistente y visible
+               mientras se navega el panel — el email queda como respaldo para
+               las cuentas que todavía no tienen `nombre` guardado (ver
+               Bienvenida.jsx) y como tooltip completo en cualquier caso. */}
+            <p className="admin-sidebar-usuario" title={admin?.email}>
+              {admin?.nombre ? `¡Hola, ${admin.nombre}!` : admin?.email}
+            </p>
+          </div>
           <button className="admin-sidebar-logout" onClick={manejarLogout}>Cerrar sesión</button>
         </div>
       </aside>
