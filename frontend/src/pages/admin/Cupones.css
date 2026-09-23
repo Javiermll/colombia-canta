@@ -1,0 +1,98 @@
+/* Cupones de descuento (Tienda, 2026-09-10) — mismo patrón visual que
+   Administradores.css (pantalla simple: crear arriba + lista de filas con
+   acciones inline abajo), prefijo propio `.cupones-`. */
+
+.cupones-crear {
+  margin-bottom: 20px;
+}
+
+.cupones-seccion-titulo {
+  font-family: var(--font-titulo);
+  font-size: 1rem;
+  color: var(--texto-principal);
+  margin: 0 0 14px;
+}
+
+.cupones-crear-form {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cupones-crear-form .admin-field {
+  margin: 0;
+}
+
+.cupones-campo-codigo input {
+  text-transform: uppercase;
+}
+
+.cupones-vacio {
+  color: var(--texto-secundario);
+  font-size: 14px;
+}
+
+.cupones-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cupones-fila {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border-sutil);
+  background: var(--bg-card);
+}
+
+.cupones-fila-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1 1 240px;
+  min-width: 0;
+}
+
+.cupones-codigo {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--texto-principal);
+}
+
+.cupones-meta {
+  font-size: 12px;
+  color: var(--texto-secundario);
+}
+
+.cupones-activo { color: #1a8a4a; font-weight: 600; }
+.cupones-inactivo { color: var(--rojo); font-weight: 600; }
+
+.cupones-fila-acciones {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 599px) {
+  .cupones-crear-form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cupones-fila {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+
+  .cupones-fila-info {
+    flex: 0 1 auto;
+  }
+}

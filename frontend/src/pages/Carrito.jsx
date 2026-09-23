@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { useCarrito } from '../context/CarritoContext';
 import Footer from '../components/Footer/Footer';
 import CompradorModal from '../components/CompradorModal/CompradorModal';
+import { apiFetch } from '../utils/api';
 import { formatCOP as formatPrecio } from '../utils/formato';
 import { BASE_URL, OG_IMAGE } from '../utils/seo';
 import './Carrito.css';
@@ -11,35 +12,68 @@ import './Carrito.css';
 const PAGE_TITLE = 'Carrito | Colombia Canta y Encanta';
 const PAGE_DESC = 'Revisa tu pedido y procede al pago de los productos oficiales de Colombia Canta y Encanta.';
 
-function PedidoExito({ pedido, onCerrar }) {
-  return (
-    <div className="cf-panel cf-exito">
-      <div className="cf-exito-ico">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      </div>
-      <h3>¡Pedido recibido!</h3>
-      <p>Te contactaremos a</p>
-      <strong className="cf-exito-email">{pedido.email}</strong>
-      <p className="cf-exito-sub">para coordinar el pago y el envío de tu pedido. Revisa también tu carpeta de spam.</p>
-      <Link to="/tienda" className="cf-btn-submit" onClick={onCerrar}>Seguir comprando</Link>
-    </div>
-  );
-}
-
 export default function Carrito() {
   const { items, actualizarCantidad, eliminar, vaciar } = useCarrito();
-  const [paso, setPaso] = useState('carrito'); // 'carrito' | 'listo'
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [pedidoCreado, setPedidoCreado] = useState(null);
   const subtotal = items.reduce((sum, item) => sum + item.precio * item.cantidad, 0);
 
-  const manejarExito = (pedido) => {
-    setPedidoCreado(pedido);
+  // ⭐ Cupones de descuento (pedido del usuario, 2026-09-10) — esto es solo
+  // una VISTA PREVIA para que el comprador vea el descuento antes de pagar;
+  // el backend vuelve a validar y calcular todo desde cero al crear el
+  // pedido (nunca confía en lo que mande el carrito). Si el subtotal cambia
+  // después de aplicar un cupón (ej. se sube/baja una cantidad), se limpia
+  // solo — mostrar un descuento calculado sobre un total viejo confundiría
+  // más de lo que ayuda.
+  const [cuponCodigo, setCuponCodigo] = useState('');
+  const [cuponAplicado, setCuponAplicado] = useState(null); // { codigo, porcentaje, descuento, total, subtotalBase }
+  const [validandoCupon, setValidandoCupon] = useState(false);
+  const [errorCupon, setErrorCupon] = useState('');
+
+  // Ajuste durante el render (no en un efecto — mismo criterio ya usado en
+  // AdminSidebar.jsx para no violar react-hooks/set-state-in-effect): si el
+  // subtotal cambia después de aplicar un cupón, se limpia solo.
+  const [subtotalDelCupon, setSubtotalDelCupon] = useState(subtotal);
+  if (subtotal !== subtotalDelCupon) {
+    setSubtotalDelCupon(subtotal);
+    if (cuponAplicado) setCuponAplicado(null);
+  }
+
+  async function aplicarCupon(e) {
+    e.preventDefault();
+    if (!cuponCodigo.trim()) return;
+    setValidandoCupon(true);
+    setErrorCupon('');
+    try {
+      const { data } = await apiFetch('/api/cupones/validar', {
+        method: 'POST',
+        body: { codigo: cuponCodigo.trim(), subtotal },
+      });
+      setCuponAplicado({ codigo: cuponCodigo.trim().toUpperCase(), ...data });
+    } catch (err) {
+      setErrorCupon(err.message);
+      setCuponAplicado(null);
+    } finally {
+      setValidandoCupon(false);
+    }
+  }
+
+  function quitarCupon() {
+    setCuponAplicado(null);
+    setCuponCodigo('');
+    setErrorCupon('');
+  }
+
+  const totalConDescuento = cuponAplicado ? cuponAplicado.total : subtotal;
+
+  // ⭐ Mercado Pago (Fase 6, Sección 2, 2026-09-10) — antes acá se mostraba
+  // una pantalla propia de "Pedido recibido, te contactaremos para
+  // coordinar el pago" (`PedidoExito`, eliminada). Ahora `CompradorModal`
+  // redirige directo a Mercado Pago tras crear el pedido — no hay ninguna
+  // pantalla de éxito que mostrar en el sitio mismo, el usuario sale hacia
+  // Checkout Pro antes de volver a ver esta página.
+  const manejarExito = () => {
     vaciar();
     setModalAbierto(false);
-    setPaso('listo');
   };
 
   return (
@@ -72,11 +106,7 @@ export default function Carrito() {
 
       <section style={{ padding: '56px 0 80px', background: 'var(--bg-body)' }}>
         <div className="container">
-          {paso === 'listo' ? (
-            <div className="carrito-grid-solo">
-              <PedidoExito pedido={pedidoCreado} onCerrar={() => setPaso('carrito')} />
-            </div>
-          ) : items.length === 0 ? (
+          {items.length === 0 ? (
             <div style={{
               textAlign: 'center',
               padding: '80px 24px',
@@ -295,10 +325,66 @@ export default function Carrito() {
                     <span style={{ color: 'var(--texto-secundario)' }}>Subtotal</span>
                     <span style={{ fontWeight: '600', color: 'var(--texto-principal)' }}>{formatPrecio(subtotal)}</span>
                   </div>
+                  {cuponAplicado && (
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
+                      <span style={{ color: 'var(--texto-secundario)' }}>Cupón {cuponAplicado.codigo} (-{cuponAplicado.porcentaje}%)</span>
+                      <span style={{ fontWeight: '600', color: '#1a8a4a' }}>-{formatPrecio(cuponAplicado.descuento)}</span>
+                    </div>
+                  )}
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '15px' }}>
                     <span style={{ color: 'var(--texto-secundario)' }}>Envío</span>
                     <span style={{ color: 'var(--texto-secundario)', fontSize: '13px' }}>A coordinar</span>
                   </div>
+                </div>
+
+                {/* ⭐ Cupones de descuento (pedido del usuario, 2026-09-10) */}
+                <div style={{ marginBottom: '20px' }}>
+                  {cuponAplicado ? (
+                    <div style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                      padding: '10px 14px', borderRadius: '8px',
+                      background: 'color-mix(in srgb, #1a8a4a 10%, transparent)',
+                      border: '1px solid color-mix(in srgb, #1a8a4a 30%, transparent)',
+                      fontSize: '13px',
+                    }}>
+                      <span style={{ color: 'var(--texto-principal)' }}>Cupón <strong>{cuponAplicado.codigo}</strong> aplicado</span>
+                      <button
+                        type="button"
+                        onClick={quitarCupon}
+                        style={{ background: 'none', border: 'none', color: 'var(--texto-secundario)', textDecoration: 'underline', cursor: 'pointer', fontFamily: 'var(--font-cuerpo)', fontSize: '13px' }}
+                      >
+                        Quitar
+                      </button>
+                    </div>
+                  ) : (
+                    <form onSubmit={aplicarCupon} style={{ display: 'flex', gap: '8px' }}>
+                      <input
+                        type="text"
+                        value={cuponCodigo}
+                        onChange={(e) => { setCuponCodigo(e.target.value.toUpperCase()); setErrorCupon(''); }}
+                        placeholder="¿Tienes un cupón?"
+                        style={{
+                          flex: 1, padding: '10px 12px', borderRadius: '8px',
+                          border: '1.5px solid var(--border-media)', background: 'var(--bg-surface)',
+                          color: 'var(--texto-principal)', fontSize: '13px', fontFamily: 'var(--font-cuerpo)',
+                        }}
+                      />
+                      <button
+                        type="submit"
+                        disabled={!cuponCodigo.trim() || validandoCupon}
+                        style={{
+                          padding: '10px 16px', borderRadius: '8px', border: 'none',
+                          background: 'var(--bg-surface)', color: 'var(--texto-principal)',
+                          fontWeight: '600', fontSize: '13px', cursor: 'pointer', fontFamily: 'var(--font-cuerpo)',
+                        }}
+                      >
+                        {validandoCupon ? '...' : 'Aplicar'}
+                      </button>
+                    </form>
+                  )}
+                  {errorCupon && (
+                    <p style={{ color: 'var(--rojo)', fontSize: '12px', margin: '8px 0 0' }} role="alert">{errorCupon}</p>
+                  )}
                 </div>
 
                 <div style={{
@@ -318,7 +404,7 @@ export default function Carrito() {
                     fontWeight: '700',
                     color: 'var(--coral)'
                   }}>
-                    {formatPrecio(subtotal)}
+                    {formatPrecio(totalConDescuento)}
                   </span>
                 </div>
 
@@ -349,6 +435,7 @@ export default function Carrito() {
         <CompradorModal
           items={items}
           subtotal={subtotal}
+          cupon={cuponAplicado}
           onClose={() => setModalAbierto(false)}
           onExito={manejarExito}
         />
