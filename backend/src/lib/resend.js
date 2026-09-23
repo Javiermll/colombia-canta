@@ -5,6 +5,17 @@
 // el formulario de contacto funcione en desarrollo sin configuración extra,
 // y basta con fijar RESEND_FROM a un remitente del dominio verificado cuando
 // esté listo.
+//
+// Confirmado en la práctica (2026-09-08): antes de verificar el dominio,
+// Resend no solo ignora destinatarios ajenos a la cuenta — rechaza la
+// petición ENTERA (403) si CUALQUIER destinatario (to, cc o bcc) no es la
+// casilla dueña de la cuenta. No existe forma de "agregar una copia interna"
+// junto al destinatario real mientras tanto: hay que elegir uno de los dos.
+// Por eso, mientras RESEND_DOMINIO_VERIFICADO no sea "true", este helper
+// redirige el correo entero a RESEND_BCC_INTERNO (si está configurada) y dice
+// en el asunto quién era el destinatario real, para que el equipo pueda
+// avisarle a mano (WhatsApp) mientras se completa la verificación del
+// dominio en resend.com/domains.
 const RESEND_API_URL = 'https://api.resend.com/emails';
 const FROM_DEFECTO = 'Colombia Canta y Encanta <onboarding@resend.dev>';
 
@@ -19,6 +30,13 @@ export async function enviarCorreo({ to, subject, html, replyTo }) {
     return { ok: false, omitido: true };
   }
 
+  const dominioVerificado = process.env.RESEND_DOMINIO_VERIFICADO === 'true';
+  const avisoInterno = process.env.RESEND_BCC_INTERNO;
+  const redirigir = !dominioVerificado && avisoInterno && to !== avisoInterno;
+
+  const destinatarioFinal = redirigir ? avisoInterno : to;
+  const asuntoFinal = redirigir ? `[Cliente: ${to}] ${subject}` : subject;
+
   try {
     const respuesta = await fetch(RESEND_API_URL, {
       method: 'POST',
@@ -28,8 +46,8 @@ export async function enviarCorreo({ to, subject, html, replyTo }) {
       },
       body: JSON.stringify({
         from: process.env.RESEND_FROM || FROM_DEFECTO,
-        to,
-        subject,
+        to: destinatarioFinal,
+        subject: asuntoFinal,
         html,
         ...(replyTo ? { reply_to: replyTo } : {}),
       }),

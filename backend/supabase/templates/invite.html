@@ -1,69 +1,80 @@
 <!--
   Plantilla del correo de invitación para nuevos administradores del panel.
   No se aplica sola: hay que pegar este HTML en el Dashboard de Supabase
-  (Authentication → Email Templates → Invite user) — ver instrucciones en
+  (Authentication → Emails → Templates → Invite user) — ver instrucciones en
   readme_guia.md, sección 5.7. `content_path` en config.toml solo aplica a un
   entorno local de Supabase (`supabase start`), no al proyecto real en la nube.
 
   Variables de Supabase usadas: {{ .ConfirmationURL }} (único link real que
   envía Supabase para este tipo de correo — no hay .SiteURL/.Token propios
-  para "invite" además de este).
+  para "invite" además de este) y {{ .SiteURL }} (la URL configurada en
+  Authentication → URL Configuration — hoy la de Vercel, el día que se migre
+  el dominio real este link se ajusta solo con solo cambiar esa
+  configuración, sin tocar este archivo).
 
-  ⭐ Auditoría de accesibilidad (2026-08-31): el coral real de la marca
-  (`--coral: #ff5c8d`) da ~2.9:1 de contraste sobre blanco/como fondo con
-  texto blanco encima — no cumple WCAG AA (4.5:1 para texto normal). Se usa
-  acá `#b5285a` (misma familia de color, más oscuro) en su lugar, solo para
-  este correo — el resto del panel sigue usando el coral real donde el
-  contraste no es un problema (fondos grandes, acentos). El gris de textos
-  secundarios también se oscureció de `#9a9a9a` (~2.8:1) a `#6b6b6b` (~5.3:1).
+  ⭐ Rediseño (2026-09-10), a pedido del usuario — mismo lenguaje visual que
+  el resto de los correos transaccionales (backend/src/lib/emailPlantilla.js:
+  tema oscuro, tarjeta con patrón geométrico sutil, borde con tinte coral,
+  redes sociales y link a Contacto en el pie). Este archivo es HTML estático
+  (Supabase lo renderiza con Go html/template, no con nuestro código Node) —
+  por eso los valores (colores, URLs de íconos) están escritos a mano acá en
+  vez de importar las constantes de emailPlantilla.js; si se retoca la
+  paleta allá, hay que replicar el cambio acá también.
+
+  Mismo criterio de contraste que emailPlantilla.js: en tema oscuro, el coral
+  real de marca (#ff5c8d) sí pasa WCAG AA como texto/acento directo sobre el
+  fondo (~5.75:1) — pero el botón sólido de abajo (texto blanco encima) usa
+  el coral OSCURO (#e03d6f, ~4.4:1), no el real (~2.98:1, insuficiente para
+  texto chico).
 -->
-<div style="background: #f4f2ef; padding: 32px 16px; font-family: Arial, Helvetica, sans-serif;">
-  <div style="max-width: 480px; margin: 0 auto; background: #ffffff; border-radius: 16px; border: 1px solid #ececec; overflow: hidden;">
+<div style="background: #0a0f1e; padding: 32px 16px; font-family: Arial, Helvetica, sans-serif;">
+  <div style="max-width: 480px; margin: 0 auto; background: #151b2e url('https://gvjundobpmjirhzsboeu.supabase.co/storage/v1/object/public/sitio-imagenes/email-assets/patron-tribal.webp') repeat; border-radius: 16px; border: 1px solid #3a2233; overflow: hidden;">
 
     <!-- Encabezado -->
-    <div style="padding: 32px 32px 24px; text-align: center; border-bottom: 1px solid #f0f0f0;">
-      <img src="https://colombia-canta-encanta.vercel.app/logo.png" alt="Colombia Canta y Encanta" width="56" height="56" style="display: block; margin: 0 auto 12px; border-radius: 12px;" />
-      <p style="font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: #b5285a; font-weight: bold; margin: 0;">
-        Colombia Canta y Encanta
+    <div style="padding: 28px 32px 20px; text-align: center;">
+      <img src="https://colombia-canta-encanta.vercel.app/logo.png" alt="Colombia Canta y Encanta" width="48" height="48" style="display: block; margin: 0 auto 12px; border-radius: 10px;" />
+      <p style="margin: 0; font-size: 14px; font-weight: bold; letter-spacing: 0.02em;">
+        <span style="color: #ffffff;">COLOMBIA</span> <span style="color: #ff5c8d;">Canta y Encanta</span>
       </p>
     </div>
+    <div style="border-bottom: 1px solid #3a2233;"></div>
 
     <!-- Cuerpo -->
     <div style="padding: 28px 32px 8px;">
-      <h1 style="font-size: 21px; color: #0a0f1e; margin: 0 0 14px; text-align: center;">
+      <h1 style="font-size: 20px; color: #ffffff; margin: 0 0 12px; text-align: center;">
         Te invitaron a administrar el panel
       </h1>
-      <p style="font-size: 14.5px; line-height: 1.6; color: #454545; margin: 0 0 24px; text-align: center;">
+      <p style="font-size: 14px; line-height: 1.6; color: #9a9fae; margin: 0 0 24px; text-align: center;">
         Alguien del equipo de Colombia Canta y Encanta te dio acceso al panel del sitio: eventos, cursos, la tienda, inscripciones y más.
       </p>
 
       <!-- Pasos, en breve -->
-      <div style="background: #faf9f7; border: 1px solid #ececec; border-radius: 12px; padding: 20px 22px; margin: 0 0 28px;">
-        <p style="font-size: 11.5px; letter-spacing: 0.06em; text-transform: uppercase; color: #6b6b6b; font-weight: bold; margin: 0 0 14px;">
+      <div style="background: #1c2440; border: 1px solid #3a2233; border-radius: 12px; padding: 20px 22px; margin: 0 0 24px;">
+        <p style="font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #9a9fae; font-weight: bold; margin: 0 0 14px;">
           En 3 pasos
         </p>
         <table role="presentation" cellpadding="0" cellspacing="0" style="width: 100%;">
           <tr>
             <td style="padding-bottom: 12px; vertical-align: top; width: 28px;">
-              <span style="display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 50%; background: #b5285a; color: #ffffff; font-size: 12px; font-weight: bold; text-align: center;">1</span>
+              <span style="display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 50%; background: #e03d6f; color: #ffffff; font-size: 12px; font-weight: bold; text-align: center;">1</span>
             </td>
-            <td style="padding-bottom: 12px; vertical-align: top; font-size: 13.5px; color: #454545; line-height: 1.5;">
+            <td style="padding-bottom: 12px; vertical-align: top; font-size: 13.5px; color: #d5d8e0; line-height: 1.5;">
               Activa tu cuenta con el botón de abajo.
             </td>
           </tr>
           <tr>
             <td style="padding-bottom: 12px; vertical-align: top; width: 28px;">
-              <span style="display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 50%; background: #b5285a; color: #ffffff; font-size: 12px; font-weight: bold; text-align: center;">2</span>
+              <span style="display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 50%; background: #e03d6f; color: #ffffff; font-size: 12px; font-weight: bold; text-align: center;">2</span>
             </td>
-            <td style="padding-bottom: 12px; vertical-align: top; font-size: 13.5px; color: #454545; line-height: 1.5;">
+            <td style="padding-bottom: 12px; vertical-align: top; font-size: 13.5px; color: #d5d8e0; line-height: 1.5;">
               Elige tu contraseña.
             </td>
           </tr>
           <tr>
             <td style="vertical-align: top; width: 28px;">
-              <span style="display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 50%; background: #b5285a; color: #ffffff; font-size: 12px; font-weight: bold; text-align: center;">3</span>
+              <span style="display: inline-block; width: 20px; height: 20px; line-height: 20px; border-radius: 50%; background: #e03d6f; color: #ffffff; font-size: 12px; font-weight: bold; text-align: center;">3</span>
             </td>
-            <td style="vertical-align: top; font-size: 13.5px; color: #454545; line-height: 1.5;">
+            <td style="vertical-align: top; font-size: 13.5px; color: #d5d8e0; line-height: 1.5;">
               Configura tu código de verificación en dos pasos con una app autenticadora (te guiamos ahí mismo).
             </td>
           </tr>
@@ -72,26 +83,61 @@
 
       <!-- Botón -->
       <p style="text-align: center; margin: 0 0 20px;">
-        <a href="{{ .ConfirmationURL }}" style="display: inline-block; background: #b5285a; color: #ffffff; text-decoration: none; font-weight: bold; padding: 14px 36px; border-radius: 10px; font-size: 15px;">
+        <a href="{{ .ConfirmationURL }}" style="display: inline-block; background: #e03d6f; color: #ffffff; text-decoration: none; font-weight: bold; padding: 14px 36px; border-radius: 10px; font-size: 15px;">
           Activar mi cuenta
         </a>
       </p>
-      <p style="font-size: 12px; color: #6b6b6b; text-align: center; margin: 0 0 28px;">
+      <p style="font-size: 12px; color: #9a9fae; text-align: center; margin: 0 0 28px;">
         Este enlace es personal y de un solo uso.
       </p>
     </div>
 
     <!-- Pie -->
-    <div style="padding: 20px 32px 28px; border-top: 1px solid #f0f0f0;">
-      <p style="font-size: 12px; line-height: 1.5; color: #6b6b6b; margin: 0 0 10px;">
+    <div style="padding: 20px 32px 28px; border-top: 1px solid #3a2233; text-align: center;">
+      <p style="font-size: 12px; line-height: 1.5; color: #9a9fae; margin: 0 0 10px;">
         Si el botón no funciona, copia y pega este link en tu navegador:
       </p>
-      <p style="font-size: 11.5px; word-break: break-all; color: #6b6b6b; margin: 0 0 18px;">
+      <p style="font-size: 11.5px; word-break: break-all; color: #9a9fae; margin: 0 0 18px;">
         {{ .ConfirmationURL }}
       </p>
-      <p style="font-size: 12px; line-height: 1.5; color: #6b6b6b; margin: 0;">
-        Si no esperabas este correo, puedes ignorarlo — tu información está segura.
+      <p style="font-size: 12px; line-height: 1.5; color: #9a9fae; margin: 0;">
+        Si no esperabas este correo, puedes ignorarlo — tu información está segura. ¿Dudas? Escríbenos a través de <a href="{{ .SiteURL }}/#/contacto" target="_blank" rel="noopener noreferrer" style="color: #ff5c8d;">la página de Contacto</a>.
       </p>
+
+      <table role="presentation" cellpadding="0" cellspacing="0" style="margin: 14px auto 0;">
+        <tr>
+          <td style="padding: 0 4px;">
+            <a href="https://www.instagram.com/colombia_canta" target="_blank" rel="noopener noreferrer">
+              <img src="https://gvjundobpmjirhzsboeu.supabase.co/storage/v1/object/public/sitio-imagenes/email-assets/redes-v2/instagram.webp" alt="Instagram" width="32" height="32" style="display: block; border-radius: 50%;" />
+            </a>
+          </td>
+          <td style="padding: 0 4px;">
+            <a href="https://web.facebook.com/colombiacanta" target="_blank" rel="noopener noreferrer">
+              <img src="https://gvjundobpmjirhzsboeu.supabase.co/storage/v1/object/public/sitio-imagenes/email-assets/redes-v2/facebook.webp" alt="Facebook" width="32" height="32" style="display: block; border-radius: 50%;" />
+            </a>
+          </td>
+          <td style="padding: 0 4px;">
+            <a href="https://www.youtube.com/colcanta" target="_blank" rel="noopener noreferrer">
+              <img src="https://gvjundobpmjirhzsboeu.supabase.co/storage/v1/object/public/sitio-imagenes/email-assets/redes-v2/youtube.webp" alt="YouTube" width="32" height="32" style="display: block; border-radius: 50%;" />
+            </a>
+          </td>
+          <td style="padding: 0 4px;">
+            <a href="https://www.tiktok.com/@colombiacantayencanta" target="_blank" rel="noopener noreferrer">
+              <img src="https://gvjundobpmjirhzsboeu.supabase.co/storage/v1/object/public/sitio-imagenes/email-assets/redes-v2/tiktok.webp" alt="TikTok" width="32" height="32" style="display: block; border-radius: 50%;" />
+            </a>
+          </td>
+          <td style="padding: 0 4px;">
+            <a href="https://wa.me/573015315119" target="_blank" rel="noopener noreferrer">
+              <img src="https://gvjundobpmjirhzsboeu.supabase.co/storage/v1/object/public/sitio-imagenes/email-assets/redes-v2/whatsapp.webp" alt="WhatsApp" width="32" height="32" style="display: block; border-radius: 50%;" />
+            </a>
+          </td>
+          <td style="padding: 0 4px;">
+            <a href="https://www.tripadvisor.es/Attraction_Review-g297478-d23933011-Reviews-Colombia_Canta_Y_Encanta-Medellin_Antioquia_Department.html" target="_blank" rel="noopener noreferrer">
+              <img src="https://gvjundobpmjirhzsboeu.supabase.co/storage/v1/object/public/sitio-imagenes/email-assets/redes-v2/tripadvisor.webp" alt="TripAdvisor" width="32" height="32" style="display: block; border-radius: 50%;" />
+            </a>
+          </td>
+        </tr>
+      </table>
     </div>
 
   </div>
