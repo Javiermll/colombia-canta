@@ -717,8 +717,9 @@ export default function Inscripciones() {
                     <div className="inscr-form-paso">
                       <h3>Información del estudiante</h3>
                       <div className="inscr-form-grupo">
-                        <label>Nombre completo *</label>
+                        <label htmlFor="insc-estudiante-nombre">Nombre completo *</label>
                         <input
+                          id="insc-estudiante-nombre"
                           type="text"
                           name="estudianteNombre"
                           required
@@ -729,8 +730,9 @@ export default function Inscripciones() {
                       </div>
                       <div className="inscr-form-fila">
                         <div className="inscr-form-grupo">
-                          <label>Documento *</label>
+                          <label htmlFor="insc-estudiante-documento">Documento *</label>
                           <input
+                            id="insc-estudiante-documento"
                             type="text"
                             name="estudianteDocumento"
                             required
@@ -740,8 +742,9 @@ export default function Inscripciones() {
                           />
                         </div>
                         <div className="inscr-form-grupo">
-                          <label>Edad *</label>
+                          <label htmlFor="insc-estudiante-edad">Edad *</label>
                           <input
+                            id="insc-estudiante-edad"
                             type="number"
                             name="estudianteEdad"
                             required
@@ -755,8 +758,9 @@ export default function Inscripciones() {
                       </div>
                       <div className="inscr-form-fila">
                         <div className="inscr-form-grupo">
-                          <label>Email</label>
+                          <label htmlFor="insc-estudiante-email">Email</label>
                           <input
+                            id="insc-estudiante-email"
                             type="email"
                             name="estudianteEmail"
                             value={formData.estudianteEmail}
@@ -765,8 +769,9 @@ export default function Inscripciones() {
                           />
                         </div>
                         <div className="inscr-form-grupo">
-                          <label>Teléfono</label>
+                          <label htmlFor="insc-estudiante-telefono">Teléfono</label>
                           <input
+                            id="insc-estudiante-telefono"
                             type="tel"
                             name="estudianteTelefono"
                             value={formData.estudianteTelefono}
@@ -791,8 +796,9 @@ export default function Inscripciones() {
                     <div className="inscr-form-paso">
                       <h3>Datos del acudiente</h3>
                       <div className="inscr-form-grupo">
-                        <label>Nombre del acudiente *</label>
+                        <label htmlFor="insc-acudiente-nombre">Nombre del acudiente *</label>
                         <input
+                          id="insc-acudiente-nombre"
                           type="text"
                           name="acudienteNombre"
                           required
@@ -802,8 +808,9 @@ export default function Inscripciones() {
                       </div>
                       <div className="inscr-form-fila">
                         <div className="inscr-form-grupo">
-                          <label>Teléfono *</label>
+                          <label htmlFor="insc-acudiente-contacto">Teléfono *</label>
                           <input
+                            id="insc-acudiente-contacto"
                             type="tel"
                             name="acudienteContacto"
                             required
@@ -812,8 +819,9 @@ export default function Inscripciones() {
                           />
                         </div>
                         <div className="inscr-form-grupo">
-                          <label>Parentesco *</label>
+                          <label htmlFor="insc-acudiente-parentesco">Parentesco *</label>
                           <select
+                            id="insc-acudiente-parentesco"
                             name="acudienteParentesco"
                             required
                             value={formData.acudienteParentesco}
@@ -827,8 +835,9 @@ export default function Inscripciones() {
                         </div>
                       </div>
                       <div className="inscr-form-grupo">
-                        <label>Email del acudiente</label>
+                        <label htmlFor="insc-acudiente-email">Email del acudiente</label>
                         <input
+                          id="insc-acudiente-email"
                           type="email"
                           name="acudienteEmail"
                           value={formData.acudienteEmail}
@@ -857,9 +866,10 @@ export default function Inscripciones() {
                       <h3>Preferencias de horario</h3>
                       <div className="inscr-form-fila">
                         <div className="inscr-form-grupo">
-                          <label>{opcionesHorario.length > 0 ? 'Horario *' : 'Horario a coordinar *'}</label>
+                          <label htmlFor="insc-horario">{opcionesHorario.length > 0 ? 'Horario *' : 'Horario a coordinar *'}</label>
                           {opcionesHorario.length > 0 ? (
                             <select
+                              id="insc-horario"
                               name="horarioPreferencia"
                               required
                               value={formData.horarioPreferencia}
@@ -872,6 +882,7 @@ export default function Inscripciones() {
                             </select>
                           ) : (
                             <input
+                              id="insc-horario"
                               type="text"
                               name="horarioPreferencia"
                               required
@@ -882,8 +893,9 @@ export default function Inscripciones() {
                           )}
                         </div>
                         <div className="inscr-form-grupo">
-                          <label>Barrio</label>
+                          <label htmlFor="insc-barrio">Barrio</label>
                           <input
+                            id="insc-barrio"
                             type="text"
                             name="barrio"
                             value={formData.barrio}
@@ -913,10 +925,20 @@ export default function Inscripciones() {
                         <button type="button" className="btn btn-outline-oscuro" onClick={anteriorPaso} disabled={enviando}>
                           ← Atrás
                         </button>
+                        {/* ⭐ Hallazgo real (auditoría de accesibilidad, Fase 6,
+                           2026-09-09): antes se deshabilitaba también por
+                           horario/T&C sin aceptar — un botón `disabled` sale
+                           del orden de tabulación, así que un usuario de
+                           teclado nunca llegaba a enterarse de qué faltaba.
+                           Este formulario SÍ usa validación nativa del
+                           navegador (`required`, sin `noValidate` en el
+                           `<form>` de arriba) — dejar el botón siempre
+                           alcanzable deja que el navegador muestre su propio
+                           aviso accesible apuntando al campo real que falta. */}
                         <button
                           type="submit"
                           className="btn btn-solido-oscuro"
-                          disabled={!formData.horarioPreferencia || !formData.aceptaTerminos || enviando}
+                          disabled={enviando}
                         >
                           {enviando ? "Enviando…" : "Finalizar inscripción ✓"}
                         </button>

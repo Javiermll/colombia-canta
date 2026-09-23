@@ -7,6 +7,8 @@ import { logAudit } from '../lib/auditLog.js';
 import { stripUndefined } from '../lib/zodMultipart.js';
 import { errorGenerico } from '../lib/errores.js';
 import { paginacionSchema, aplicarRango, empaquetarPagina } from '../lib/paginacion.js';
+import { enviarCorreo } from '../lib/resend.js';
+import { plantillaCorreo, escaparHtml } from '../lib/emailPlantilla.js';
 
 const ESTADOS = ['pendiente', 'confirmada', 'cancelada'];
 const fechaISO = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'fecha_pago debe tener formato YYYY-MM-DD');
@@ -102,7 +104,7 @@ inscripcionesPublicRouter.post('/', limiterEstricto, async (req, res, next) => {
 
   const { data: curso, error: cursoError } = await supabase
     .from('cursos')
-    .select('id')
+    .select('id, nombre, imagen')
     .eq('id', result.data.curso_id)
     .eq('activo', true)
     .maybeSingle();
@@ -120,6 +122,31 @@ inscripcionesPublicRouter.post('/', limiterEstricto, async (req, res, next) => {
   }
 
   res.status(201).json({ ok: true, data });
+
+  // ⭐ Correo de confirmación (Fase 6, 2026-09-08; corregido 2026-09-09 para no
+  // bloquear la respuesta — ver misma nota en reservas.js) — el destinatario
+  // es el correo del estudiante (mayor de edad) o del acudiente (menor);
+  // ambos son opcionales en el esquema (ver `publicSchema` arriba), así que
+  // puede que no haya ninguno cargado — en ese caso simplemente no se manda
+  // nada.
+  const destinatario = data.estudiante_email || data.acudiente_email;
+  if (destinatario) {
+    enviarCorreo({
+      to: destinatario,
+      subject: `Recibimos tu inscripción a "${curso.nombre}"`,
+      html: plantillaCorreo({
+        titulo: '¡Recibimos tu inscripción!',
+        intro: `Gracias por inscribirte a <strong>${escaparHtml(curso.nombre)}</strong>. Aquí el resumen:`,
+        imagenUrl: curso.imagen,
+        filas: [
+          { etiqueta: 'Curso', valor: escaparHtml(curso.nombre) },
+          { etiqueta: 'Estudiante', valor: escaparHtml(data.estudiante_nombre) },
+          { etiqueta: 'Horario preferido', valor: escaparHtml(data.horario_preferencia) },
+        ],
+        notaFinal: 'Te contactaremos pronto para confirmar los detalles y coordinar el pago de la matrícula.',
+      }),
+    }).catch((err) => console.error('Fallo al mandar correo de confirmación de inscripción:', err));
+  }
 });
 
 // ── Router admin: gestión (montado en /api/admin/inscripciones con requireAdmin) ──

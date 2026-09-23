@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { Search } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useListaDinamica } from '../../hooks/useListaDinamica';
 import { useScrollAlSeleccionar } from '../../hooks/useScrollAlSeleccionar';
@@ -349,6 +350,7 @@ export default function Inscripciones() {
       <div className="insadmin-panel-header">
         <div>
           <h1 className="admin-page-titulo">Inscripciones</h1>
+          <div className="admin-page-franja" aria-hidden="true" />
           <p className="admin-page-sub">Revisa las inscripciones recibidas, asigna nivel, cambia el estado y gestiona el pago mes a mes.</p>
         </div>
       </div>
@@ -365,12 +367,16 @@ export default function Inscripciones() {
         <div className="insadmin-layout">
           <div className="insadmin-lista-panel">
             <div className="insadmin-filtros">
-              <input
+              <div className="admin-buscador">
+                <Search size={16} className="admin-buscador-icono" aria-hidden="true" />
+                <input
                 type="text"
-                placeholder="🔎 Buscar por estudiante…"
+                placeholder="Buscar por estudiante…"
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
-              />
+                style={{ paddingLeft: 38 }}
+                />
+              </div>
               <select value={filtroCurso} onChange={(e) => setFiltroCurso(e.target.value)}>
                 <option value="todos">Todos los cursos</option>
                 {cursos.map((c) => <option key={c.id} value={c.id}>{c.nombre}</option>)}
