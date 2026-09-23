@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { Link2Off } from 'lucide-react';
 import { supabase } from '../../config/supabaseClient';
 import '../../styles/main.css';
 import './Login.css';
@@ -345,7 +346,11 @@ export default function Bienvenida() {
 
         {paso === 'error' && (
           <>
+            <div className="bienvenida-error-icono" aria-hidden="true"><Link2Off size={30} strokeWidth={1.8} /></div>
             <p className="admin-login-error" role="alert">{error}</p>
+            <p className="admin-login-hint bienvenida-error-ayuda">
+              Esto puede pasar si el link ya se usó, venció (duran un tiempo limitado por seguridad), o se abrió de una forma inesperada — por ejemplo, reenviado por otra app de correo. Si era una invitación al panel, pídele a quien te invitó que te mande una nueva. Si estabas recuperando tu contraseña, puedes intentarlo de nuevo desde el inicio de sesión.
+            </p>
             <Link to="/admin/login" className="bienvenida-link">Ir al inicio de sesión</Link>
           </>
         )}

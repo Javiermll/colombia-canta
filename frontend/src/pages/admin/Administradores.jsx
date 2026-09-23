@@ -5,6 +5,7 @@ import Card from '../../components/admin/ui/Card';
 import FormField from '../../components/admin/ui/FormField';
 import Button from '../../components/admin/ui/Button';
 import ConfirmDialog from '../../components/admin/ui/ConfirmDialog';
+import PanelUso from '../../components/admin/ui/PanelUso';
 import { EMAIL_REGEX } from '../../utils/validacion';
 import { formatearFechaHora } from '../../utils/formato';
 import './Administradores.css';
@@ -146,6 +147,7 @@ export default function Administradores() {
     return (
       <AdminLayout>
         <h1 className="admin-page-titulo">Administradores</h1>
+        <div className="admin-page-franja" aria-hidden="true" />
         <p className="admin-page-sub">Esta sección solo está disponible para el admin maestro.</p>
       </AdminLayout>
     );
@@ -154,7 +156,10 @@ export default function Administradores() {
   return (
     <AdminLayout>
       <h1 className="admin-page-titulo">Administradores</h1>
+      <div className="admin-page-franja" aria-hidden="true" />
       <p className="admin-page-sub">Invita nuevos administradores, gestiona su acceso, y resetea su MFA si pierden el celular.</p>
+
+      <PanelUso />
 
       <Card className="adminsadmin-invitar">
         <h3 className="adminsadmin-seccion-titulo">Invitar un admin nuevo</h3>

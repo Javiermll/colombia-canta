@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import "./CookieBanner.css";
 
@@ -13,7 +13,22 @@ export default function CookieBanner() {
   const location = useLocation();
   const [visible, setVisible] = useState(false);
   const [detalleAbierto, setDetalleAbierto] = useState(false);
-  const esRutaAdmin = location.pathname.startsWith("/admin");
+  // `/puerta` (Fase 6, 2026-09-08) se excluye igual que `/admin` — pantalla
+  // aislada para staff temporal, sin cookies propias que declarar ahí.
+  const esRutaAdmin = location.pathname.startsWith("/admin") || location.pathname.startsWith("/puerta");
+  const entendidoBtnRef = useRef(null);
+
+  // ⭐ Hallazgo real (auditoría de cierre de Fase 5, 2026-09-08): el panel de
+  // "Opciones" (role="dialog") no movía el foco al abrirse ni cerraba con
+  // Escape — mismo patrón ya exigido en ConfirmDialog.jsx (5.2) y ahora
+  // también en ReservaModal.jsx, aplicado acá por consistencia.
+  useEffect(() => {
+    if (!detalleAbierto) return;
+    entendidoBtnRef.current?.focus();
+    const onKey = (e) => { if (e.key === "Escape") setDetalleAbierto(false); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [detalleAbierto]);
 
   // ⭐ Hallazgo real (auditoría pre-push, 2026-09-07): con `[]` de dependencias
   // este efecto solo corría una vez, al montar la SPA. Si esa primera carga
@@ -104,7 +119,7 @@ export default function CookieBanner() {
                 compra.
               </li>
             </ul>
-            <button type="button" className="cookie-banner-btn-aceptar" onClick={aceptar}>
+            <button type="button" className="cookie-banner-btn-aceptar" ref={entendidoBtnRef} onClick={aceptar}>
               Entendido
             </button>
           </div>

@@ -107,3 +107,23 @@
   color: var(--azul);
   font-weight: 600;
 }
+
+/* Pantalla de "Link no válido" (pedido del usuario, 2026-09-10) — antes era
+   solo el mensaje de error y un link, se sentía muy desnuda. */
+.bienvenida-error-icono {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: -4px auto 16px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--rojo) 10%, transparent);
+  color: var(--rojo);
+}
+
+.bienvenida-error-ayuda {
+  margin: 14px 0 4px;
+  line-height: 1.5;
+  text-align: left;
+}

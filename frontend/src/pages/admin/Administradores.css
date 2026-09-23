@@ -94,8 +94,31 @@
     align-items: stretch;
   }
 
+  /* Hallazgo real (pedido del usuario, 2026-09-07): con `align-items:
+     flex-start` en `flex-direction: column`, el hijo NO se estira al ancho
+     del contenedor — se encoge al ancho de su propio contenido. Eso anulaba
+     el truncado con elipsis de `.adminsadmin-email` (solo actúa si la caja
+     tiene un ancho limitado) y el correo largo desbordaba la tarjeta y
+     empujaba scroll horizontal en toda la página. `stretch` hace que
+     `.adminsadmin-fila-info` sí ocupe el ancho real disponible. */
   .adminsadmin-fila {
     flex-direction: column;
-    align-items: flex-start;
+    /* `flex-wrap: wrap` (regla base, pensada para la fila horizontal de
+       desktop/tablet) seguía activa junto con `flex-direction: column` acá
+       — esa combinación crea una columna nueva cuando el contenido no cabe
+       en el alto disponible, en vez de una sola pila vertical, y en la
+       práctica anulaba el `align-items: stretch` de abajo. */
+    flex-wrap: nowrap;
+    align-items: stretch;
+  }
+
+  /* `flex: 1 1 240px` en `.adminsadmin-fila-info` está pensado para el ANCHO
+     en la fila horizontal (240px de ancho mínimo preferido) — pero al pasar
+     `.adminsadmin-fila` a columna, ese mismo flex-basis se aplica al eje
+     principal, que ahora es la ALTURA: quedaba forzando ~240px de alto (con
+     flex-grow:1 de por medio) y dejaba un hueco vacío enorme antes de los
+     botones. En columna no hace falta que crezca ni tenga una base fija. */
+  .adminsadmin-fila-info {
+    flex: 0 1 auto;
   }
 }

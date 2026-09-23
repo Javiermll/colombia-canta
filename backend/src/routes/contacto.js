@@ -8,6 +8,7 @@ import { stripUndefined } from '../lib/zodMultipart.js';
 import { errorGenerico } from '../lib/errores.js';
 import { paginacionSchema, aplicarRango, empaquetarPagina } from '../lib/paginacion.js';
 import { enviarCorreo } from '../lib/resend.js';
+import { escaparHtml } from '../lib/emailPlantilla.js';
 
 const EMAIL_DESTINO = process.env.CONTACTO_EMAIL_DESTINO || 'info@colombiacanta.org';
 
@@ -15,13 +16,6 @@ function zodError(result) {
   const err = new Error(result.error.issues.map((i) => i.message).join(', '));
   err.status = 400;
   return err;
-}
-
-function escaparHtml(texto) {
-  return texto
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;');
 }
 
 // ── Router público: recepción del formulario de Contacto ──

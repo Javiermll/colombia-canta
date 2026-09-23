@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { Search } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useScrollAlSeleccionar } from '../../hooks/useScrollAlSeleccionar';
 import AdminLayout from '../../components/admin/ui/AdminLayout';
@@ -175,6 +176,7 @@ export default function Contacto() {
       <div className="contadmin-panel-header">
         <div>
           <h1 className="admin-page-titulo">Contacto</h1>
+          <div className="admin-page-franja" aria-hidden="true" />
           <p className="admin-page-sub">Mensajes recibidos desde el formulario de Contacto del sitio.</p>
         </div>
       </div>
@@ -191,12 +193,16 @@ export default function Contacto() {
         <div className="contadmin-layout">
           <div className="contadmin-lista-panel">
             <div className="contadmin-filtros">
-              <input
-                type="text"
-                placeholder="🔎 Buscar por nombre, correo o mensaje…"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-              />
+              <div className="admin-buscador">
+                <Search size={16} className="admin-buscador-icono" aria-hidden="true" />
+                <input
+                  type="text"
+                  placeholder="Buscar por nombre, correo o mensaje…"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  style={{ paddingLeft: 38 }}
+                />
+              </div>
               <label className="contadmin-filtro-check">
                 <input type="checkbox" checked={soloNoLeidos} onChange={(e) => setSoloNoLeidos(e.target.checked)} />
                 Solo no leídos {noLeidos > 0 && `(${noLeidos})`}

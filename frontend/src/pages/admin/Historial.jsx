@@ -124,6 +124,7 @@ export default function Historial() {
     return (
       <AdminLayout>
         <h1 className="admin-page-titulo">Historial</h1>
+        <div className="admin-page-franja" aria-hidden="true" />
         <p className="admin-page-sub">Esta sección solo está disponible para el admin maestro.</p>
       </AdminLayout>
     );
@@ -133,6 +134,7 @@ export default function Historial() {
     <AdminLayout>
       <div className="histadmin-panel-header">
         <h1 className="admin-page-titulo">Historial</h1>
+        <div className="admin-page-franja" aria-hidden="true" />
         <p className="admin-page-sub">Registro de cada acción de crear, editar o borrar realizada desde el panel, con quién y cuándo la hizo.</p>
       </div>
 
