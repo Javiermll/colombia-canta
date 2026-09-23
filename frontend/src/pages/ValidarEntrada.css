@@ -1,0 +1,327 @@
+/* Pantalla de puerta (Fase 6, 2026-09-08) — pensada para el celular del staff
+   esa noche, sin Navbar/Footer (ver App.jsx). Colores fijos (no usa el
+   sistema claro/oscuro del sitio): fondo oscuro constante, mismo criterio
+   que una pantalla de "modo evento" — legible bajo luz de escenario o de
+   noche, sin depender del tema del celular de quien la use. */
+
+.puerta-pantalla {
+  min-height: 100vh;
+  background: #0a0f1e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 16px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.puerta-tarjeta {
+  width: 100%;
+  max-width: 380px;
+  background: #151b2e;
+  border-radius: 20px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+}
+
+.puerta-tarjeta--ancha {
+  max-width: 440px;
+}
+
+.puerta-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.puerta-titulo {
+  font-size: 22px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 8px;
+}
+
+.puerta-titulo--chico {
+  font-size: 18px;
+  margin: 0;
+}
+
+.puerta-sub {
+  font-size: 14px;
+  color: #9a9fae;
+  margin: 0 0 24px;
+}
+
+.puerta-input-pin {
+  width: 100%;
+  font-size: 32px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  padding: 16px;
+  border-radius: 12px;
+  border: 2px solid #2a3350;
+  background: #0a0f1e;
+  color: #ffffff;
+  margin-bottom: 20px;
+  font-family: inherit;
+}
+
+.puerta-input-pin:focus {
+  outline: none;
+  border-color: #ff5c8d;
+}
+
+.puerta-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 100px;
+  border: none;
+  background: #ff5c8d;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.puerta-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Pantalla de PIN: mensaje de error (ej. "PIN no reconocido"). */
+.puerta-pin-error {
+  color: #f87171;
+  font-size: 13px;
+  margin: -12px 0 16px;
+}
+
+/* Pantalla de confirmación de evento (pedido del usuario, 2026-09-10) — el
+   nombre es el elemento a leer más rápido posible, de noche, antes de
+   confiar en que el PIN era el correcto. */
+.puerta-evento-confirmado {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ff5c8d;
+  margin: 0 0 28px;
+  line-height: 1.3;
+}
+
+.puerta-btn--secundario {
+  background: #2a3350;
+  margin-top: 10px;
+}
+
+.puerta-header-escaneo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+}
+
+.puerta-link {
+  background: none;
+  border: none;
+  color: #9a9fae;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: inherit;
+  /* ⭐ Hallazgo real (auditoría de accesibilidad, Fase 6, 2026-09-09): sin
+     padding, el área táctil real era del tamaño del texto (~12px) — muy por
+     debajo del mínimo recomendado (~24px), justo en un botón que se usa de
+     noche, con nervios, en un celular. */
+  padding: 10px 6px;
+  margin: -10px -6px;
+}
+
+/* Patrón "sr-only" estándar: visible solo para lectores de pantalla, oculto
+   visualmente sin usar display:none (que también lo oculta de AT). */
+.puerta-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.puerta-lector-ayuda {
+  font-size: 13px;
+  color: #9a9fae;
+  text-align: center;
+  margin: 0 0 12px;
+}
+
+.puerta-lector {
+  border-radius: 14px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+/* ⭐ Rediseño (pedido del usuario, 2026-09-10): html5-qrcode inyecta su propia
+   UI (selector de cámara, botón de iniciar/detener, link para cambiar a
+   "escanear imagen") dentro de #lector-qr-puerta con estilos en línea
+   pensados para un fondo claro (caja blanca, texto negro, borde plateado) —
+   sobre el fondo oscuro de esta pantalla quedaba un recuadro blanco
+   desentonado y de difícil lectura para el staff, de noche. La librería fija
+   varias propiedades vía `style.xxx =` en JS (mayor especificidad que una
+   clase normal), así que hace falta `!important` en las que chocan
+   (`border`, `background`); el resto (tipografía, color de texto) no lo
+   fija la librería, así que una regla normal alcanza.
+   Los `id` de estos elementos vienen del id del contenedor (ver
+   ELEMENTO_ESCANER en ValidarEntrada.jsx) + un sufijo fijo de la librería —
+   referenciados acá tal cual, no son arbitrarios. */
+.puerta-lector,
+#lector-qr-puerta__dashboard_section,
+#lector-qr-puerta__dashboard_section_csr,
+#lector-qr-puerta__scan_region {
+  background: #151b2e !important;
+  border: none !important;
+}
+
+.puerta-lector *,
+#lector-qr-puerta__dashboard_section * {
+  font-family: inherit !important;
+  color: #e5e7eb;
+}
+
+.puerta-lector select {
+  width: 100%;
+  padding: 10px 12px;
+  margin: 6px 0 10px;
+  border-radius: 10px;
+  border: 1.5px solid #2a3350 !important;
+  background: #0a0f1e !important;
+  color: #ffffff !important;
+  font-size: 14px;
+}
+
+.puerta-lector button {
+  width: 100%;
+  padding: 12px;
+  margin: 6px 0;
+  border-radius: 100px;
+  border: none !important;
+  background: #2a3350 !important;
+  color: #ffffff !important;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.puerta-lector button:hover {
+  background: #384060 !important;
+}
+
+/* El link "Escanear una imagen" (cambia de modo cámara a archivo) — se
+   distingue del resto del texto, mismo tratamiento que `.puerta-link`. */
+.puerta-lector span[style*="underline"],
+.puerta-lector a {
+  color: #ff5c8d !important;
+  text-decoration: underline;
+}
+
+.puerta-lector img {
+  opacity: 0.9;
+}
+
+/* Región del video (el propio feed de la cámara) — sin fondo oscuro forzado,
+   ahí va la imagen real. */
+.puerta-lector video,
+.puerta-lector canvas {
+  border-radius: 10px;
+}
+
+.puerta-procesando {
+  text-align: center;
+  color: #9a9fae;
+  font-size: 13px;
+  margin: 8px 0;
+}
+
+.puerta-manual {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #2a3350;
+}
+
+.puerta-manual-label {
+  font-size: 12px;
+  color: #9a9fae;
+  margin: 0 0 10px;
+}
+
+.puerta-input-manual {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #2a3350;
+  background: #0a0f1e;
+  color: #ffffff;
+  font-size: 14px;
+  font-family: inherit;
+  margin-bottom: 8px;
+}
+
+.puerta-input-manual:focus {
+  outline: none;
+  border-color: #ff5c8d;
+}
+
+.puerta-resultado {
+  padding: 32px 16px;
+  border-radius: 14px;
+}
+
+.puerta-resultado--ok {
+  background: rgba(22, 163, 74, 0.12);
+  border: 1.5px solid rgba(22, 163, 74, 0.4);
+}
+
+.puerta-resultado--error {
+  background: rgba(220, 38, 38, 0.12);
+  border: 1.5px solid rgba(220, 38, 38, 0.4);
+}
+
+.puerta-resultado-icono {
+  font-size: 44px;
+  font-weight: 700;
+  margin: 0 0 8px;
+}
+
+/* ⭐ Hallazgo real (auditoría de accesibilidad, Fase 6, 2026-09-09): el verde
+   original (#16a34a) sobre el fondo compuesto de `.puerta-resultado--ok`
+   (~rgb(21,43,49)) daba ≈1.4:1 de contraste — muy por debajo del mínimo 3:1
+   para texto grande. Es el elemento visual dominante del panel de éxito,
+   justo el que el staff necesita distinguir rápido de noche. Se aclaran
+   ambos íconos con margen de sobra sobre el mínimo. */
+.puerta-resultado--ok .puerta-resultado-icono { color: #4ade80; }
+.puerta-resultado--error .puerta-resultado-icono { color: #f87171; }
+
+.puerta-resultado-titulo {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 12px;
+}
+
+.puerta-resultado-detalle {
+  font-size: 15px;
+  color: #e5e7eb;
+  margin: 0 0 4px;
+}
+
+.puerta-resultado-chico {
+  font-size: 12px;
+  color: #9a9fae;
+  margin: 8px 0 20px;
+}
+
+.puerta-resultado .puerta-btn {
+  margin-top: 16px;
+}

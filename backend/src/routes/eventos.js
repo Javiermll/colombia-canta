@@ -8,6 +8,7 @@ import { booleanFromString, jsonArrayField, nullableNumberFromString, stripUndef
 import { generarSlugUnico } from '../lib/slug.js';
 import { toCamelCase } from '../lib/camelCase.js';
 import { errorGenerico } from '../lib/errores.js';
+import { generarPin, regenerarPinPuerta } from '../lib/pin.js';
 
 const router = Router();
 const CARPETA_IMG = 'eventos/img';
@@ -41,6 +42,17 @@ const pillSchema = z.object({
 const zonaSchema = z.object({
   nombre: z.string().trim().min(1, 'zonas[].nombre es obligatorio'),
   precio: z.string().trim().min(1, 'zonas[].precio es obligatorio'),
+  // Cupo de ESTA zona (pedido del usuario, 2026-09-07) — opcional: una zona sin
+  // cupo definido se trata como "sin límite propio" (solo cuenta hacia el
+  // cupo_total general del evento, si lo tiene). Viene como string porque
+  // este endpoint es multipart (mismo criterio que max_entradas/cupo_total).
+  // ⭐ Hallazgo real (auditoría de cierre de Fase 5, 2026-09-08): `/^\d+$/`
+  // aceptaba "0" como "cupo válido" (a diferencia de cupo_total y del cupo
+  // por show de eventos_fijos, que sí exigen positivo) — una zona con
+  // cupo:0 pasaba todas las validaciones y quedaba permanentemente
+  // imposible de reservar, sin ningún aviso. `[1-9]\d*` excluye "0" (y
+  // "00", "01"...) sin dejar de aceptar cualquier entero positivo real.
+  cupo: z.string().trim().regex(/^[1-9]\d*$/, 'zonas[].cupo debe ser un entero positivo').optional(),
 });
 const testimonioSchema = z.object({
   texto: z.string().trim().min(1, 'testimonios[].texto es obligatorio'),
@@ -80,6 +92,11 @@ const baseEventoSchema = z.object({
   // se usa `nullableNumberFromString` en vez del `z.union` directo que usa
   // cursos.js (JSON real) -- ver `zodMultipart.js`.
   max_entradas: nullableNumberFromString(z.coerce.number().int('max_entradas debe ser un entero').positive('max_entradas debe ser mayor a 0')).optional(),
+  // Aforo TOTAL del evento (pedido del usuario, 2026-09-07) — distinto de
+  // max_entradas (que limita cuántas entradas se piden EN UNA reserva, no
+  // cuántas hay en total). null/vacío = sin límite. Mismo criterio de
+  // "mandar '' para borrar" que max_entradas, ver nota de arriba.
+  cupo_total: nullableNumberFromString(z.coerce.number().int('cupo_total debe ser un entero').positive('cupo_total debe ser mayor a 0')).optional(),
   cta: z.string().trim().min(1, 'cta es obligatorio').max(35, 'cta no puede pasar de 35 caracteres'),
   cta_wa: z.string().trim().max(18, 'cta_wa no puede pasar de 18 caracteres').optional(),
   color: hexColor,
@@ -113,6 +130,28 @@ function zodError(result) {
   return err;
 }
 
+// ⭐ Pedido explícito del usuario (2026-09-07): "obviamente [los cupos de
+// zona] deben ser cuadrados con la cantidad máxima de asientos disponibles"
+// — esto ya se valida en el panel (Eventos.jsx) pero se repite acá como
+// defensa real, no solo de UI (mismo criterio que el resto del proyecto:
+// nunca confiar solo en la validación del cliente).
+function validarCuposZonas(cupoTotal, zonas) {
+  if (!zonas || zonas.length === 0) return null;
+  const conCupo = zonas.filter((z) => z.cupo);
+  if (conCupo.length === 0) return null;
+  if (conCupo.length !== zonas.length) {
+    return 'Si defines cupo para una zona, todas las zonas deben tener uno';
+  }
+  if (!cupoTotal) {
+    return 'Si defines cupo por zona, también debes definir el cupo total del evento';
+  }
+  const suma = conCupo.reduce((acc, z) => acc + Number(z.cupo), 0);
+  if (suma !== cupoTotal) {
+    return `La suma de cupos por zona (${suma}) debe ser igual al cupo total del evento (${cupoTotal})`;
+  }
+  return null;
+}
+
 // Desmarca cualquier otro evento destacado — el índice único parcial en `eventos`
 // solo permite un `destacado_hero = true` a la vez. Sin esto, marcar uno nuevo
 // como destacado violaría ese índice si ya había otro.
@@ -132,12 +171,18 @@ router.get('/', async (req, res, next) => {
   // orden entre filas "empatadas" si no hay un segundo criterio explícito.
   // Se agrega `creado_en` ascendente como desempate, para que el evento
   // creado primero aparezca primero cuando 2 comparten fecha (pedido del
-  // usuario). El `.sort()` de JS que hace el sitio público (`CarruselEventos.jsx`)
-  // es estable, así que respeta este orden de desempate tal cual llega.
+  // usuario).
+  //
+  // ⭐ Pedido del usuario (2026-09-10): en el panel el orden importa al revés
+  // que en la nota original — el evento MÁS PRÓXIMO (fecha más cercana) va
+  // arriba y el más lejano abajo, para que el admin vea primero lo que se
+  // viene pronto. Ojo: esto es SOLO el listado admin — `eventosPublicoRouter`
+  // más abajo mantiene su propio orden (`fecha_iso` descendente) para el
+  // sitio público, que no se tocó.
   const { data, error } = await supabase
     .from('eventos')
     .select('*')
-    .order('fecha_iso', { ascending: false })
+    .order('fecha_iso', { ascending: true })
     .order('creado_en', { ascending: true });
 
   if (error) {
@@ -164,6 +209,15 @@ router.post('/', requireCsrf, uploadFields, async (req, res, next) => {
   }
   const { destacado_hero, ...camposEvento } = result.data;
 
+  if (camposEvento.accion_tipo === 'pago') {
+    const errorCupos = validarCuposZonas(camposEvento.cupo_total, camposEvento.zonas);
+    if (errorCupos) {
+      const err = new Error(errorCupos);
+      err.status = 400;
+      return next(err);
+    }
+  }
+
   // Validar TODOS los archivos antes de subir ninguno.
   await validarImagenReal(imgFile.buffer);
   for (const archivo of galeriaFiles) {
@@ -182,9 +236,13 @@ router.post('/', requireCsrf, uploadFields, async (req, res, next) => {
   // destacado_hero NUNCA se manda en el insert inicial (queda en false por default) —
   // si se pidió true, se aplica en un paso aparte DESPUÉS de crear la fila, para que
   // un fallo del insert no deje el sitio sin ningún evento destacado.
+  // ⭐ Pedido del usuario (2026-09-10): el PIN de puerta ya no espera a que
+  // el admin se acuerde de generarlo a mano — queda listo desde el momento
+  // en que el evento existe. Regenerarlo sigue disponible (POST
+  // /:id/pin-puerta) por si alguna vez hace falta invalidar uno filtrado.
   const { data: evento, error: eventoError } = await supabase
     .from('eventos')
-    .insert({ ...camposEvento, slug, img: imgUrl, galeria: galeriaUrls.length > 0 ? galeriaUrls : null })
+    .insert({ ...camposEvento, slug, img: imgUrl, galeria: galeriaUrls.length > 0 ? galeriaUrls : null, pin_puerta: generarPin() })
     .select()
     .single();
 
@@ -228,6 +286,30 @@ router.patch('/:id', requireCsrf, uploadFields, async (req, res, next) => {
   }
   const { destacado_hero, ...camposParciales } = result.data;
   const camposEvento = stripUndefined(camposParciales);
+
+  const accionTipoFinal = camposEvento.accion_tipo ?? actual.accion_tipo;
+  if (accionTipoFinal === 'pago') {
+    const cupoTotalFinal = 'cupo_total' in camposEvento ? camposEvento.cupo_total : actual.cupo_total;
+    const zonasFinal = 'zonas' in camposEvento ? camposEvento.zonas : actual.zonas;
+    const errorCupos = validarCuposZonas(cupoTotalFinal, zonasFinal);
+    if (errorCupos) {
+      const err = new Error(errorCupos);
+      err.status = 400;
+      return next(err);
+    }
+  } else if (!('zonas' in camposEvento) && actual.zonas) {
+    // ⭐ Hallazgo real (auditoría de cierre de Fase 5, 2026-09-08): el panel
+    // solo manda `zonas` cuando accion_tipo es 'pago' (Eventos.jsx nunca
+    // envía esa clave para los otros caminos) — sin esto, cambiar un evento
+    // de 'pago' a 'libre'/'festival'/'proximamente' dejaba las zonas VIEJAS
+    // pegadas en la base (un PATCH parcial nunca las toca si no vienen en el
+    // body). Eso reabría el bypass de cupo recién corregido: `ReservaModal`
+    // preselecciona `evento.zonas?.[0]` sin importar el camino de reserva, así
+    // que un evento 'libre' con zonas fantasma podía terminar mandando una
+    // `zona_seleccionada` real (no inventada) a un evento que ya no debería
+    // tener ninguna. Se limpian explícitamente al dejar de ser 'pago'.
+    camposEvento.zonas = null;
+  }
 
   const imgFile = req.files?.img?.[0];
   const galeriaFiles = req.files?.galeria || [];
@@ -294,6 +376,24 @@ router.patch('/:id', requireCsrf, uploadFields, async (req, res, next) => {
   res.json({ ok: true, data: eventoFinal });
 });
 
+// POST /:id/pin-puerta — genera (o regenera) el código de acceso de la
+// pantalla de puerta (/puerta, Fase 6, 2026-09-08). Reemplaza cualquier PIN
+// anterior — si el staff de una noche anterior todavía lo tuviera guardado,
+// deja de servir apenas se genera uno nuevo.
+router.post('/:id/pin-puerta', requireCsrf, async (req, res, next) => {
+  const { id } = req.params;
+  const resultado = await regenerarPinPuerta({
+    tabla: 'eventos',
+    entidad: 'eventos',
+    id,
+    actor: req.admin,
+    contexto: 'POST /api/admin/eventos/:id/pin-puerta',
+  });
+  if (resultado.error) return next(resultado.error);
+
+  res.json({ ok: true, data: { pin: resultado.pin } });
+});
+
 // DELETE /:id — borra el evento y sus imágenes (img + galería)
 router.delete('/:id', requireCsrf, async (req, res, next) => {
   const { id } = req.params;
@@ -340,6 +440,22 @@ router.delete('/:id', requireCsrf, async (req, res, next) => {
 // eventos activos, en camelCase. Mismo orden que el admin (fecha_iso descendente).
 export const eventosPublicoRouter = Router();
 
+// Una reserva 'pendiente' con más de 30 min desde que se creó deja de contar
+// para el cupo (mismo criterio que `crear_reserva_con_cupo`/migración
+// 20260910150000) — la disponibilidad pública tiene que coincidir exacto con
+// lo que esa función va a permitir de verdad al momento de comprar.
+function estaExpirada(reserva) {
+  if (reserva.estado !== 'pendiente') return false;
+  return Date.now() - new Date(reserva.creado_en).getTime() > 30 * 60 * 1000;
+}
+
+// ⭐ Cupos (pedido del usuario, 2026-09-07; extendido a Eventos de pago,
+// 2026-09-10): la disponibilidad de 'libre' se calcula desde siempre.
+// La de 'pago' quedó deliberadamente afuera hasta ahora — mostrar "cupos
+// disponibles" ahí habría sido un dato falso mientras esos eventos seguían
+// simulados en el frontend (nunca bajaba, no importaba cuánto se "vendiera").
+// Con Mercado Pago ya conectado (Fase 6), se agrega el mismo cálculo por
+// zona (cada zona de un evento 'pago' puede tener su propio `cupo`).
 eventosPublicoRouter.get('/', async (req, res, next) => {
   const { data, error } = await supabase
     .from('eventos')
@@ -352,7 +468,60 @@ eventosPublicoRouter.get('/', async (req, res, next) => {
     return next(errorGenerico(error, 'GET /api/eventos'));
   }
 
-  res.json({ ok: true, data: toCamelCase(data) });
+  const idsConCupo = data.filter((e) => e.accion_tipo === 'libre' && e.cupo_total != null).map((e) => e.id);
+  let reservadoPorEvento = {};
+  if (idsConCupo.length > 0) {
+    const { data: reservas, error: errorReservas } = await supabase
+      .from('reservas')
+      .select('evento_id, cantidad')
+      .in('evento_id', idsConCupo)
+      .neq('estado', 'cancelada');
+    if (errorReservas) return next(errorGenerico(errorReservas, 'GET /api/eventos (disponibilidad)'));
+    reservadoPorEvento = reservas.reduce((acc, r) => {
+      acc[r.evento_id] = (acc[r.evento_id] || 0) + r.cantidad;
+      return acc;
+    }, {});
+  }
+
+  const idsConZonasCupo = data
+    .filter((e) => e.accion_tipo === 'pago' && (e.zonas || []).some((z) => z.cupo))
+    .map((e) => e.id);
+  let reservadoPorZona = {};
+  if (idsConZonasCupo.length > 0) {
+    const { data: reservasZona, error: errorReservasZona } = await supabase
+      .from('reservas')
+      .select('evento_id, cantidad, estado, creado_en, zona_seleccionada')
+      .in('evento_id', idsConZonasCupo)
+      .neq('estado', 'cancelada');
+    if (errorReservasZona) return next(errorGenerico(errorReservasZona, 'GET /api/eventos (disponibilidad por zona)'));
+    for (const r of reservasZona) {
+      if (estaExpirada(r)) continue;
+      const clave = `${r.evento_id}|${r.zona_seleccionada?.nombre}`;
+      reservadoPorZona[clave] = (reservadoPorZona[clave] || 0) + r.cantidad;
+    }
+  }
+
+  // ⭐ `pin_puerta` (Fase 6, 2026-09-08) nunca debe llegar al público — es el
+  // código que autentica a la pantalla de puerta (/puerta); exponerlo acá
+  // dejaría a cualquier visitante leerlo directo de `GET /api/eventos` y
+  // saltarse por completo esa protección.
+  const dataConDisponibilidad = data.map(({ pin_puerta, ...e }) => {
+    if (e.accion_tipo === 'libre' && e.cupo_total != null) {
+      const reservado = reservadoPorEvento[e.id] || 0;
+      return { ...e, cupo_disponible: Math.max(0, e.cupo_total - reservado) };
+    }
+    if (e.accion_tipo === 'pago' && (e.zonas || []).some((z) => z.cupo)) {
+      const zonas = e.zonas.map((z) => {
+        if (!z.cupo) return z;
+        const reservado = reservadoPorZona[`${e.id}|${z.nombre}`] || 0;
+        return { ...z, cupo_disponible: Math.max(0, z.cupo - reservado) };
+      });
+      return { ...e, zonas };
+    }
+    return e;
+  });
+
+  res.json({ ok: true, data: toCamelCase(dataConDisponibilidad) });
 });
 
 export default router;

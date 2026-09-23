@@ -22,3 +22,17 @@ export const limiterEstricto = rateLimit({
   legacyHeaders: false,
   message: { error: 'Demasiados intentos, intenta de nuevo en unos minutos.' },
 });
+
+// Pantalla de puerta (Fase 6, 2026-09-08) — necesita mucho más volumen legítimo
+// que limiterEstricto (el staff puede escanear a cientos de personas en poco
+// tiempo durante un evento real), pero sigue siendo un endpoint que recibe un
+// PIN como credencial — 120/15min alcanza sobrado para uso real y sigue
+// haciendo impráctico adivinar un PIN de 6 dígitos por fuerza bruta (1M
+// combinaciones tardaría semanas a este ritmo).
+export const limiterPuerta = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 120,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Demasiados intentos, espera unos minutos.' },
+});

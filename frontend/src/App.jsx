@@ -13,6 +13,7 @@ import AdminNoticias from './pages/admin/Noticias';
 import AdminEventos from './pages/admin/Eventos';
 import AdminEventosFijos from './pages/admin/EventosFijos';
 import AdminProductos from './pages/admin/Productos';
+import AdminCupones from './pages/admin/Cupones';
 import AdminCursos from './pages/admin/Cursos';
 import AdminInscripciones from './pages/admin/Inscripciones';
 import AdminReservas from './pages/admin/Reservas';
@@ -42,6 +43,7 @@ import PoliticaEnvios from './pages/PoliticaEnvios';
 import PoliticaPrivacidad from './pages/PoliticaPrivacidad';
 import NotFound from './pages/NotFound';
 import CookieBanner from './components/CookieBanner/CookieBanner';
+import ValidarEntrada from './pages/ValidarEntrada';
 import './styles/main.css';
 
 // 5.2 · El panel SÍ comparte el Navbar del sitio público (decisión revisada,
@@ -50,8 +52,20 @@ import './styles/main.css';
 // en /admin/* es el reproductor flotante de Spotify, no tiene sentido ahí.
 function PlayerSitioPublico() {
   const location = useLocation();
-  if (location.pathname.startsWith('/admin')) return null;
+  if (location.pathname.startsWith('/admin') || location.pathname.startsWith('/puerta')) return null;
   return <GlobalSpotifyPlayer />;
+}
+
+// ⭐ Pantalla de puerta (Fase 6, 2026-09-08): a diferencia del panel de admin
+// (que sí comparte Navbar, ver nota de arriba), /puerta es una pantalla
+// aislada pensada para el celular de staff temporal esa noche — mostrarle el
+// menú completo del sitio (Tienda, Inscripciones, etc.) no aporta nada y
+// puede confundir. Se oculta el Navbar acá, mismo criterio de exclusión por
+// ruta que ya usa `PlayerSitioPublico`.
+function NavbarSitioPublico() {
+  const location = useLocation();
+  if (location.pathname.startsWith('/puerta')) return null;
+  return <Navbar />;
 }
 
 export default function App() {
@@ -62,7 +76,7 @@ export default function App() {
           <AdminAuthProvider>
             <BrowserRouter>
               <ScrollToTop />
-              <Navbar />
+              <NavbarSitioPublico />
               <Routes>
                 <Route path="/" element={<Inicio />} />
                 <Route path="/nosotros" element={<Nosotros />} />
@@ -91,6 +105,7 @@ export default function App() {
                 <Route path="/admin/eventos" element={<RequireAuth><AdminEventos /></RequireAuth>} />
                 <Route path="/admin/eventos-fijos" element={<RequireAuth><AdminEventosFijos /></RequireAuth>} />
                 <Route path="/admin/productos" element={<RequireAuth><AdminProductos /></RequireAuth>} />
+                <Route path="/admin/cupones" element={<RequireAuth><AdminCupones /></RequireAuth>} />
                 <Route path="/admin/cursos" element={<RequireAuth><AdminCursos /></RequireAuth>} />
                 <Route path="/admin/inscripciones" element={<RequireAuth><AdminInscripciones /></RequireAuth>} />
                 <Route path="/admin/reservas" element={<RequireAuth><AdminReservas /></RequireAuth>} />
@@ -98,6 +113,7 @@ export default function App() {
                 <Route path="/admin/contacto" element={<RequireAuth><AdminContacto /></RequireAuth>} />
                 <Route path="/admin/historial" element={<RequireAuth><AdminHistorial /></RequireAuth>} />
                 <Route path="/admin/administradores" element={<RequireAuth><AdminAdministradores /></RequireAuth>} />
+                <Route path="/puerta" element={<ValidarEntrada />} />
                 <Route path="/404" element={<NotFound />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>

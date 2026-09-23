@@ -53,7 +53,13 @@ export default function EventoDetalle({ evento, eventos, eventosFijos }) {
     if (!prog?.length) return null;
     const fechaParam = searchParams.get('fecha');
     if (fechaParam) {
-      const idx = prog.findIndex(p => p.fechaISO === fechaParam);
+      // ⭐ Hallazgo real del usuario (2026-09-07): un link directo con
+      // `?fecha=` a un show YA PASADO (ej. un enlace viejo compartido) se
+      // saltaba por completo el bloqueo de "no reservar funciones pasadas"
+      // de más abajo — acá no se validaba `esFechaPasada`, solo en el click
+      // del carrusel. Si el show del link ya pasó, se ignora y se cae al
+      // mismo criterio de "primer show futuro" de abajo.
+      const idx = prog.findIndex(p => p.fechaISO === fechaParam && !esFechaPasada(p.fechaISO));
       if (idx >= 0) return idx;
     }
     // ⭐ Hallazgo real del usuario (2026-08-28): antes siempre arrancaba en el
@@ -135,10 +141,35 @@ export default function EventoDetalle({ evento, eventos, eventosFijos }) {
   const ctaLabelEfectivo      = itemSeleccionado ? 'Reservar este show' : ctaLabel;
   const ctaLabelCortoEfectivo = itemSeleccionado ? 'Reservar' : ctaLabelCorto;
 
+  // ⭐ Cupos (pedido del usuario, 2026-09-07; extendido a Eventos de pago,
+  // 2026-09-10): `cupoDisponible` viene del backend para 'libre'/eventos
+  // fijos (a nivel de evento/show) — 'festival'/'proximamente' nunca lo
+  // traen, quedan `undefined` sin necesitar chequear accionTipo acá. Un
+  // evento 'pago' en cambio lo trae POR ZONA (cada zona puede tener su
+  // propio cupo) — está "agotado" de verdad solo si TODAS sus zonas con
+  // cupo definido llegaron a 0 (una zona sin límite nunca cuenta como
+  // agotada, ni una sola zona en 0 mientras otras todavía tengan lugar).
+  const cupoRelevante = itemSeleccionado ? itemSeleccionado.cupoDisponible : evento.cupoDisponible;
+  const zonasConCupo = evento.zonas?.filter((z) => typeof z.cupoDisponible === 'number') ?? [];
+  const agotado = zonasConCupo.length > 0
+    ? zonasConCupo.every((z) => z.cupoDisponible === 0)
+    : cupoRelevante === 0;
+
   const inscripcionLink    = evento.inscripcionLink ?? null;
   const inscripcionLabel   = evento.cta ?? 'Inscribirme';
   const inscripcionLabelCorto = evento.cta ?? 'Inscribirme';
   const inscripcionCerrada = evento.inscripcionCerrada ?? false;
+
+  // ⭐ Hallazgo real (auditoría Fase 6, 2026-09-09): "Convocatoria" quedó
+  // decidido como fuera de alcance — la inscripción real pasa por
+  // `inscripcionLink` (Google Form externo), este sitio no construye nada
+  // propio para ese camino (ver ReservaModal.jsx, `esConvocatoria`, que solo
+  // simula un envío con un `setTimeout`). Sin este guard, un evento
+  // 'festival' creado sin `inscripcionLink` cargado (el admin lo olvidó, o
+  // el link real todavía no existe) caía en el botón de abajo y abría ese
+  // modal simulado — un visitante real creía haberse postulado sin que nada
+  // se guardara ni se mandara a ningún lado.
+  const esConvocatoriaSinLink = evento.accionTipo === 'festival' && !inscripcionLink && !inscripcionCerrada;
 
   const otrosEventos = [
     ...eventos.map(e => ({ ...e, _permanente: false })),
@@ -193,6 +224,10 @@ export default function EventoDetalle({ evento, eventos, eventosFijos }) {
             <a href={inscripcionLink} target="_blank" rel="noopener noreferrer" className="sticky-btn sticky-btn--form">
               <FormIcon size={15} /> {inscripcionLabelCorto}
             </a>
+          ) : esConvocatoriaSinLink ? (
+            <button className="sticky-btn sticky-btn--cerrado" disabled>Inscripciones próximamente</button>
+          ) : agotado ? (
+            <button className="sticky-btn sticky-btn--cerrado" disabled>Agotado</button>
           ) : (
             <button className="sticky-btn sticky-btn--form" onClick={() => setModalAbierto(true)} disabled={esProximamente}>
               {ctaLabelCortoEfectivo}
@@ -429,6 +464,10 @@ export default function EventoDetalle({ evento, eventos, eventosFijos }) {
                 <a href={inscripcionLink} target="_blank" rel="noopener noreferrer" className="compra-btn compra-btn--form">
                   <FormIcon /> {inscripcionLabel}
                 </a>
+              ) : esConvocatoriaSinLink ? (
+                <button className="compra-btn compra-btn--cerrado" disabled>Inscripciones próximamente</button>
+              ) : agotado ? (
+                <button className="compra-btn compra-btn--cerrado" disabled>Agotado</button>
               ) : (
                 <button
                   className="compra-btn compra-btn--form"
@@ -499,6 +538,10 @@ export default function EventoDetalle({ evento, eventos, eventosFijos }) {
             <a href={inscripcionLink} target="_blank" rel="noopener noreferrer" className="compra-btn compra-btn--form">
               <FormIcon size={17} /> {inscripcionLabelCorto}
             </a>
+          ) : esConvocatoriaSinLink ? (
+            <button className="compra-btn compra-btn--cerrado" disabled>Inscripciones próximamente</button>
+          ) : agotado ? (
+            <button className="compra-btn compra-btn--cerrado" disabled>Agotado</button>
           ) : (
             <button
               className="compra-btn compra-btn--form"

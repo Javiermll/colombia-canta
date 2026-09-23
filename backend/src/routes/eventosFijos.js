@@ -4,9 +4,10 @@ import { supabase } from '../config/supabaseClient.js';
 import { requireCsrf } from '../middleware/requireCsrf.js';
 import { logAudit } from '../lib/auditLog.js';
 import { uploadMiddleware, validarImagenReal, procesarYSubirImagen, borrarImagenPorUrl } from '../lib/imageUpload.js';
-import { jsonArrayField } from '../lib/zodMultipart.js';
+import { jsonArrayField, nullableNumberFromString } from '../lib/zodMultipart.js';
 import { toCamelCase } from '../lib/camelCase.js';
 import { errorGenerico } from '../lib/errores.js';
+import { regenerarPinPuerta } from '../lib/pin.js';
 
 const router = Router();
 const CARPETA_GALERIA = 'eventos-fijos/galeria';
@@ -33,6 +34,10 @@ const showSchema = z.object({
   // `fotosIndices`) — la obligatoriedad real (todo show necesita alguna
   // foto, vieja o nueva) se valida aparte, no acá.
   foto: z.string().trim().url('programacion[].foto debe ser una URL válida').optional(),
+  // Cupo de ESTE show (pedido del usuario, 2026-09-07) — opcional, null/vacío
+  // = sin límite. Cada show de la programación tiene su propio aforo (ej. un
+  // show de Salas Colombia canta puede tener menos cupo que otro).
+  cupo: z.coerce.number().int('programacion[].cupo debe ser un entero').positive('programacion[].cupo debe ser mayor a 0').nullable().optional(),
 });
 
 // El panel solo puede tocar mes/programación. El resto del contenido (título,
@@ -42,6 +47,11 @@ const showSchema = z.object({
 const updateSchema = z
   .object({
     mes: z.string().trim().optional(),
+    // Aforo TOTAL de esta experiencia (pedido del usuario, 2026-09-07) — solo
+    // aplica a la reserva "general" sin show específico (`show_seleccionado`
+    // null en reservas.js); cuando SÍ hay programación con shows concretos,
+    // el cupo real que manda es el de cada show (`programacion[].cupo`).
+    cupo_total: nullableNumberFromString(z.coerce.number().int('cupo_total debe ser un entero').positive('cupo_total debe ser mayor a 0')).optional(),
     programacion: jsonArrayField(showSchema).optional(),
     // Índices (dentro de `programacion`) que traen una foto NUEVA en este
     // envío, en el mismo orden que los archivos subidos — ej. `[0, 2]`
@@ -108,9 +118,32 @@ router.patch('/:id', requireCsrf, uploadImagenes, async (req, res, next) => {
     updates.mes = result.data.mes;
   }
 
+  if (result.data.cupo_total !== undefined) {
+    updates.cupo_total = result.data.cupo_total;
+  }
+
   if (result.data.programacion !== undefined) {
     const programacion = result.data.programacion;
     const fotosIndices = result.data.fotosIndices || [];
+
+    // ⭐ Hallazgo real (auditoría Fase 6, 2026-09-09): el cupo/disponibilidad
+    // de un show (crear_reserva_con_cupo, y el cálculo público de abajo) se
+    // busca SOLO por `fechaISO` — 2 shows de la misma experiencia con la
+    // misma fecha pero distinta hora (ej. función 3pm y función 8pm el mismo
+    // día) colisionarían en el mismo cupo, dejando uno mal bloqueado o el
+    // otro vendible de más. Se rechaza acá, en el único lugar donde se
+    // puede crear esa combinación, en vez de rediseñar la clave.
+    const fechasRepetidas = new Set();
+    const fechasVistas = new Set();
+    for (const show of programacion) {
+      if (fechasVistas.has(show.fechaISO)) fechasRepetidas.add(show.fechaISO);
+      fechasVistas.add(show.fechaISO);
+    }
+    if (fechasRepetidas.size > 0) {
+      const err = new Error(`No puede haber 2 funciones con la misma fecha (${[...fechasRepetidas].join(', ')}) — usa fechas distintas para cada función`);
+      err.status = 400;
+      return next(err);
+    }
 
     if (archivos.length !== fotosIndices.length) {
       const err = new Error(
@@ -177,7 +210,7 @@ router.patch('/:id', requireCsrf, uploadImagenes, async (req, res, next) => {
       accion: 'editar',
       entidad: 'eventos_fijos',
       entidadId: id,
-      detalle: { mes: updates.mes, cantidadShows: updates.programacion?.length },
+      detalle: { mes: updates.mes, cupoTotal: updates.cupo_total, cantidadShows: updates.programacion?.length },
     });
   }
 
@@ -185,11 +218,32 @@ router.patch('/:id', requireCsrf, uploadImagenes, async (req, res, next) => {
   res.json({ ok: true, data });
 });
 
+// POST /:id/pin-puerta — genera (o regenera) el código de acceso de la
+// pantalla de puerta (/puerta, Fase 6, 2026-09-08). Mismo criterio que el
+// endpoint gemelo de eventos.js.
+router.post('/:id/pin-puerta', requireCsrf, async (req, res, next) => {
+  const { id } = req.params;
+  const resultado = await regenerarPinPuerta({
+    tabla: 'eventos_fijos',
+    entidad: 'eventos_fijos',
+    id,
+    actor: req.admin,
+    contexto: 'POST /api/admin/eventos-fijos/:id/pin-puerta',
+  });
+  if (resultado.error) return next(resultado.error);
+
+  res.json({ ok: true, data: { pin: resultado.pin } });
+});
+
 // Router público de solo lectura — sin requireAdmin ni requireCsrf, en camelCase.
 // Filtra activo:true por consistencia con el resto (aunque hoy el PATCH de admin no
 // expone ese campo — ver nota de la corrección hecha antes de construir esto).
 export const eventosFijosPublicoRouter = Router();
 
+// ⭐ Cupos (pedido del usuario, 2026-09-07): a diferencia de eventos, acá SÍ
+// se conecta a reservas reales siempre (Salas/Enamoras no tienen concepto de
+// pago simulado) — se calcula disponibilidad tanto a nivel de la experiencia
+// (reservas sin show específico) como por cada show de la programación.
 eventosFijosPublicoRouter.get('/', async (req, res, next) => {
   const { data, error } = await supabase
     .from('eventos_fijos')
@@ -201,7 +255,42 @@ eventosFijosPublicoRouter.get('/', async (req, res, next) => {
     return next(errorGenerico(error, 'GET /api/eventos-fijos'));
   }
 
-  res.json({ ok: true, data: toCamelCase(data) });
+  const ids = data.map((e) => e.id);
+  let reservas = [];
+  if (ids.length > 0) {
+    const { data: reservasData, error: errorReservas } = await supabase
+      .from('reservas')
+      .select('evento_fijo_id, show_seleccionado, cantidad')
+      .in('evento_fijo_id', ids)
+      .neq('estado', 'cancelada');
+    if (errorReservas) return next(errorGenerico(errorReservas, 'GET /api/eventos-fijos (disponibilidad)'));
+    reservas = reservasData;
+  }
+
+  const reservadoGeneral = {};
+  const reservadoPorShow = {};
+  for (const r of reservas) {
+    if (r.show_seleccionado?.fecha_iso) {
+      const clave = `${r.evento_fijo_id}|${r.show_seleccionado.fecha_iso}`;
+      reservadoPorShow[clave] = (reservadoPorShow[clave] || 0) + r.cantidad;
+    } else {
+      reservadoGeneral[r.evento_fijo_id] = (reservadoGeneral[r.evento_fijo_id] || 0) + r.cantidad;
+    }
+  }
+
+  // ⭐ `pin_puerta` (Fase 6, 2026-09-08) nunca debe llegar al público — mismo
+  // criterio que en eventos.js (ver esa nota para el detalle del riesgo).
+  const dataConDisponibilidad = data.map(({ pin_puerta, ...e }) => {
+    const programacion = (e.programacion || []).map((s) => {
+      if (s.cupo == null) return s;
+      const reservado = reservadoPorShow[`${e.id}|${s.fechaISO}`] || 0;
+      return { ...s, cupoDisponible: Math.max(0, s.cupo - reservado) };
+    });
+    const cupoDisponible = e.cupo_total != null ? Math.max(0, e.cupo_total - (reservadoGeneral[e.id] || 0)) : null;
+    return { ...e, programacion, cupo_disponible: cupoDisponible };
+  });
+
+  res.json({ ok: true, data: toCamelCase(dataConDisponibilidad) });
 });
 
 export default router;

@@ -106,6 +106,21 @@ export function formatearFechaHora(iso) {
 // fecha "pura" (`fecha_iso` de eventos, sin hora) reproduce el mismo bug de
 // zona horaria que `fechaLocalDesdeISO` ya resuelve arriba (`new Date('2026-09-15')`
 // se interpreta como medianoche UTC y en Colombia, UTC-5, muestra el 14).
+// Panel de uso (admin_maestro): tamaños en bytes a algo legible. Un decimal
+// solo por debajo de 10 de la unidad (ej. "8.3 GB"), entero de ahí en
+// adelante (ej. "84 MB") — un decimal en números grandes no aporta nada.
+export function formatearBytes(bytes) {
+  if (!bytes || bytes < 1024) return `${bytes || 0} B`;
+  const unidades = ['KB', 'MB', 'GB', 'TB'];
+  let valor = bytes;
+  let i = -1;
+  do {
+    valor /= 1024;
+    i += 1;
+  } while (valor >= 1024 && i < unidades.length - 1);
+  return `${valor.toFixed(valor < 10 ? 1 : 0)} ${unidades[i]}`;
+}
+
 export function formatearFechaSolo(fechaISO) {
   if (!fechaISO) return '—';
   return fechaLocalDesdeISO(fechaISO).toLocaleDateString('es-CO', { day: 'numeric', month: 'short', year: 'numeric' });
@@ -119,4 +134,37 @@ export function formatearFechaHoraCompleta(iso) {
   return new Date(iso).toLocaleString('es-CO', {
     day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
   });
+}
+
+// 5.3a (admin Eventos) — precio en "De pago" es monto numérico + moneda
+// elegida (por ahora COP/USD, el resto de LATAM queda para cuando se conecte
+// Mercado Pago en Fase 6). Extraído acá (auditoría de cierre de Fase 5,
+// 2026-09-08) para que `ReservaModal.jsx` (sitio público) pueda calcular el
+// "Total estimado" de una reserva respetando la moneda real del precio en
+// vez de asumir siempre pesos colombianos — hallazgo documentado desde
+// 2026-08-16, sin corregir hasta ahora porque el camino "De pago" seguía
+// simulado y nadie lo había notado en la práctica.
+export const MONEDAS = [
+  { valor: 'COP', label: 'COP', sufijo: '' },
+  { valor: 'USD', label: 'USD', sufijo: ' USD' },
+];
+
+export function formatearMonto(monto, moneda) {
+  const numero = Number(monto);
+  if (!monto || Number.isNaN(numero) || numero <= 0) return '';
+  const m = MONEDAS.find((x) => x.valor === moneda) || MONEDAS[0];
+  return `$${numero.toLocaleString('es-CO')}${m.sufijo}`;
+}
+
+// Para leer un precio ya guardado como texto compuesto (ej. "$45.000" o
+// "Desde $35,99 USD") — ver el hallazgo real de 2026-08-16 en el comentario
+// de `formatearMonto` de arriba: conserva el tramo numérico completo e
+// invierte el formato es-CO (`.`=miles, `,`=decimal) en vez de sacar solo
+// dígitos, que corrompía montos con centavos.
+export function parsePrecioCompuesto(texto) {
+  if (!texto) return { monto: '', moneda: 'COP' };
+  const moneda = /usd/i.test(texto) ? 'USD' : 'COP';
+  const tramoNumerico = texto.match(/[\d.,]+/)?.[0] || '';
+  const monto = tramoNumerico.replace(/\./g, '').replace(',', '.');
+  return { monto, moneda };
 }
