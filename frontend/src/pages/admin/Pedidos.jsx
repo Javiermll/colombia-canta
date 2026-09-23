@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { Search } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useScrollAlSeleccionar } from '../../hooks/useScrollAlSeleccionar';
 import AdminLayout from '../../components/admin/ui/AdminLayout';
@@ -6,6 +7,7 @@ import Card from '../../components/admin/ui/Card';
 import FormField from '../../components/admin/ui/FormField';
 import Button from '../../components/admin/ui/Button';
 import ConfirmDialog from '../../components/admin/ui/ConfirmDialog';
+import VerificarPagoMp from '../../components/admin/ui/VerificarPagoMp';
 import { formatearFechaHora, formatCOP } from '../../utils/formato';
 import { EMAIL_REGEX } from '../../utils/validacion';
 import './Pedidos.css';
@@ -52,7 +54,10 @@ function PedidoForm({ pedido, onGuardado, onBorrado, onAviso, aviso, adminFetch 
 
   async function guardar(e) {
     e.preventDefault();
-    if (!validar()) return;
+    if (!validar()) {
+      setErrorGeneral('Hay campos por corregir — revisa los que quedaron marcados en rojo.');
+      return;
+    }
     setGuardando(true);
     setErrorGeneral('');
     try {
@@ -94,7 +99,7 @@ function PedidoForm({ pedido, onGuardado, onBorrado, onAviso, aviso, adminFetch 
   return (
     <Card>
       <form onSubmit={guardar} noValidate>
-        <h2 className="pedadmin-form-titulo">{pedido.nombre}</h2>
+        <h2 className="pedadmin-form-titulo">Pedido #{pedido.numero_pedido} · {pedido.nombre}</h2>
         <p className="pedadmin-form-sub">
           {formatCOP(pedido.total)} · {formatearFechaHora(pedido.creado_en)}
         </p>
@@ -153,8 +158,10 @@ function PedidoForm({ pedido, onGuardado, onBorrado, onAviso, aviso, adminFetch 
             <input type="text" value={referenciaMp} onChange={(e) => setReferenciaMp(e.target.value)} placeholder="ID de Mercado Pago…" />
           </FormField>
         </div>
-
-        {errorGeneral && <p className="admin-page-error">{errorGeneral}</p>}
+        {/* ⭐ Pedido del usuario (2026-09-10): verificar el ID escrito arriba
+           contra la API real de Mercado Pago ANTES de guardar como "pagado" —
+           evita confirmar el pedido equivocado por un ID mal copiado. */}
+        <VerificarPagoMp referenciaMp={referenciaMp} adminFetch={adminFetch} externalReferenceEsperada={`pedido:${pedido.id}`} />
 
         {aviso && (
           <p className="admin-form-aviso" role="status">
@@ -170,6 +177,7 @@ function PedidoForm({ pedido, onGuardado, onBorrado, onAviso, aviso, adminFetch 
             Borrar pedido
           </Button>
         </div>
+        {errorGeneral && <p className="admin-page-error" role="alert">{errorGeneral}</p>}
       </form>
 
       <ConfirmDialog
@@ -269,6 +277,7 @@ export default function Pedidos() {
       <div className="pedadmin-panel-header">
         <div>
           <h1 className="admin-page-titulo">Pedidos</h1>
+          <div className="admin-page-franja" aria-hidden="true" />
           <p className="admin-page-sub">Consulta los pedidos de la Tienda, corrige datos del comprador y gestiona el estado del pago y envío.</p>
         </div>
       </div>
@@ -285,12 +294,16 @@ export default function Pedidos() {
         <div className="pedadmin-layout">
           <div className="pedadmin-lista-panel">
             <div className="pedadmin-filtros">
-              <input
+              <div className="admin-buscador">
+                <Search size={16} className="admin-buscador-icono" aria-hidden="true" />
+                <input
                 type="text"
-                placeholder="🔎 Buscar por comprador o email…"
+                placeholder="Buscar por comprador o email…"
                 value={busqueda}
                 onChange={(e) => setBusqueda(e.target.value)}
-              />
+                style={{ paddingLeft: 38 }}
+                />
+              </div>
               <select value={filtroEstado} onChange={(e) => setFiltroEstado(e.target.value)}>
                 <option value="todos">Todos los estados</option>
                 {ESTADOS.map((e) => <option key={e} value={e}>{e}</option>)}
@@ -315,7 +328,7 @@ export default function Pedidos() {
                   className={`pedadmin-item${p.id === seleccionadoId ? ' activo' : ''}`}
                   onClick={() => seleccionar(p.id)}
                 >
-                  <span className="pedadmin-item-titulo">{p.nombre}</span>
+                  <span className="pedadmin-item-titulo">#{p.numero_pedido} · {p.nombre}</span>
                   <span className="pedadmin-item-meta">
                     {formatCOP(p.total)} · <span className={`pedadmin-estado pedadmin-estado-${p.estado}`}>{p.estado}</span>
                   </span>

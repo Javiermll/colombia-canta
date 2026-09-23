@@ -9,8 +9,13 @@ export default function PagoCancelado() {
   // para saber a qué evento redirigir al usuario en "Intentar de nuevo"
   const externalRef = params.get('external_reference');
   const eventoSlug  = params.get('evento');
+  // ⭐ Mercado Pago, Tienda (Fase 6, Sección 2, 2026-09-10) — misma
+  // generalización que PagoConfirmacion.jsx: `pedido` (mandado por
+  // `pedidos.js` en `back_urls.failure`) distingue una compra de Tienda de
+  // una reserva de Eventos, para el copy y el "Intentar de nuevo".
+  const esPedido = params.has('pedido');
 
-  const backToEvento = eventoSlug ? `/eventos/${eventoSlug}` : '/eventos';
+  const backToDestino = esPedido ? '/tienda/carrito' : (eventoSlug ? `/eventos/${eventoSlug}` : '/eventos');
 
   return (
     <>
@@ -37,15 +42,15 @@ export default function PagoCancelado() {
           <div className="px-divider" />
 
           <p className="px-note">
-            Si el problema persiste, contáctanos por WhatsApp y te ayudamos a completar tu reserva.
+            Si el problema persiste, contáctanos por WhatsApp y te ayudamos a completar {esPedido ? 'tu compra' : 'tu reserva'}.
           </p>
 
           <div className="px-btns">
-            <Link to={backToEvento} className="px-btn-primary">
+            <Link to={backToDestino} className="px-btn-primary">
               Intentar de nuevo
             </Link>
             <a
-              href="https://wa.me/573015315119?text=Hola%2C+tuve+un+problema+al+pagar+mi+entrada+y+necesito+ayuda."
+              href={`https://wa.me/573015315119?text=Hola%2C+tuve+un+problema+al+pagar+mi+${esPedido ? 'pedido' : 'entrada'}+y+necesito+ayuda.`}
               target="_blank"
               rel="noopener noreferrer"
               className="px-btn-wa"
@@ -55,7 +60,11 @@ export default function PagoCancelado() {
               </svg>
               Contactar por WhatsApp
             </a>
-            <Link to="/eventos" className="px-btn-secondary">Ver todos los eventos</Link>
+            {esPedido ? (
+              <Link to="/tienda" className="px-btn-secondary">Volver a la tienda</Link>
+            ) : (
+              <Link to="/eventos" className="px-btn-secondary">Ver todos los eventos</Link>
+            )}
           </div>
 
           {externalRef && (

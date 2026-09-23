@@ -10,6 +10,13 @@ export default function PagoConfirmacion() {
   const paymentId       = params.get('collection_id') ?? params.get('payment_id');
   const paymentType     = params.get('payment_type');
   const externalRef     = params.get('external_reference');
+  // ⭐ Mercado Pago, Tienda (Fase 6, Sección 2, 2026-09-10) — esta pantalla
+  // ya existía para Eventos de pago; se generaliza acá en vez de duplicarla
+  // para Tienda. `pedido` viene en el `back_urls.success` que arma
+  // `pedidos.js` cuando la compra es de la Tienda (`evento` es el que ya
+  // mandaba `reservas.js`) — con eso alcanza para distinguir el copy y los
+  // links de "seguir" sin depender de parsear `external_reference`.
+  const esPedido = params.has('pedido');
 
   const isPending = status === 'pending' || status === 'in_process';
 
@@ -26,9 +33,9 @@ export default function PagoConfirmacion() {
         <div className="pc-card">
 
           {isPending ? (
-            <PendingView paymentId={paymentId} externalRef={externalRef} />
+            <PendingView paymentId={paymentId} externalRef={externalRef} esPedido={esPedido} />
           ) : (
-            <SuccessView paymentId={paymentId} paymentType={paymentType} externalRef={externalRef} />
+            <SuccessView paymentId={paymentId} paymentType={paymentType} externalRef={externalRef} esPedido={esPedido} />
           )}
 
         </div>
@@ -145,7 +152,7 @@ export default function PagoConfirmacion() {
   );
 }
 
-function SuccessView({ paymentId, paymentType, externalRef }) {
+function SuccessView({ paymentId, paymentType, externalRef, esPedido }) {
   return (
     <>
       <div className="pc-ico pc-ico--ok">
@@ -156,8 +163,10 @@ function SuccessView({ paymentId, paymentType, externalRef }) {
 
       <h1 className="pc-title">¡Pago confirmado!</h1>
       <p className="pc-sub">
-        Tu entrada está en camino. En los próximos minutos recibirás un correo con tu boleta digital.
-        Revisa también tu carpeta de spam.
+        {esPedido
+          ? 'Tu pedido pasa a preparación. En los próximos minutos recibirás un correo con el resumen de tu compra.'
+          : 'Tu entrada está en camino. En los próximos minutos recibirás un correo con tu boleta digital.'}
+        {' '}Revisa también tu carpeta de spam.
       </p>
 
       <div className="pc-divider" />
@@ -173,14 +182,18 @@ function SuccessView({ paymentId, paymentType, externalRef }) {
       )}
 
       <div className="pc-btns">
-        <Link to="/eventos" className="pc-btn-primary">Ver más eventos →</Link>
+        {esPedido ? (
+          <Link to="/tienda" className="pc-btn-primary">Seguir comprando →</Link>
+        ) : (
+          <Link to="/eventos" className="pc-btn-primary">Ver más eventos →</Link>
+        )}
         <Link to="/" className="pc-btn-secondary">Volver al inicio</Link>
       </div>
     </>
   );
 }
 
-function PendingView({ paymentId, externalRef }) {
+function PendingView({ paymentId, externalRef, esPedido }) {
   return (
     <>
       <div className="pc-ico pc-ico--pending">
@@ -203,7 +216,11 @@ function PendingView({ paymentId, externalRef }) {
       {externalRef && <p className="pc-detail">Referencia: {externalRef}</p>}
 
       <div className="pc-btns">
-        <Link to="/eventos" className="pc-btn-primary">Ver más eventos →</Link>
+        {esPedido ? (
+          <Link to="/tienda" className="pc-btn-primary">Seguir comprando →</Link>
+        ) : (
+          <Link to="/eventos" className="pc-btn-primary">Ver más eventos →</Link>
+        )}
         <Link to="/" className="pc-btn-secondary">Volver al inicio</Link>
       </div>
     </>

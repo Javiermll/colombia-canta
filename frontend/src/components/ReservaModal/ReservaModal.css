@@ -186,6 +186,23 @@
   color: #fff;
 }
 
+/* ⭐ Pedido del usuario (2026-09-10): zona agotada — visualmente apagada y
+   no clickeable (`disabled` real en el botón, no solo estilo). */
+.rm-zona-btn--agotada {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.rm-zona-btn--agotada:hover {
+  background: transparent;
+  border-color: var(--border-media);
+}
+
+.rm-zona-cupo {
+  font-weight: 400;
+  opacity: 0.8;
+}
+
 /* ── Formulario ── */
 .rm-form {
   display: flex;
@@ -403,46 +420,93 @@
   line-height: 1.5;
 }
 
-/* ── Estado de éxito ── */
+/* ── Estado de éxito ──
+   Rediseño pedido por el usuario (2026-09-07): el aviso anterior era muy
+   simple (solo el ícono verde + texto). Se agrega el logo de la marca
+   arriba y una franja tricolor corta (mismo lenguaje visual que el resto
+   del sitio) para reforzar identidad, manteniendo todo centrado en las
+   tres responsividades — hereda `align-items:center; text-align:center`
+   de `.rm-success`, que ya no cambia entre breakpoints. */
 .rm-success {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  padding: 12px 0;
-  gap: 10px;
+  padding: 8px 0 4px;
+  gap: 8px;
   width: 100%;
 }
 
+.rm-success-logo {
+  height: 34px;
+  width: auto;
+  margin-bottom: 6px;
+  object-fit: contain;
+}
+
 .rm-success-ico {
-  width: 60px;
-  height: 60px;
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   background: #16a34a;
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
+  box-shadow: 0 8px 20px rgba(22, 163, 74, 0.3);
+}
+
+.rm-success-ico--agotado {
+  /* Mismo rojo ya usado en este archivo para estados de error
+     (.rm-input--error/.rm-field-error, preexistentes) — hardcodeado en vez
+     de var(--rojo) para no introducir un 2do tono de "error" distinto
+     dentro del mismo componente. Nota (auditoría Fase 6, 2026-09-09): esto
+     técnicamente sigue violando la regla de CLAUDE.md ("nunca hardcodear
+     hex") heredada de esas reglas preexistentes — si se centraliza el rojo
+     de error del proyecto más adelante, ajustar los 3 juntos. */
+  background: #dc2626;
+  box-shadow: 0 8px 20px rgba(220, 38, 38, 0.3);
 }
 
 .rm-success h3 {
   font-family: var(--font-titulo);
-  font-size: 22px;
+  font-size: 23px;
   font-weight: 700;
   color: var(--texto-principal);
   margin: 0;
 }
 
-.rm-success p {
+.rm-success-lead {
   font-size: 14px;
   color: var(--texto-secundario);
   margin: 0;
 }
 
 .rm-success-email {
-  font-size: 14px;
+  font-size: 15px;
   color: var(--texto-principal);
+  word-break: break-word;
+  max-width: 100%;
+}
+
+.rm-success-divider {
+  width: 40px;
+  height: 4px;
+  border-radius: 2px;
+  margin: 10px 0 4px;
+  /* Colores REALES de la bandera de Colombia (no la paleta de marca del
+     sitio) — mismo criterio y mismos valores exactos ya usados en
+     `.franja-bandera` (NoticiaDetalle.css) para el mismo propósito. Se
+     hardcodean a propósito: son los colores oficiales de la bandera, no
+     algo que deba seguir la paleta de marca (var(--amarillo)/--azul/--rojo
+     son tonos de marca distintos, no representan la bandera real). */
+  background: linear-gradient(
+    to right,
+    #fcd116 0%, #fcd116 50%,
+    #003087 50%, #003087 75%,
+    #ce1126 75%, #ce1126 100%
+  );
 }
 
 .rm-success-sub {
@@ -451,6 +515,10 @@
   opacity: 0.7;
   max-width: 280px;
   line-height: 1.5;
+}
+
+.rm-success .rm-btn-submit {
+  margin-top: 12px;
 }
 
 /* ── Mobile — bottom sheet ── */

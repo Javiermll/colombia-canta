@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
+import { Search } from 'lucide-react';
 import { useAdminAuth } from '../../context/AdminAuthContext';
 import { useScrollAlSeleccionar } from '../../hooks/useScrollAlSeleccionar';
 import AdminLayout from '../../components/admin/ui/AdminLayout';
@@ -6,7 +7,8 @@ import Card from '../../components/admin/ui/Card';
 import FormField from '../../components/admin/ui/FormField';
 import Button from '../../components/admin/ui/Button';
 import ConfirmDialog from '../../components/admin/ui/ConfirmDialog';
-import { formatearFechaHora, formatearFechaSolo } from '../../utils/formato';
+import VerificarPagoMp from '../../components/admin/ui/VerificarPagoMp';
+import { formatearFechaHora, formatearFechaSolo, formatearMonto } from '../../utils/formato';
 import { EMAIL_REGEX } from '../../utils/validacion';
 import './Reservas.css';
 
@@ -88,7 +90,10 @@ function ReservaForm({ reserva, onGuardado, onBorrado, onAviso, aviso, adminFetc
 
   async function guardar(e) {
     e.preventDefault();
-    if (!validar()) return;
+    if (!validar()) {
+      setErrorGeneral('Hay campos por corregir — revisa los que quedaron marcados en rojo.');
+      return;
+    }
     setGuardando(true);
     setErrorGeneral('');
     try {
@@ -139,7 +144,9 @@ function ReservaForm({ reserva, onGuardado, onBorrado, onAviso, aviso, adminFetc
           <div><span className="resadmin-dato-label">Evento</span><span>{nombreEvento(reserva)}</span></div>
           <div><span className="resadmin-dato-label">Fecha</span><span>{formatearFechaSolo(fechaEfectiva(reserva))}</span></div>
           {reserva.zona_seleccionada && (
-            <div><span className="resadmin-dato-label">Zona</span><span>{reserva.zona_seleccionada.nombre} — ${Number(reserva.zona_seleccionada.precio).toLocaleString('es-CO')}</span></div>
+            // Reservas guardadas antes del 2026-09-09 no tienen `moneda` — formatearMonto
+            // cae a COP por defecto en ese caso (mismo criterio de siempre, no rompe nada viejo).
+            <div><span className="resadmin-dato-label">Zona</span><span>{reserva.zona_seleccionada.nombre} — {formatearMonto(reserva.zona_seleccionada.precio, reserva.zona_seleccionada.moneda)}</span></div>
           )}
           {reserva.show_seleccionado && (
             <div><span className="resadmin-dato-label">Show</span><span>{reserva.show_seleccionado.nombre} · {reserva.show_seleccionado.dia} {reserva.show_seleccionado.hora}</span></div>
@@ -176,8 +183,10 @@ function ReservaForm({ reserva, onGuardado, onBorrado, onAviso, aviso, adminFetc
             <input type="text" value={referenciaMp} onChange={(e) => setReferenciaMp(e.target.value)} placeholder="ID de Mercado Pago…" />
           </FormField>
         </div>
-
-        {errorGeneral && <p className="admin-page-error">{errorGeneral}</p>}
+        {/* ⭐ Pedido del usuario (2026-09-10): verificar el ID escrito arriba
+           contra la API real de Mercado Pago ANTES de guardar como "pagada" —
+           evita confirmar la reserva equivocada por un ID mal copiado. */}
+        <VerificarPagoMp referenciaMp={referenciaMp} adminFetch={adminFetch} externalReferenceEsperada={`reserva:${reserva.id}`} />
 
         {aviso && (
           <p className="admin-form-aviso" role="status">
@@ -193,6 +202,7 @@ function ReservaForm({ reserva, onGuardado, onBorrado, onAviso, aviso, adminFetc
             Borrar reserva
           </Button>
         </div>
+        {errorGeneral && <p className="admin-page-error" role="alert">{errorGeneral}</p>}
       </form>
 
       <ConfirmDialog
@@ -305,6 +315,7 @@ export default function Reservas() {
       <div className="resadmin-panel-header">
         <div>
           <h1 className="admin-page-titulo">Reservas</h1>
+          <div className="admin-page-franja" aria-hidden="true" />
           <p className="admin-page-sub">Consulta las entradas reservadas para Eventos, corrige datos del comprador y gestiona el estado del pago.</p>
         </div>
       </div>
@@ -321,12 +332,16 @@ export default function Reservas() {
         <div className="resadmin-layout">
           <div className="resadmin-lista-panel">
             <div className="resadmin-filtros">
-              <input
-                type="text"
-                placeholder="🔎 Buscar por comprador, evento o show…"
-                value={busqueda}
-                onChange={(e) => setBusqueda(e.target.value)}
-              />
+              <div className="admin-buscador">
+                <Search size={16} className="admin-buscador-icono" aria-hidden="true" />
+                <input
+                  type="text"
+                  placeholder="Buscar por comprador, evento o show…"
+                  value={busqueda}
+                  onChange={(e) => setBusqueda(e.target.value)}
+                  style={{ paddingLeft: 38 }}
+                />
+              </div>
               <select value={filtroEvento} onChange={(e) => setFiltroEvento(e.target.value)}>
                 <option value="todos">Todos los eventos</option>
                 {eventosDisponibles.map((ev) => <option key={ev.key} value={ev.key}>{ev.titulo}</option>)}
@@ -361,6 +376,9 @@ export default function Reservas() {
                   </span>
                   <span className="resadmin-item-meta">
                     {fechaEfectiva(r) ? formatearFechaSolo(fechaEfectiva(r)) : 'Sin fecha fija'} · {r.cantidad} entrada{r.cantidad === 1 ? '' : 's'}
+                    {r.reserva_entradas?.length > 0 && (
+                      <> · {r.reserva_entradas.filter((e) => e.validado_en).length}/{r.reserva_entradas.length} validadas en puerta</>
+                    )}
                   </span>
                 </button>
               ))}

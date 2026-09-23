@@ -20,9 +20,14 @@ import eventosFijosRouter, { eventosFijosPublicoRouter } from './routes/eventosF
 import inscripcionesRouter, { inscripcionesPublicRouter } from './routes/inscripciones.js';
 import reservasRouter, { reservasPublicRouter } from './routes/reservas.js';
 import pedidosRouter, { pedidosPublicRouter } from './routes/pedidos.js';
+import cuponesRouter, { cuponesPublicRouter } from './routes/cupones.js';
 import contactoRouter, { contactoPublicRouter } from './routes/contacto.js';
 import auditLogRouter from './routes/auditLog.js';
+import usoRouter from './routes/uso.js';
 import perfilRouter from './routes/perfil.js';
+import validarEntradaRouter from './routes/validarEntrada.js';
+import { webhookMercadoPagoRouter } from './routes/webhookMercadoPago.js';
+import mercadoPagoAdminRouter from './routes/mercadoPago.js';
 
 dotenv.config();
 
@@ -77,12 +82,15 @@ app.use('/api/admin/eventos-fijos', requireAdmin, eventosFijosRouter);
 app.use('/api/admin/inscripciones', requireAdmin, inscripcionesRouter);
 app.use('/api/admin/reservas', requireAdmin, reservasRouter);
 app.use('/api/admin/pedidos', requireAdmin, pedidosRouter);
+app.use('/api/admin/cupones', requireAdmin, cuponesRouter);
 app.use('/api/admin/contacto', requireAdmin, contactoRouter);
+app.use('/api/admin/mercadopago', requireAdmin, mercadoPagoAdminRouter);
 // A pedido del usuario (2026-08-31): el historial completo de acciones (quién
 // hizo qué en todo el panel) queda restringido al maestro, mismo criterio que
 // ya usa Administradores — un admin normal no necesita ver la actividad del
 // resto, solo la propia.
 app.use('/api/admin/audit-log', requireAdmin, requireRole('admin_maestro'), auditLogRouter);
+app.use('/api/admin/uso', requireAdmin, requireRole('admin_maestro'), usoRouter);
 // Sin `requireAdmin`: este router valida su propio JWT de Supabase por ruta
 // (ver perfil.js) — se llama ANTES de que exista la cookie de sesión propia
 // del panel, durante el onboarding en Bienvenida.jsx.
@@ -106,7 +114,17 @@ app.use('/api/eventos-fijos', eventosFijosPublicoRouter);
 app.use('/api/inscripciones', inscripcionesPublicRouter);
 app.use('/api/reservas', reservasPublicRouter);
 app.use('/api/pedidos', pedidosPublicRouter);
+app.use('/api/cupones', cuponesPublicRouter);
 app.use('/api/contacto', contactoPublicRouter);
+// ⭐ Pantalla de puerta (/puerta, Fase 6, 2026-09-08) — pública a propósito
+// (el staff de esa noche no tiene cuenta de admin), autenticada por su
+// propio PIN por evento en vez de requireAdmin/CSRF, ver validarEntrada.js.
+app.use('/api/validar-entrada', validarEntradaRouter);
+// ⭐ Webhooks de Mercado Pago (Fase 6, integración de pagos) — pública a
+// propósito (Mercado Pago no manda cookie de sesión ni token CSRF),
+// autenticada por la firma `x-signature` en vez de requireCsrf, ver
+// webhookMercadoPago.js.
+app.use('/api/webhooks/mercadopago', webhookMercadoPagoRouter);
 
 // Multer usa mensajes genéricos en inglés (ej. "Unexpected field" cuando se supera
 // el límite de archivos) — se traducen los códigos más comunes a algo legible.
@@ -134,3 +152,4 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });
+

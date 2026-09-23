@@ -203,6 +203,19 @@
   color: var(--coral);
 }
 
+/* Fila de descuento por cupón (2026-09-10) — visualmente distinta de la fila
+   de Total (verde, más chica), antes de ella en el orden del DOM. */
+.cm-total--descuento {
+  background: color-mix(in srgb, #1a8a4a 8%, transparent);
+  border-color: color-mix(in srgb, #1a8a4a 25%, transparent);
+  margin-bottom: 8px;
+}
+
+.cm-total--descuento .cm-total-valor {
+  color: #1a8a4a;
+  font-size: 15px;
+}
+
 /* ── Checkboxes de políticas ── */
 .cm-checkbox {
   display: flex;
