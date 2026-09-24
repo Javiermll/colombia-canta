@@ -29,10 +29,37 @@ export default function Hero() {
 
   const eventoDestacado = eventos.find((e) => e.destacadoHero);
 
+  // ⭐ Pedido del usuario (2026-09-23): en el plan gratuito de Render el
+  // backend puede tardar 20-50s en "despertar" tras estar inactivo — antes
+  // acá solo había un "Cargando…" chiquito sobre fondo negro, que con esa
+  // espera se sentía roto en vez de "cargando". Se reemplaza por un
+  // esqueleto que reutiliza el mismo layout/clases que el contenido real
+  // (`.hero-imagen-area`/`.hero-slide-contenido`/`.hero-dots-nav`), así
+  // hereda gratis el mismo comportamiento responsive y no hay ningún salto
+  // de layout cuando el contenido real reemplaza al esqueleto.
   if (cargando) {
     return (
-      <section className="hero-carousel hero-carousel--estado">
-        <p className="hero-estado-mensaje">Cargando…</p>
+      <section className="hero-carousel" aria-busy="true">
+        <span className="hero-visually-hidden">Cargando contenido…</span>
+        <div className="hero-imagen-area" aria-hidden="true">
+          <div className="hero-skeleton-bloque hero-skeleton-imagen" />
+        </div>
+        <div className="hero-slide-contenido" aria-hidden="true">
+          <div className="hero-skeleton-bloque hero-skeleton-titulo" />
+          <div className="hero-skeleton-bloque hero-skeleton-linea" style={{ width: '92%' }} />
+          <div className="hero-skeleton-bloque hero-skeleton-linea" style={{ width: '68%' }} />
+          <div className="hero-ctas">
+            <div className="hero-skeleton-bloque hero-skeleton-boton" />
+            <div className="hero-skeleton-bloque hero-skeleton-boton hero-skeleton-boton--corto" />
+          </div>
+        </div>
+        <div className="hero-dots-nav" aria-hidden="true">
+          <div className="hero-dots">
+            <div className="hero-skeleton-bloque hero-skeleton-dot" />
+            <div className="hero-skeleton-bloque hero-skeleton-dot" />
+            <div className="hero-skeleton-bloque hero-skeleton-dot" />
+          </div>
+        </div>
       </section>
     );
   }

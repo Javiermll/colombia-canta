@@ -22,6 +22,97 @@
   color: rgba(255, 255, 255, 0.6);
 }
 
+/* Patrón "sr-only" estándar — visible solo para lectores de pantalla mientras
+   carga el esqueleto (que en sí es puramente decorativo, `aria-hidden`). */
+.hero-visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Esqueleto de carga (2026-09-23) — mismo "shine" barriendo de izquierda a
+   derecha en cada bloque, clásico de skeleton screens. Los bloques viven
+   DENTRO de `.hero-imagen-area`/`.hero-slide-contenido`/`.hero-dots-nav`
+   reales (ver Hero.jsx), así heredan gratis el mismo layout responsive que
+   el contenido real — sin duplicar ninguna media query acá. ── */
+@keyframes hero-skeleton-shine {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.hero-skeleton-bloque {
+  border-radius: 8px;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.06) 30%,
+    rgba(255, 255, 255, 0.14) 50%,
+    rgba(255, 255, 255, 0.06) 70%
+  );
+  background-size: 300% 100%;
+  animation: hero-skeleton-shine 1.8s ease-in-out infinite;
+}
+
+.hero-skeleton-imagen {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+}
+
+.hero-skeleton-titulo {
+  width: 78%;
+  height: clamp(28px, 3.2vw, 44px);
+  border-radius: 6px;
+}
+
+.hero-skeleton-linea {
+  height: 14px;
+}
+
+.hero-skeleton-boton {
+  width: 150px;
+  height: 38px;
+  border-radius: 100px;
+}
+
+.hero-skeleton-boton--corto {
+  width: 120px;
+}
+
+.hero-skeleton-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  animation-duration: 1.4s;
+}
+
+@media (max-width: 1024px) {
+  .hero-skeleton-titulo {
+    margin: 0 auto;
+  }
+
+  .hero-skeleton-linea {
+    margin: 0 auto;
+  }
+
+  .hero-skeleton-boton {
+    margin: 0 auto;
+  }
+}
+
+@media (max-width: 599px) {
+  .hero-skeleton-boton,
+  .hero-skeleton-boton--corto {
+    width: 100%;
+    max-width: 220px;
+  }
+}
+
 /* ── Imagen — derecha, se difumina hacia el fondo negro puro ── */
 
 .hero-imagen-area {
