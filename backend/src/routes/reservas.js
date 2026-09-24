@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { supabase } from '../config/supabaseClient.js';
 import { requireCsrf } from '../middleware/requireCsrf.js';
 import { limiterEstricto } from '../middleware/rateLimiters.js';
-import { logAudit } from '../lib/auditLog.js';
+import { logAudit, buscarBorradoEnAuditLog } from '../lib/auditLog.js';
 import { stripUndefined } from '../lib/zodMultipart.js';
 import { errorGenerico } from '../lib/errores.js';
 import { hoyColombia } from '../lib/fechas.js';
@@ -243,7 +243,14 @@ export async function confirmarPagoReserva(reservaId, referenciaMp) {
     .maybeSingle();
 
   if (fetchError || !actual) {
-    console.error('confirmarPagoReserva: reserva no encontrada -', reservaId);
+    const borrada = await buscarBorradoEnAuditLog('reservas', reservaId);
+    if (borrada) {
+      console.error(
+        `confirmarPagoReserva: pago tardío ${referenciaMp} para la reserva ${reservaId} — el registro fue BORRADO por ${borrada.usuario_email} el ${new Date(borrada.creado_en).toLocaleString('es-CO')}. Requiere revisión manual (posible reembolso).`,
+      );
+    } else {
+      console.error('confirmarPagoReserva: reserva no encontrada -', reservaId);
+    }
     return;
   }
 

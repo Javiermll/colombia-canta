@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { supabase } from '../config/supabaseClient.js';
 import { requireCsrf } from '../middleware/requireCsrf.js';
 import { limiterEstricto } from '../middleware/rateLimiters.js';
-import { logAudit } from '../lib/auditLog.js';
+import { logAudit, buscarBorradoEnAuditLog } from '../lib/auditLog.js';
 import { stripUndefined } from '../lib/zodMultipart.js';
 import { errorGenerico } from '../lib/errores.js';
 import { paginacionSchema, aplicarRango, empaquetarPagina } from '../lib/paginacion.js';
@@ -99,7 +99,14 @@ export async function confirmarPagoPedido(pedidoId, referenciaMp) {
     .maybeSingle();
 
   if (fetchError || !actual) {
-    console.error('confirmarPagoPedido: pedido no encontrado -', pedidoId);
+    const borrado = await buscarBorradoEnAuditLog('pedidos', pedidoId);
+    if (borrado) {
+      console.error(
+        `confirmarPagoPedido: pago tardío ${referenciaMp} para el pedido ${pedidoId} — el registro fue BORRADO por ${borrado.usuario_email} el ${new Date(borrado.creado_en).toLocaleString('es-CO')}. Requiere revisión manual (posible reembolso).`,
+      );
+    } else {
+      console.error('confirmarPagoPedido: pedido no encontrado -', pedidoId);
+    }
     return;
   }
 
